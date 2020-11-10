@@ -70,22 +70,7 @@
                 </div>
             </div>
         </div>
-        <!-- modal pour les install -->
-        <div class="modal fade" id="modal_install" style="display: none;" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Résultat installation</h4>
-                    </div>
-                    <div class="modal-body" id="modalinstallbody">
 
-                    </div>
-                    <div class="modal-footer float-right">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
-                    </div>
-                </div>
-            </div>
-        </div>
         <!--End content modal 2-->
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">

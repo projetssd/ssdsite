@@ -21,12 +21,12 @@ class service
         {
             case "radarr":
                 $this->url = "http://127.0.0.1:7878";
-                $this->command_line = 'rm /var/www/seedboxdocker.website/logtail/log; sudo -u root ansible-playbook /opt/seedbox-compose/includes/dockerapps/radarr.yml 2>&1 | tee -a /var/www/seedboxdocker.website/logtail/log 2>/dev/null >/dev/null';
+                $this->command_line = 'rm /var/www/seedboxdocker.website/logtail/log; sudo -u root ansible-playbook /opt/seedbox-compose/includes/dockerapps/radarr.yml 2>&1 | tee -a /var/www/seedboxdocker.website/logtail/log 2>/dev/null >/dev/null &';
                 // on peut éventuellement surcharger $username et $password ici
                 break;
             case "monautreservice":
                 $this->url = "http://127.0.0.1:8080";
-                $this->command_line = 'rm /var/www/seedboxdocker.website/logtail/log; sudo -u root ansible-playbook /opt/seedbox-compose/includes/dockerapps/autreservice.yml 2>&1 | tee -a /var/www/seedboxdocker.website/logtail/log 2>/dev/null >/dev/null';
+                $this->command_line = 'rm /var/www/seedboxdocker.website/logtail/log; sudo -u root ansible-playbook /opt/seedbox-compose/includes/dockerapps/autreservice.yml 2>&1 | tee -a /var/www/seedboxdocker.website/logtail/log 2>/dev/null >/dev/null &';
                 // on peut éventuellement surcharger $username et $password ici
                 break;
             default:
@@ -68,7 +68,7 @@ class service
     {
         // pas la peine de faire un retour true or false, on ne sait pas si ça s'est bien passé
         // on va juste retourner le texte de la commande
-        echo "Execution de " . $this->command_line;
+
         $this->log = shell_exec($this->command_line);
         return true;
     }

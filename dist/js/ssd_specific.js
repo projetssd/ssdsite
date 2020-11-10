@@ -45,7 +45,6 @@ $(document).ready(function () {
                 $("#status-" + appli).html("Désinstaller").prop('disabled', false);
                 $(".start-stop-button-" + appli).show();
                 // on affiche les logs
-                $("#modalinstallbody").html(data);
                 $('#modalYT1').modal('show');
 
             }).fail(function () {
