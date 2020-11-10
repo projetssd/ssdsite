@@ -196,10 +196,10 @@ require_once "php/classes/service.php";
                             <div class="card-body">
                                 <div class="row">
                                     <?php
-                                    $service = new service('radarr');
-                                    $service->display();
+                                    //$service = new service('radarr');
+                                    //$service->display();
                                     ?>
-                                    <!--
+
                                     <div class=col-md-4>
                                         <div class="post">
                                             <div class="card card-info card-outline">
@@ -242,7 +242,7 @@ require_once "php/classes/service.php";
                                             </div>
                                         </div>
                                     </div>
-                                    -->
+
                                     <!-- /.app -->
                                     <!-- app -->
                                     <div class=col-md-4>
