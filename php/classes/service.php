@@ -101,7 +101,8 @@ class service
 
     public function display()
     {
-        echo '<div class="col-md-4" >
+        echo '
+                                    <div class="col-md-4" >
                                          <div class="post" >
                                             <div class="card card-info card-outline" >
                                                 <div class="card-body user-block" >

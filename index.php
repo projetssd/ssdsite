@@ -1,6 +1,3 @@
-<?php
-require_once "php/classes/service.php";
-?>
 <!DOCTYPE html>
 <html>
 
@@ -195,13 +192,91 @@ require_once "php/classes/service.php";
                             <!-- app -->
                             <div class="card-body">
                                 <div class="row">
-                                    <?php
-                                    $service = new service('radarr');
-                                    $service->display();
-                                    $service = new service('sonarr');
-                                    $service->display();
-                                    ?>
+                                    <div class=col-md-4>
+                                        <div class="post">
+                                            <div class="card card-info card-outline">
+                                                <div class="card-body user-block">
+                                                    <img class="img-circle img-bordered-sm" src="https://www.scriptseedboxdocker.com/wp-content/uploads/2020/05/radarr.png" alt="user image">
+                                                    <span class="username">
+                                                        <a href="#">Radarr</a>
+                                                    </span>
+                                                    <span class="description">Version 3.0.4.991</span>
+                                                </div>
 
+                                                <div class="card-footer" id="toto">
+                                                    <!-- Note Merrick, je désactive le form, tout va être
+                                                                 géré par ajax
+                                                                  <form action="/php/index.php" method="post"> -->
+                                                    <!-- Notes Merrick
+                                                                      Les boutons start/stop doivent avoir comme classe
+                                                                      start-stop-button-<nom_service>
+                                                                      On va les cacher par défaut
+                                                                      -->
+                                                    <a href="php/index.php?reset=true" class="link-black start-stop-button-radarr
+                                                                      text-sm mr-2" id="reset" name="reset" style="display: none;"><i class="fas fa-share mr-1"></i>Restart</a>
+                                                    <a href="php/index.php?stop=true" class="link-black start-stop-button-radarr
+                                                                      text-sm mr-2" id="stop" name="stop" style="display: none;"><i class="fas fa-stop mr-1"></i>Stop</a>
+
+                                                    <span class="float-right">
+                                                        <!-- Notes Merrick
+                                                                        Le bouton d'install doit avoir pour id
+                                                                        status-<nomservice>
+                                                                        Comme classe bouton-isntall et
+                                                                        data-appli=<nomservice>
+                                                                        -->
+                                                        <button type="submit" name="radarr" id="status-radarr" class="btn btn-block
+                                                                               btn-success btn-sm text-with
+                                                                               bouton-install" data-appli="radarr"></button>
+
+                                                    </span>
+                                                    <!-- </form> -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /.app -->
+                                    <!-- app -->
+                                    <div class=col-md-4>
+                                        <div class="post">
+                                            <div class="card card-info card-outline">
+                                                <div class="card-body user-block">
+                                                    <img class="img-circle img-bordered-sm" src="https://www.scriptseedboxdocker.com/wp-content/uploads/2020/05/radarr.png" alt="user image">
+                                                    <span class="username">
+                                                        <a href="#">Sonarr</a>
+                                                    </span>
+                                                    <span class="description">Version 3.0.4.991</span>
+                                                </div>
+
+                                                <div class="card-footer" id="toto">
+                                                    <!-- Note Merrick, je désactive le form, tout va être
+                                                                 géré par ajax
+                                                                  <form action="/php/index.php" method="post"> -->
+                                                    <!-- Notes Merrick
+                                                                      Les boutons start/stop doivent avoir comme classe
+                                                                      start-stop-button-<nom_service>
+                                                                      On va les cacher par défaut
+                                                                      -->
+                                                    <a href="php/index.php?reset=true" class="link-black start-stop-button-sonarr
+                                                                      text-sm mr-2" id="reset" name="reset" style="display: none;"><i class="fas fa-share mr-1"></i>Restart</a>
+                                                    <a href="php/index.php?stop=true" class="link-black start-stop-button-sonarr
+                                                                      text-sm mr-2" id="stop" name="stop" style="display: none;"><i class="fas fa-stop mr-1"></i>Stop</a>
+
+                                                    <span class="float-right">
+                                                        <!-- Notes Merrick
+                                                                        Le bouton d'install doit avoir pour id
+                                                                        status-<nomservice>
+                                                                        Comme classe bouton-isntall et
+                                                                        data-appli=<nomservice>
+                                                                        -->
+                                                        <button type="submit" name="sonarr" id="status-sonarr" class="btn btn-block
+                                                                               btn-success btn-sm text-with
+                                                                               bouton-install" data-appli="sonarr"></button>
+                                                    </span>
+                                                    <!-- </form> -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <!-- /.app -->
                                 </div>
                             </div>
