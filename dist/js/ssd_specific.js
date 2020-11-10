@@ -31,7 +31,7 @@ $(document).ready(function () {
         // on va considérer que le texte du bouton est ok
         // a voir si on refait un appel ajax pour vérifier ?
         if ($("#status-radarr").html() === "Installer") {
-            $("#status-radarr").html("Installation...")
+            $("#status-radarr").html("Installation...").prop('disabled', true);
             // on lance un ajax qui va installer tout ça
             $.ajax({
                 url: "http://178.170.54.173/ajax/install_service.php?service=radarr"
@@ -41,7 +41,7 @@ $(document).ready(function () {
                 // le résultat de la requête est maintenant dans la variable "data"
                 if (data === "ok") {
                     // le service a été installé
-                    $("#status-radarr").html("Désinstaller");
+                    $("#status-radarr").html("Désinstaller").prop('disabled', false);
                     $(".start-stop-button-radarr").show();
                 } else {
                     // il y a eu une erreur sur l'installation
@@ -54,7 +54,7 @@ $(document).ready(function () {
             });
 
         } else if ($("#status-radarr").html() === "Désinstaller") {
-            $("#status-radarr").html("Désinstallation...")
+            $("#status-radarr").html("Désinstallation...").prop('disabled', true);
             $.ajax({
                 url: "http://178.170.54.173/ajax/install_service.php?service=radarr"
             }).done(function (data) {
@@ -63,7 +63,7 @@ $(document).ready(function () {
                 // le résultat de la requête est maintenant dans la variable "data"
                 if (data === "ok") {
                     // le service a été désinstallé
-                    $("#status-radarr").html("Installer");
+                    $("#status-radarr").html("Installer").prop('disabled', false);
                     $(".start-stop-button-radarr").hide();
                 } else {
                     // il y a eu une erreur sur l'installation
