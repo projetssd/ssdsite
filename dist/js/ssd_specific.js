@@ -63,20 +63,17 @@ $(document).ready(function () {
         } else if ($("#status-" + appli).html() === "Désinstaller") {
             $("#status-" + appli).html("Désinstallation...").prop('disabled', true);
             $.ajax({
-                url: "http://178.170.54.173/ajax/install_service.php?service=" + appli
+                url: "http://178.170.54.173/ajax/uninstall_service.php?service=" + appli
             }).done(function (data) {
                 // On est dans le done, tout est ok
                 // la requête est passée
                 // le résultat de la requête est maintenant dans la variable "data"
-                if (data === "ok") {
-                    // le service a été désinstallé
-                    $("#status-" + appli).html("Installer").prop('disabled', false);
-                    $(".start-stop-button-" + appli).hide();
-                } else {
-                    // il y a eu une erreur sur l'installation
-                    $("#status-" + appli).html("Erreur sur installation");
-                    $(".start-stop-button-" + appli).hide();
-                }
+                $("#status-" + appli).html("Installer").prop('disabled', false);
+                // on afficher les boutons start/stop
+                $(".start-stop-button-" + appli).hide();
+                // on affiche les logs
+                // il suffit d'afficher la dic modalYT1 qui contient déjà un iframe de défilement des logs
+                $('#modalYT1').modal('show');
             }).fail(function () {
                 console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
                 $("#status-" + appli).html("Erreur ajax");
