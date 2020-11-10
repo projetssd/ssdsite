@@ -16,7 +16,7 @@ $(document).ready(function () {
             $("#status-radarr").html("Désinstaller");
             $(".start-stop-button-radarr").show();
         } else {
-            // le service tourne
+            // le service ne tourne pas
             $("#status-radarr").html("Installer");
             $(".start-stop-button-radarr").hide();
         }
@@ -33,6 +33,7 @@ $(document).ready(function () {
         // on va considérer que le texte du bouton est ok
         // a voir si on refait un appel ajax pour vérifier ?
         if ($("#status-" + appli).html() === "Installer") {
+            // on change le texte du bouton et on le met en disabled
             $("#status-" + appli).html("Installation...").prop('disabled', true);
             // on lance un ajax qui va installer tout ça
             $.ajax({
@@ -41,10 +42,14 @@ $(document).ready(function () {
                 // On est dans le done, tout est ok
                 // la requête est passée
                 // le résultat de la requête est maintenant dans la variable "data"
+                // dont on ne fait rien
 
+                // on change le texte du bouton et on le remet en enable
                 $("#status-" + appli).html("Désinstaller").prop('disabled', false);
+                // on afficher les boutons start/stop
                 $(".start-stop-button-" + appli).show();
                 // on affiche les logs
+                // il suffit d'afficher la dic modalYT1 qui contient déjà un iframe de défilement des logs
                 $('#modalYT1').modal('show');
 
             }).fail(function () {
