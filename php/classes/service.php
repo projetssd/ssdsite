@@ -3,10 +3,11 @@
 
 class service
 {
-    var $url          = '';
-    var $username     = '';
-    var $password     = '';
-    var $command_line = '';
+    var $url             = '';
+    var $display_name;
+    var $username        = '';
+    var $password        = '';
+    var $command_line    = '';
     var $command_lineone = '';
 
     function __construct($my_service)
@@ -17,6 +18,7 @@ class service
          * C'est ce service qui sera utilisé dans toutes les fonctions qui suivent
          *
          */
+        $this->display_name = $my_service;
         switch ($my_service)
         {
             case "radarr":
@@ -95,5 +97,53 @@ class service
 
         shell_exec($this->command_lineone);
         return true;
+    }
+
+    public function display()
+    {
+        echo '<div class="col-md-4" >
+                                         <div class="post" >
+                                            <div class="card card-info card-outline" >
+                                                <div class="card-body user-block" >
+                                                    <img class="img-circle img-bordered-sm" src =
+        "https://www.scriptseedboxdocker.com/wp-content/uploads/2020/05/' . $this->display_name . '.png" alt         = "user image" >
+                                                    <span class="username" >
+                                                        <a href = "#" >' . $this->display_name . '</a >
+                                                    </span >
+                                                    <span class="description" > Version 3.0.4.991 </span >
+                                                </div >
+
+                                                <div class="card-footer" id = "toto" >
+                                                    
+                                                    <!--Notes Merrick
+                                                                      Les boutons start / stop doivent avoir comme classe
+                                                                      start - stop - button -<nom_service >
+                                                                                              On va les cacher par défaut
+                                                                                                                   -- >
+                                                    <a href = "php/index.php?reset=true" class="link-black start-stop-button-' . $this->display_name . '
+                                                                      text-sm mr-2" id = "reset" name = "reset" style =
+        "display: none;" ><i class="fas fa-share mr-1" ></i > Restart</a >
+                                                    <a href = "php/index.php?stop=true" class="link-black start-stop-button-' . $this->display_name . '
+                                                                      text-sm mr-2" id = "stop" name = "stop" style =
+        "display: none;" ><i class="fas fa-stop mr-1" ></i > Stop</a >
+
+                                                    <span class="float-right" >
+                                                        <!--Notes Merrick
+                                                                        Le bouton d\'install doit avoir pour id
+                                                                        status-<nomservice>
+                                                                        Comme classe bouton-isntall et
+                                                                        data-appli=<nomservice>
+                                                                        -->
+                                                        <button type="submit" name="' . $this->display_name . '" id="status-' . $this->display_name . '" class="btn btn-block
+                                                                               btn-success btn-sm text-with
+                                                                               bouton-install" data-appli="' . $this->display_name . '"></button>
+
+                                                    </span>
+                                                    <!-- </form> -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /.app -->';
     }
 }
