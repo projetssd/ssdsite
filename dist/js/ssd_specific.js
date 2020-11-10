@@ -3,26 +3,29 @@ ne s'éxécute que quand la page est totalement chargée
  */
 $(document).ready(function () {
     // on va d'abord mettre les bons textes sur les bons boutons...
-    $.ajax({
-        url: "http://178.170.54.173/ajax/check_service.php?service=radarr"
-        // appel simple, en GET
-        // on peut rajouter des options si besoin pour du POST
-    }).done(function (data) {
-        // On est dans le done, tout est ok
-        // la requête est passée
-        // le résultat de la requête est maintenant dans la variable "data"
-        if (data === "ok") {
-            // le service tourne
-            $("#status-radarr").html("Désinstaller");
-            $(".start-stop-button-radarr").show();
-        } else {
-            // le service ne tourne pas
-            $("#status-radarr").html("Installer");
-            $(".start-stop-button-radarr").hide();
-        }
-    }).fail(function () {
-        console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
-        $("#status-radarr").html("Erreur ajax");
+    $(".bouton-install").each(function() {
+        let appli = $(this).attr("data-appli");
+        $.ajax({
+            url: "http://178.170.54.173/ajax/check_service.php?service=" + appli
+            // appel simple, en GET
+            // on peut rajouter des options si besoin pour du POST
+        }).done(function (data) {
+            // On est dans le done, tout est ok
+            // la requête est passée
+            // le résultat de la requête est maintenant dans la variable "data"
+            if (data === "ok") {
+                // le service tourne
+                $("#status-" + appli).html("Désinstaller");
+                $(".start-stop-button-" + appli).show();
+            } else {
+                // le service ne tourne pas
+                $("#status-" + appli).html("Installer");
+                $(".start-stop-button-" + appli).hide();
+            }
+        }).fail(function () {
+            console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+            $("#status-" + appli).html("Erreur ajax");
+        });
     });
 
 
