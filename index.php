@@ -205,13 +205,17 @@
                                                                       <!-- Notes Merrick
                                                                       Les boutons start/stop doivent avoir comme classe
                                                                       start-stop-button-<nom_service>
+                                                                      On va les cacher par défaut
                                                                       -->
                                                                    <a href="php/index.php?reset=true"
                                                                       class="link-black start-stop-button-radarr
-                                                                      text-sm mr-2" id="reset" name="reset"><i class="fas fa-share mr-1"></i>Restart</a>
+                                                                      text-sm mr-2" id="reset" name="reset"
+                                                                      style="display: none;"><i
+                                                                               class="fas fa-share mr-1"></i>Restart</a>
                                                                    <a href="php/index.php?stop=true"
                                                                       class="link-black start-stop-button-radarr
-                                                                      text-sm mr-2" id="stop" name="stop"><i class="fas fa-stop mr-1"></i>Stop</a>
+                                                                      text-sm mr-2" id="stop" name="stop" style="display: none;"><i
+                                                                               class="fas fa-stop mr-1"></i>Stop</a>
 
                                                                     <span class="float-right">
                                                                         <!-- Notes Merrick
@@ -225,7 +229,7 @@
                                                                                btn-success btn-sm text-with
                                                                                bouton-install"
                                                                                data-appli="radarr" onclick="myFunction()
-">Installer</button>
+"></button>
                                                                     </span>
                                                                   </form>
                                                             </div>
