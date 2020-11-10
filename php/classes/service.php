@@ -58,8 +58,9 @@ class service
      */
     public function install()
     {
-        echo "On va installer des trucs...";
+
         sleep(10);
+        echo "ok";
         return true;
     }
 
@@ -68,8 +69,8 @@ class service
      */
     public function uninstall()
     {
-        echo "On va désinstaller des trucs...";
         sleep(10);
+        echo "ok";
         return true;
     }
 }
