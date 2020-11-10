@@ -1,11 +1,6 @@
 <?php
 require_once "../php/classes/service.php";
 $service = new service($_GET['service']);
-if($service->install())
-{
-    echo "ok";
-}
-else
-{
-    echo "bad";
-}
+// on lance la fonction install qui va stocker le log dans une variable $log de la classe service
+$service->install();
+echo $service->log;

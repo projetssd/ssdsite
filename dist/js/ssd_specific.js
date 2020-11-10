@@ -41,15 +41,13 @@ $(document).ready(function () {
                 // On est dans le done, tout est ok
                 // la requête est passée
                 // le résultat de la requête est maintenant dans la variable "data"
-                if (data === "ok") {
-                    // le service a été installé
-                    $("#status-" + appli).html("Désinstaller").prop('disabled', false);
-                    $(".start-stop-button-" + appli).show();
-                } else {
-                    // il y a eu une erreur sur l'installation
-                    $("#status-" + appli).html("Erreur sur installation");
-                    $(".start-stop-button-" + appli).hide();
-                }
+
+                $("#status-" + appli).html("Désinstaller").prop('disabled', false);
+                $(".start-stop-button-" + appli).show();
+                // on affiche les logs
+                $("#modalinstallbody").html(data);
+                $('#modalYT1').modal('show');
+
             }).fail(function () {
                 console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
                 $("#status-" + appli).html("Erreur ajax");
