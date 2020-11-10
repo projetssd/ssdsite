@@ -202,11 +202,30 @@
 
                                                             <div class="card-footer" id="toto">
                                                                   <form action="/php/index.php" method="post">
-                                                                   <a href="php/index.php?reset=true" class="link-black start-stop-button text-sm mr-2" id="reset" name="reset"><i class="fas fa-share mr-1"></i>Restart</a>
-                                                                   <a href="php/index.php?stop=true" class="link-black start-stop-button text-sm mr-2" id="stop" name="stop"><i class="fas fa-stop mr-1"></i>Stop</a>
+                                                                      <!-- Notes Merrick
+                                                                      Les boutons start/stop doivent avoir comme classe
+                                                                      start-stop-button-<nom_service>
+                                                                      -->
+                                                                   <a href="php/index.php?reset=true"
+                                                                      class="link-black start-stop-button-radarr
+                                                                      text-sm mr-2" id="reset" name="reset"><i class="fas fa-share mr-1"></i>Restart</a>
+                                                                   <a href="php/index.php?stop=true"
+                                                                      class="link-black start-stop-button-radarr
+                                                                      text-sm mr-2" id="stop" name="stop"><i class="fas fa-stop mr-1"></i>Stop</a>
 
                                                                     <span class="float-right">
-                                                                       <button type="submit" name="radarr" id="status" class="btn btn-block btn-success btn-sm text-with" onclick="myFunction()">Installer</button>
+                                                                        <!-- Notes Merrick
+                                                                        Le bouton d'install doit avoir pour id
+                                                                        status-<nomservice>
+                                                                        Comme classe bouton-isntall et
+                                                                        data-appli=<nomservice>
+                                                                        -->
+                                                                       <button type="submit" name="radarr"
+                                                                               id="status-radarr" class="btn btn-block
+                                                                               btn-success btn-sm text-with
+                                                                               bouton-install"
+                                                                               data-appli="radarr" onclick="myFunction()
+">Installer</button>
                                                                     </span>
                                                                   </form>
                                                             </div>
@@ -253,7 +272,7 @@
     <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE App -->
     <script src="dist/js/adminlte.min.js"></script>
-    <script type="text/javascript" src="dist/js/scripts.js"></script> 
+    <script type="text/javascript" src="dist/js/ssd_specific.js"></script>
 
 </body>
 
