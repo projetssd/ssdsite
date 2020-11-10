@@ -201,7 +201,9 @@
                                                             </div>
 
                                                             <div class="card-footer" id="toto">
-                                                                  <form action="/php/index.php" method="post">
+                                                                <!-- Note Merrick, je désactive le form, tout va être
+                                                                 géré par ajax
+                                                                  <form action="/php/index.php" method="post"> -->
                                                                       <!-- Notes Merrick
                                                                       Les boutons start/stop doivent avoir comme classe
                                                                       start-stop-button-<nom_service>
@@ -231,7 +233,7 @@
                                                                                data-appli="radarr" onclick="myFunction()
 "></button>
                                                                     </span>
-                                                                  </form>
+                                                                  <!-- </form> -->
                                                             </div>
                                                         </div>
                                                     </div>
