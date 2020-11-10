@@ -60,7 +60,6 @@ class service
     {
 
         sleep(10);
-        echo "ok";
         return true;
     }
 
@@ -70,7 +69,6 @@ class service
     public function uninstall()
     {
         sleep(10);
-        echo "ok";
         return true;
     }
 }
