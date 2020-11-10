@@ -75,7 +75,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Logs du serveur</h4>
+                        <h4 class="modal-title">Résultat installation</h4>
                     </div>
                     <div class="modal-body" id="modalinstallbody">
 

@@ -68,8 +68,9 @@ class service
     {
         // pas la peine de faire un retour true or false, on ne sait pas si ça s'est bien passé
         // on va juste retourner le texte de la commande
+        echo "Execution de " . $this->command_line;
         $this->log = shell_exec($this->command_line);
-        return $this->log;
+        return true;
     }
 
     /**
