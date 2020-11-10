@@ -7,6 +7,7 @@ class service
     var $username     = '';
     var $password     = '';
     var $command_line = '';
+    var $command_lineone = '';
 
     function __construct($my_service)
     {
@@ -23,11 +24,17 @@ class service
                 $this->command_line =
                     'rm /var/www/seedboxdocker.website/logtail/log; sudo -u root ansible-playbook /opt/seedbox-compose/includes/dockerapps/radarr.yml 2>&1 | tee -a /var/www/seedboxdocker.website/logtail/log 2>/dev/null >/dev/null &';
                 // on peut éventuellement surcharger $username et $password ici
+                $this->command_lineone =
+                    'rm /var/www/seedboxdocker.website/logtail/log; sudo -u root docker rm -f radarr 2>&1 | tee -a /var/www/seedboxdocker.website/logtail/log 2>/dev/null >/dev/null &';
+                // on peut éventuellement surcharger $username et $password ici
                 break;
-            case "monautreservice":
-                $this->url          = "http://127.0.0.1:8080";
+            case "sonarr":
+                $this->url          = "http://127.0.0.1:8989";
                 $this->command_line =
-                    'rm /var/www/seedboxdocker.website/logtail/log; sudo -u root ansible-playbook /opt/seedbox-compose/includes/dockerapps/autreservice.yml 2>&1 | tee -a /var/www/seedboxdocker.website/logtail/log 2>/dev/null >/dev/null &';
+                    'rm /var/www/seedboxdocker.website/logtail/log; sudo -u root ansible-playbook /opt/seedbox-compose/includes/dockerapps/sonarr.yml 2>&1 | tee -a /var/www/seedboxdocker.website/logtail/log 2>/dev/null >/dev/null &';
+                // on peut éventuellement surcharger $username et $password ici
+                $this->command_lineone =
+                    'rm /var/www/seedboxdocker.website/logtail/log; sudo -u root docker rm -f sonarr 2>&1 | tee -a /var/www/seedboxdocker.website/logtail/log 2>/dev/null >/dev/null &';
                 // on peut éventuellement surcharger $username et $password ici
                 break;
             default:
@@ -81,7 +88,12 @@ class service
      */
     public function uninstall()
     {
-        sleep(10);
+        /* la commande d'uninstall se termine par un & et donc rend la main tout de suite
+        impossible de catcher la sortie
+        on ne stocke donc aucune info
+        les infos seront lues dans le défilement des logs */
+
+        shell_exec($this->command_lineone);
         return true;
     }
 }
