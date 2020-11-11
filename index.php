@@ -185,167 +185,99 @@ require_once "php/classes/service.php";
                             <!-- /.card -->
                         </div>
                         <!-- /.col -->
-                        <div class="card card-primary card-outline">
-                            <div class="card-header">
-                                <h3 class="card-title p-2">
-                                    <i class="fas fa-edit"></i>
-                                    Applications
-                                </h3>
-                            </div><!-- /.card-header -->
-                            <!-- app -->
-                            <div class="card-body">
-                                <div class="row">
-                                    <?php
-                                    //$service = new service('radarr');
-                                    //$service->display();
+                        <div class="col-md-9">
+                            <div class="card card-primary card-outline">
+                                <div class="card-header">
+                                    <h3 class="card-title p-2">
+                                        <i class="fas fa-edit"></i>
+                                        Applications
+                                    </h3>
+                                    <!-- START SEARCH FORM -->
+                                    <form class="form-inline ml-3 float-right">
+                                        <div class="input-group input-group-sm">
+                                            <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-navbar" type="submit">
+                                                    <i class="fas fa-search"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <!-- END SEARCH FORM -->
+
+                                </div><!-- /.card-header -->
+                                <!-- app -->
+                                <div class="card-body">
+                                    <div class="row">
+                                        <?php
+                                    $service = new service('radarr');
+                                    $service->display();
+                                     $service = new service('sonarr');
+                                    $service->display();
+                                    $service = new service('rutorrent');
+                                    $service->display();
                                     ?>
-
-                                    <div class=col-md-4>
-                                        <div class="post">
-                                            <div class="card card-info card-outline">
-                                                <div class="card-body user-block">
-                                                    <img class="img-circle img-bordered-sm" src="https://www.scriptseedboxdocker.com/wp-content/uploads/2020/05/radarr.png" alt="user image">
-                                                    <span class="username">
-                                                        <a href="#">Radarr</a>
-                                                    </span>
-                                                    <span class="description">Version 3.0.4.991</span>
-                                                </div>
-
-                                                <div class="card-footer" id="toto">
-                                                    <!-- Note Merrick, je désactive le form, tout va être
-                                                                 géré par ajax
-                                                                  <form action="/php/index.php" method="post"> -->
-                                                    <!-- Notes Merrick
-                                                                      Les boutons start/stop doivent avoir comme classe
-                                                                      start-stop-button-<nom_service>
-                                                                      On va les cacher par défaut
-                                                                      -->
-                                                    <a href="php/index.php?reset=true" class="link-black start-stop-button-radarr
-                                                                      text-sm mr-2" id="reset" name="reset" style="display: none;"><i class="fas fa-share mr-1"></i>Restart</a>
-                                                    <a href="php/index.php?stop=true" class="link-black start-stop-button-radarr
-                                                                      text-sm mr-2" id="stop" name="stop" style="display: none;"><i class="fas fa-stop mr-1"></i>Stop</a>
-
-                                                    <span class="float-right">
-                                                        <!-- Notes Merrick
-                                                                        Le bouton d'install doit avoir pour id
-                                                                        status-<nomservice>
-                                                                        Comme classe bouton-isntall et
-                                                                        data-appli=<nomservice>
-                                                                        -->
-                                                        <button type="submit" name="radarr" id="status-radarr" class="btn btn-block
-                                                                               btn-success btn-sm text-with
-                                                                               bouton-install" data-appli="radarr"></button>
-
-                                                    </span>
-                                                    <!-- </form> -->
-                                                </div>
-                                            </div>
-                                        </div>
+                   
+                                  
                                     </div>
-
-                                    <!-- /.app -->
-                                    <!-- app -->
-                                    <div class=col-md-4>
-                                        <div class="post">
-                                            <div class="card card-info card-outline">
-                                                <div class="card-body user-block">
-                                                    <img class="img-circle img-bordered-sm" src="https://www.scriptseedboxdocker.com/wp-content/uploads/2020/05/radarr.png" alt="user image">
-                                                    <span class="username">
-                                                        <a href="#">Sonarr</a>
-                                                    </span>
-                                                    <span class="description">Version 3.0.4.991</span>
-                                                </div>
-
-                                                <div class="card-footer" id="toto">
-                                                    <!-- Note Merrick, je désactive le form, tout va être
-                                                                 géré par ajax
-                                                                  <form action="/php/index.php" method="post"> -->
-                                                    <!-- Notes Merrick
-                                                                      Les boutons start/stop doivent avoir comme classe
-                                                                      start-stop-button-<nom_service>
-                                                                      On va les cacher par défaut
-                                                                      -->
-                                                    <a href="php/index.php?reset=true" class="link-black start-stop-button-sonarr
-                                                                      text-sm mr-2" id="reset" name="reset" style="display: none;"><i class="fas fa-share mr-1"></i>Restart</a>
-                                                    <a href="php/index.php?stop=true" class="link-black start-stop-button-sonarr
-                                                                      text-sm mr-2" id="stop" name="stop" style="display: none;"><i class="fas fa-stop mr-1"></i>Stop</a>
-
-                                                    <span class="float-right">
-                                                        <!-- Notes Merrick
-                                                                        Le bouton d'install doit avoir pour id
-                                                                        status-<nomservice>
-                                                                        Comme classe bouton-isntall et
-                                                                        data-appli=<nomservice>
-                                                                        -->
-                                                        <button type="submit" name="sonarr" id="status-sonarr" class="btn btn-block
-                                                                               btn-success btn-sm text-with
-                                                                               bouton-install" data-appli="sonarr"></button>
-                                                    </span>
-                                                    <!-- </form> -->
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- /.app -->
                                 </div>
                             </div>
-                        </div>
-                        <!-- /.nav-tabs-custom -->
-                        <!-- Start exemple toast-->
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="card card-warning card-outline">
-                                    <div class="card-header">
-                                        <h3 class="card-title">
-                                            <i class="fas fa-edit"></i>
-                                            Exemple de notification rapide
-                                        </h3>
-                                    </div>
-                                    <div class="card-body">
-                                        <button type="button" class="btn btn-success toastrDefaultSuccess">
-                                            Success Toast
-                                        </button>
-                                        <button type="button" class="btn btn-info toastrDefaultInfo">
-                                            Info Toast
-                                        </button>
-                                        <button type="button" class="btn btn-danger toastrDefaultError">
-                                            Error Toast
-                                        </button>
-                                        <button type="button" class="btn btn-warning toastrDefaultWarning">
-                                            Warning Toast
-                                        </button>
-                                        <div class="text-muted mt-3">
-                                            Voir le script en bas de page
+                            <!-- /.nav-tabs-custom -->
+                            <!-- Start exemple toast-->
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card card-warning card-outline">
+                                        <div class="card-header">
+                                            <h3 class="card-title">
+                                                <i class="fas fa-edit"></i>
+                                                Exemple de notification rapide
+                                            </h3>
                                         </div>
+                                        <div class="card-body">
+                                            <button type="button" class="btn btn-success toastrDefaultSuccess">
+                                                Success Toast
+                                            </button>
+                                            <button type="button" class="btn btn-info toastrDefaultInfo">
+                                                Info Toast
+                                            </button>
+                                            <button type="button" class="btn btn-danger toastrDefaultError">
+                                                Error Toast
+                                            </button>
+                                            <button type="button" class="btn btn-warning toastrDefaultWarning">
+                                                Warning Toast
+                                            </button>
+                                            <div class="text-muted mt-3">
+                                                Voir le script en bas de page
+                                            </div>
+                                        </div>
+                                        <!-- /.card -->
                                     </div>
-                                    <!-- /.card -->
                                 </div>
                             </div>
+                            <!-- End exemple toast-->
                         </div>
-                        <!-- End exemple toast-->
+                        <!-- /.col -->
                     </div>
-                    <!-- /.col -->
+                    <!-- /.row -->
                 </div>
-                <!-- /.row -->
+            </section>
+            <!-- /.content -->
         </div>
-        </section>
-        <!-- /.content -->
-    </div>
-    <!-- /.content-wrapper -->
+        <!-- /.content-wrapper -->
 
-    <footer class="main-footer">
-        <div class="float-right d-none d-sm-block">
-            <b>Version</b> 1.0.0
-        </div>
-        <strong>Copyright &copy; 2020 <a href="http://scriptseedboxdocker.com">SSD</a>.</strong> All rights
-        reserved.
-    </footer>
+        <footer class="main-footer">
+            <div class="float-right d-none d-sm-block">
+                <b>Version</b> 1.0.0
+            </div>
+            <strong>Copyright &copy; 2020 <a href="http://scriptseedboxdocker.com">SSD</a>.</strong> All rights
+            reserved.
+        </footer>
 
-    <!-- Control Sidebar -->
-    <aside class="control-sidebar control-sidebar-dark">
-        <!-- Control sidebar content goes here -->
-    </aside>
-    <!-- /.control-sidebar -->
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
     </div>
     <!-- ./wrapper -->
 

@@ -9,6 +9,7 @@ class service
     var $password        = '';
     var $command_line    = '';
     var $command_lineone = '';
+    var $command_linetwo = '';
 
     function __construct($my_service)
     {
@@ -37,6 +38,21 @@ class service
                 // on peut éventuellement surcharger $username et $password ici
                 $this->command_lineone =
                     'rm /var/www/seedboxdocker.website/logtail/log; sudo -u root docker rm -f sonarr 2>&1 | tee -a /var/www/seedboxdocker.website/logtail/log 2>/dev/null >/dev/null &';
+                // on peut éventuellement surcharger $username et $password ici
+                break;
+            case "rutorrent":
+                $this->url          = "http://127.0.0.1:8080";
+                $this->command_line =
+                    'rm /var/www/seedboxdocker.website/logtail/log; sudo -u root ansible-playbook /opt/seedbox-compose/includes/dockerapps/rutorrent.yml 2>&1 | tee -a /var/www/seedboxdocker.website/logtail/log 2>/dev/null >/dev/null &';
+                // on peut éventuellement surcharger $username et $password ici
+                $this->command_lineone =
+                    'rm /var/www/seedboxdocker.website/logtail/log; sudo -u root docker rm -f rutorrent 2>&1 | tee -a /var/www/seedboxdocker.website/logtail/log 2>/dev/null >/dev/null &';
+                // on peut éventuellement surcharger $username et $password ici
+                break;
+            case "reset":
+                $this->url          = "http://127.0.0.1:8080";
+                $this->command_linetwo =
+                    'rm /var/www/seedboxdocker.website/logtail/log; sudo -u root docker restart rutorrent 2>&1 | tee -a /var/www/seedboxdocker.website/logtail/log 2>/dev/null >/dev/null &';
                 // on peut éventuellement surcharger $username et $password ici
                 break;
             default:
@@ -99,6 +115,21 @@ class service
         return true;
     }
 
+    /**
+     * @return bool
+     */
+    public function restart()
+    {
+        /* la commande de restart se termine par un & et donc rend la main tout de suite
+        impossible de catcher la sortie
+        on ne stocke donc aucune info
+        les infos seront lues dans le défilement des logs */
+
+        shell_exec($this->command_linetwo);
+        return true;
+    }
+
+
     public function display()
     {
         echo '
@@ -106,9 +137,9 @@ class service
                                         <div class="post">
                                             <div class="card card-info card-outline">
                                                 <div class="card-body user-block">
-                                                    <img class="img-circle img-bordered-sm" src="https://www.scriptseedboxdocker.com/wp-content/uploads/2020/05/radarr.png" alt="user image">
+                                                    <img class="img-circle img-bordered-sm" src="https://www.scriptseedboxdocker.com/wp-content/uploads/2020/05/' . $this->display_name . '.png" alt="user image">
                                                     <span class="username">
-                                                        <a href="#">Radarr</a>
+                                                        <a href="#">' . ucfirst($this->display_name) . '</a>
                                                     </span>
                                                     <span class="description">Version 3.0.4.991</span>
                                                 </div>
@@ -122,9 +153,9 @@ class service
                                                                       start-stop-button-<nom_service>
                                                                       On va les cacher par défaut
                                                                       -->
-                                                    <a href="php/index.php?reset=true" class="link-black start-stop-button-radarr
+                                                    <a href="php/index.php?reset=true" class="link-black start-stop-button-' . $this->display_name . '
                                                                       text-sm mr-2" id="reset" name="reset" style="display: none;"><i class="fas fa-share mr-1"></i>Restart</a>
-                                                    <a href="php/index.php?stop=true" class="link-black start-stop-button-radarr
+                                                    <a href="php/index.php?stop=true" class="link-black start-stop-button-' . $this->display_name . '
                                                                       text-sm mr-2" id="stop" name="stop" style="display: none;"><i class="fas fa-stop mr-1"></i>Stop</a>
 
                                                     <span class="float-right">
@@ -134,9 +165,9 @@ class service
                                                                         Comme classe bouton-isntall et
                                                                         data-appli=<nomservice>
                                                                         -->
-                                                        <button type="submit" name="radarr" id="status-radarr" class="btn btn-block
+                                                        <button type="submit" name="' . $this->display_name . '" id="status-' . $this->display_name . '" class="btn btn-block
                                                                                btn-success btn-sm text-with
-                                                                               bouton-install" data-appli="radarr"></button>
+                                                                               bouton-install" data-appli="' . $this->display_name . '"></button>
 
                                                     </span>
                                                     <!-- </form> -->
