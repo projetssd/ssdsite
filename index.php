@@ -76,6 +76,23 @@ require_once "php/classes/service.php";
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="modalLibre" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="titre-modal-libre">Logs du serveur</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="embed-responsive embed-responsive-16by9 z-depth-1-half" id="data-modal-libre">
+                            
+                        </div>
+                    </div>
+                    <div class="modal-footer float-right">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!--End content modal 2-->
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
@@ -193,14 +210,14 @@ require_once "php/classes/service.php";
                                         Applications
                                     </h3>
                                     <!-- START SEARCH FORM -->
-                                    <form class="form-inline ml-3 float-right">
+                                    <form class="form-group ml-3 float-right">
                                         <div class="input-group input-group-sm">
-                                            <input class="form-control" type="search" placeholder="Search" aria-label="Search">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-navbar" type="submit">
-                                                    <i class="fas fa-search"></i>
-                                                </button>
-                                            </div>
+                                            <input class="form-control" type="search" placeholder="Search" aria-label="Search" id="searchappli">
+                                 
+                                        </div><br />
+                                        <div class="form-check">
+                                          <input type="checkbox" class="form-check-input"  id="installed_appli">
+                                          <label for="installed_appli">Uniquement installés</label>
                                         </div>
                                     </form>
                                     <!-- END SEARCH FORM -->

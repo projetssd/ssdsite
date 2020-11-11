@@ -49,10 +49,13 @@ class service
                     'rm /var/www/seedboxdocker.website/logtail/log; sudo -u root docker rm -f rutorrent 2>&1 | tee -a /var/www/seedboxdocker.website/logtail/log 2>/dev/null >/dev/null &';
                 // on peut éventuellement surcharger $username et $password ici
                 break;
-            case "reset":
-                $this->url          = "http://127.0.0.1:8080";
-                $this->command_linetwo =
-                    'rm /var/www/seedboxdocker.website/logtail/log; sudo -u root docker restart rutorrent 2>&1 | tee -a /var/www/seedboxdocker.website/logtail/log 2>/dev/null >/dev/null &';
+            case "lidarr":
+                $this->url          = "http://127.0.0.1:8686";
+                $this->command_line =
+                    'rm /var/www/seedboxdocker.website/logtail/log; sudo -u root ansible-playbook /opt/seedbox-compose/includes/dockerapps/lidarr.yml 2>&1 | tee -a /var/www/seedboxdocker.website/logtail/log 2>/dev/null >/dev/null &';
+                // on peut éventuellement surcharger $username et $password ici
+                $this->command_lineone =
+                    'rm /var/www/seedboxdocker.website/logtail/log; sudo -u root sudo -u root docker rm -f lidarr 2>&1 | tee -a /var/www/seedboxdocker.website/logtail/log 2>/dev/null >/dev/null &';
                 // on peut éventuellement surcharger $username et $password ici
                 break;
             default:
@@ -133,11 +136,11 @@ class service
     public function display()
     {
         echo '
-                                    <div class=col-md-4>
+                                    <div class="col-md-4 divappli" id="div-' . $this->display_name . '" data-appli="' . $this->display_name . '" data-installed="">
                                         <div class="post">
                                             <div class="card card-info card-outline">
                                                 <div class="card-body user-block">
-                                                    <img class="img-circle img-bordered-sm" src="https://www.scriptseedboxdocker.com/wp-content/uploads/2020/05/' . $this->display_name . '.png" alt="user image">
+                                                    <img class="img-circle img-bordered-sm" src="https://www.scriptseedboxdocker.com/wp-content/uploads/icones/' . $this->display_name . '.png" alt="user image">
                                                     <span class="username">
                                                         <a href="#">' . ucfirst($this->display_name) . '</a>
                                                     </span>
@@ -153,10 +156,8 @@ class service
                                                                       start-stop-button-<nom_service>
                                                                       On va les cacher par défaut
                                                                       -->
-                                                    <a href="php/index.php?reset=true" class="link-black start-stop-button-' . $this->display_name . '
-                                                                      text-sm mr-2" id="reset" name="reset" style="display: none;"><i class="fas fa-share mr-1"></i>Restart</a>
-                                                    <a href="php/index.php?stop=true" class="link-black start-stop-button-' . $this->display_name . '
-                                                                      text-sm mr-2" id="stop" name="stop" style="display: none;"><i class="fas fa-stop mr-1"></i>Stop</a>
+                                                    <a class="link-black start-stop-button-' . $this->display_name . ' text-sm mr-2 bouton-start" data-appli="' . $this->display_name . '" id="reset-' . $this->display_name . '" name="reset-' . $this->display_name . '" style="display: none;cursor: pointer;"><i class="fas fa-share mr-1"></i>Restart</a>
+                                                    <a class="link-black start-stop-button-' . $this->display_name . ' text-sm mr-2 bouton-stop" id="stop-' . $this->display_name . '" name="stop" style="display: none;cursor: pointer;"><i class="fas fa-stop mr-1"></i>Stop</a>
 
                                                     <span class="float-right">
                                                         <!-- Notes Merrick

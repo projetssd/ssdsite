@@ -1,7 +1,7 @@
 /* le document.ready permet de faire en sorte que le js
 ne s'éxécute que quand la page est totalement chargée
  */
-$(document).ready(function () {
+$(document).ready(function() {
     // on va d'abord mettre les bons textes sur les bons boutons...
     $(".bouton-install").each(function() {
         let appli = $(this).attr("data-appli");
@@ -9,7 +9,7 @@ $(document).ready(function () {
             url: "http://178.170.54.173/ajax/check_service.php?service=" + appli
             // appel simple, en GET
             // on peut rajouter des options si besoin pour du POST
-        }).done(function (data) {
+        }).done(function(data) {
             // On est dans le done, tout est ok
             // la requête est passée
             // le résultat de la requête est maintenant dans la variable "data"
@@ -17,20 +17,23 @@ $(document).ready(function () {
                 // le service tourne
                 $("#status-" + appli).html("Désinstaller");
                 $(".start-stop-button-" + appli).show();
-            } else {
+                $("#div-" + appli).attr("data-installed", 1);
+            }
+            else {
                 // le service ne tourne pas
                 $("#status-" + appli).html("Installer");
                 $(".start-stop-button-" + appli).hide();
+                $("#div-" + appli).attr("data-installed", 0);
             }
-        }).fail(function () {
+        }).fail(function() {
             console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
             $("#status-" + appli).html("Erreur ajax");
         });
     });
 
 
-    // on va maintenant intercepter le click sur le bouton status-radarr
-    $(".bouton-install").click(function () {
+    // on va maintenant intercepter le click sur le bouton status
+    $(".bouton-install").click(function() {
         let appli = $(this).attr("data-appli");
         console.log("Appli appelée " + appli)
         // on va considérer que le texte du bouton est ok
@@ -41,7 +44,7 @@ $(document).ready(function () {
             // on lance un ajax qui va installer tout ça
             $.ajax({
                 url: "http://178.170.54.173/ajax/install_service.php?service=" + appli
-            }).done(function (data) {
+            }).done(function(data) {
                 // On est dans le done, tout est ok
                 // la requête est passée
                 // le résultat de la requête est maintenant dans la variable "data"
@@ -54,17 +57,19 @@ $(document).ready(function () {
                 // on affiche les logs
                 // il suffit d'afficher la dic modalYT1 qui contient déjà un iframe de défilement des logs
                 $('#modalYT1').modal('show');
+                $("#div-" + appli).attr("data-installed", 1);
 
-            }).fail(function () {
+            }).fail(function() {
                 console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
                 $("#status-" + appli).html("Erreur ajax");
             });
 
-        } else if ($("#status-" + appli).html() === "Désinstaller") {
+        }
+        else if ($("#status-" + appli).html() === "Désinstaller") {
             $("#status-" + appli).html("Désinstallation...").prop('disabled', true);
             $.ajax({
                 url: "http://178.170.54.173/ajax/uninstall_service.php?service=" + appli
-            }).done(function (data) {
+            }).done(function(data) {
                 // On est dans le done, tout est ok
                 // la requête est passée
                 // le résultat de la requête est maintenant dans la variable "data"
@@ -74,15 +79,84 @@ $(document).ready(function () {
                 // on affiche les logs
                 // il suffit d'afficher la dic modalYT1 qui contient déjà un iframe de défilement des logs
                 $('#modalYT1').modal('show');
-            }).fail(function () {
+            }).fail(function() {
                 console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
                 $("#status-" + appli).html("Erreur ajax");
             });
-        } else {
+        }
+        else {
             console.log('Erreur sur le texte du bouton, impossible de continuer');
         }
 
     });
 
+    //le bouton restart
+    $(".bouton-start").click(function() {
+        console.log("Bouton start clické");
+        let appli = $(this).attr("data-appli");
+        console.log("Restart de " + appli);
+
+        $.ajax({
+            url: "http://178.170.54.173/ajax/restart_service.php?service=" + appli
+        }).done(function(data) {
+
+            toastr.success("Redémarrage de " + appli + " en cours");
+        }).fail(function() {
+            console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+            $("#status-" + appli).html("Erreur ajax");
+        });
+
+
+    });
+
+
+    // gestion de la zone de recherche
+    $("#searchappli").on('input', function() {
+        let searchcontent = $("#searchappli").val();
+        searchcontent = searchcontent.toLowerCase();
+        $(".divappli").each(function() {
+
+            let iddiv = $(this).attr('id');
+            let nomdiv = $(this).attr('data-appli');
+            if (nomdiv.includes(searchcontent)) {
+                $("#" + iddiv).show();
+
+            }
+            else {
+                $("#" + iddiv).hide();
+            }
+
+
+        });
+
+
+    });
+
+
+
+    // gestion de la case à cocher pour afficher les applis installées
+    $("#installed_appli").change(function() {
+
+        if ($(this).is(":checked")) {
+            $(".divappli").each(function() {
+                let isinstalled = $(this).attr('data-installed');
+                if (isinstalled == 1) {
+                    $(this).show();
+
+                }
+                else {
+                    $(this).hide();
+                }
+
+            });
+
+        }
+        else {
+            $(".divappli").show();
+        }
+
+
+
+    });
 
 });
