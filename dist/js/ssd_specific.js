@@ -39,7 +39,7 @@ $(document).ready(function() {
     });*/
 
 
-    // on va maintenant intercepter le click sur le bouton status
+    // on va intercepter le click sur le bouton status
     $(".bouton-install").click(function() {
         let appli = $(this).attr("data-appli");
         console.log("Appli appelée " + appli)
@@ -51,11 +51,9 @@ $(document).ready(function() {
             // on lance un ajax qui va installer tout ça
             $.ajax({
                 url: "ajax/install_service.php?service=" + appli
-            }).done(function(data) {
+            }).done(function () {
                 // On est dans le done, tout est ok
                 // la requête est passée
-                // le résultat de la requête est maintenant dans la variable "data"
-                // dont on ne fait rien
 
                 // on change le texte du bouton et on le remet en enable
                 $("#status-" + appli).html("Désinstaller").removeClass("btn-success").addClass("btn-warning");
@@ -64,26 +62,22 @@ $(document).ready(function() {
                 // on affiche les logs
                 // il suffit d'afficher la dic modalYT1 qui contient déjà un iframe de défilement des logs
                 $('#modalYT1').modal('show');
-                $("#div-" + appli).attr("data-installed", 1);
-                // on retire la classe de la div
-                $("#div-" + appli).removeClass('div-uninstalled');
-
+                // on met à jour les infos de la div
+                $("#div-" + appli).attr("data-installed", 1).removeClass('div-uninstalled');
             }).fail(function() {
                 console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
                 $("#status-" + appli).html("Erreur ajax");
             });
-
         }
         else if ($("#status-" + appli).html() === "Désinstaller") {
             $("#status-" + appli).html("Désinstallation...");
             $.ajax({
                 url: "ajax/uninstall_service.php?service=" + appli
-            }).done(function(data) {
+            }).done(function () {
                 // On est dans le done, tout est ok
                 // la requête est passée
-                // le résultat de la requête est maintenant dans la variable "data"
                 $("#status-" + appli).html("Installer").removeClass("btn-warning").addClass("btn-success");
-                // on afficher les boutons start/stop
+                // on cache les boutons start/stop
                 $(".start-stop-button-" + appli).hide();
                 // on affiche le toaster
                 toastr.success("Désinstallation de " + appli + " en cours");
@@ -108,8 +102,8 @@ $(document).ready(function() {
 
         $.ajax({
             url: "ajax/restart_service.php?service=" + appli
-        }).done(function(data) {
-          toastr.success("Redémarrage de " + appli + " en cours");
+        }).done(function () {
+            toastr.success("Redémarrage de " + appli + " en cours");
         }).fail(function() {
             console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
             $("#status-" + appli).html("Erreur ajax");
@@ -125,7 +119,7 @@ $(document).ready(function() {
 
         $.ajax({
             url: "ajax/stop_service.php?service=" + appli
-        }).done(function(data) {
+        }).done(function () {
             toastr.success("Arrêt de " + appli + " en cours");
             $(".start-stop-button-" + appli).show();
         }).fail(function() {
@@ -151,25 +145,18 @@ $(document).ready(function() {
             else {
                 $("#"+iddiv).hide();
             }
-
-
         });
-
-
     });
-
 
 
     // gestion de la case à cocher pour afficher les applis installées
     $("#installed_appli").change(function() {
-
         if ($(this).is(":checked")) {
             $(".divappli").each(function() {
                 let isinstalled = $(this).attr('data-installed');
-                if (isinstalled == 1) {
+                if (isinstalled === 1) {
                     $(this).show();
-                }
-                else {
+                } else {
                     $(this).hide();
                 }
             });
