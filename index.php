@@ -245,12 +245,17 @@ require_once 'php/classes/service.php';
                                 <div class="card-body">
                                     <div class="row">
                                         <?php
-                                        $service = new service('radarr');
-                                        $service->display();
-                                        $service = new service('sonarr');
-                                        $service->display();
-                                        $service = new service('rutorrent');
-                                        $service->display();
+                                        /**
+                                         * Explication : la fonction get_all affiche les applis en priorisant celles installées
+                                         * On met dans le tableau toutes les applis qu'on veut afficher.
+                                         */
+                                        $tableau_appli = [
+                                            'rutorrent',
+                                            'radarr',
+                                            'sonarr', ];
+                                        $service = new service('all');
+                                        $temp = $service->get_all($tableau_appli);
+
                                         ?>
 
 
@@ -258,39 +263,7 @@ require_once 'php/classes/service.php';
                                 </div>
                             </div>
                             <!-- /.nav-tabs-custom -->
-                            <!--test de modif en groupe ajout Merrick-->
-                            <!-- Start exemple toast-->
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="card card-warning card-outline">
-                                        <div class="card-header">
-                                            <h3 class="card-title">
-                                                <i class="fas fa-edit"></i>
-                                                Exemple de notification rapide
-                                            </h3>
-                                        </div>
-                                        <div class="card-body">
-                                            <button type="button" class="btn btn-success toastrDefaultSuccess">
-                                                Success Toast
-                                            </button>
-                                            <button type="button" class="btn btn-info toastrDefaultInfo">
-                                                Info Toast
-                                            </button>
-                                            <button type="button" class="btn btn-danger toastrDefaultError">
-                                                Error Toast
-                                            </button>
-                                            <button type="button" class="btn btn-warning toastrDefaultWarning">
-                                                Warning Toast
-                                            </button>
-                                            <div class="text-muted mt-3">
-                                                Voir le script en bas de page
-                                            </div>
-                                        </div>
-                                        <!-- /.card -->
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- End exemple toast-->
+
                         </div>
                         <!-- /.col -->
                     </div>

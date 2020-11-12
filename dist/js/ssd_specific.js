@@ -46,7 +46,7 @@ $(document).ready(function() {
         // on va considérer que le texte du bouton est ok
         // a voir si on refait un appel ajax pour vérifier ?
         if ($("#status-" + appli).html() === "Installer") {
-            // on change le texte du bouton et on le met en disabled
+            // on change le texte du bouton 
             $("#status-" + appli).html("Installation...");
             // on lance un ajax qui va installer tout ça
             $.ajax({
@@ -65,6 +65,8 @@ $(document).ready(function() {
                 // il suffit d'afficher la dic modalYT1 qui contient déjà un iframe de défilement des logs
                 $('#modalYT1').modal('show');
                 $("#div-" + appli).attr("data-installed", 1);
+                // on retire la classe de la div
+                $("#div-" + appli).removeClass('div-uninstalled');
 
             }).fail(function() {
                 console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
@@ -83,10 +85,10 @@ $(document).ready(function() {
                 $("#status-" + appli).html("Installer").removeClass("btn-warning").addClass("btn-success");
                 // on afficher les boutons start/stop
                 $(".start-stop-button-" + appli).hide();
-                // on affiche les logs
-                // il suffit d'afficher la dic modalYT1 qui contient déjà un iframe de défilement des logs
-                // $('#modalYT1').modal('show');
+                // on affiche le toaster
                 toastr.success("Désinstallation de " + appli + " en cours");
+                // on ajoute la transparence
+                $("#div-" + appli).addClass('div-uninstalled');
             }).fail(function() {
                 console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
                 $("#status-" + appli).html("Erreur ajax");
@@ -143,11 +145,11 @@ $(document).ready(function() {
             let iddiv = $(this).attr('id');
             let nomdiv = $(this).attr('data-appli');
             if (nomdiv.includes(searchcontent)) {
-                $("#" + iddiv).show();
+                $("#"+iddiv).show();
 
             }
             else {
-                $("#" + iddiv).hide();
+                $("#"+iddiv).hide();
             }
 
 

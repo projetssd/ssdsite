@@ -1,0 +1,7 @@
+.div-uninstalled {
+  opacity: 0.5;  
+}
+
+.div-uninstalled:hover {
+  opacity: 0.8;
+}

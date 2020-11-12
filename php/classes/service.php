@@ -2,14 +2,14 @@
 
 class service
 {
-    private $url               = '';
+    private $url = '';
     private $display_name;
-    private $username          = '';
-    private $password          = '';
-    private $command_install   = '';
+    private $username = '';
+    private $password = '';
+    private $command_install = '';
     private $command_uninstall = '';
-    private $command_restart   = '';
-    private $command_stop      = '';
+    private $command_restart = '';
+    private $command_stop = '';
     private $display_text;
     private $installed;
     private $running;
@@ -25,19 +25,18 @@ class service
         //
         // on commence par mettre tout ce qui es générique
         //
-        $this->display_name      = $my_service;
-        $this->command_line      =
-            'rm /var/www/seedboxdocker.website/logtail/log; sudo -u root ansible-playbook /opt/seedbox-compose/includes/dockerapps/' . $this->display_name . '.yml 2>&1 | tee -a /var/www/seedboxdocker.website/logtail/log 2>/dev/null >/dev/null &';
-        $this->command_lineone   =
-            'rm /var/www/seedboxdocker.website/logtail/log; echo 0 | sudo tee /opt/seedbox/variables/' . $this->display_name . '; sudo -u root sudo -u root docker rm -f ' . $this->display_name . ' 2>&1 | tee -a /var/www/seedboxdocker.website/logtail/log 2>/dev/null >/dev/null &';
-        $this->command_linetwo   =
-            'rm /var/www/seedboxdocker.website/logtail/log; sudo -u root docker restart ' . $this->display_name . ' 2>&1 | tee -a /var/www/seedboxdocker.website/logtail/log 2>/dev/null >/dev/null &';
-        $this->command_linethree =
-            'rm /var/www/seedboxdocker.website/logtail/log; sudo -u root docker stop ' . $this->display_name . ' 2>&1 | tee -a /var/www/seedboxdocker.website/logtail/log 2>/dev/null >/dev/null &';
+        $this->display_name = trim($my_service);
+        $this->command_install =
+            'rm /var/www/seedboxdocker.website/logtail/log; sudo -u root ansible-playbook /opt/seedbox-compose/includes/dockerapps/'.$this->display_name.'.yml 2>&1 | tee -a /var/www/seedboxdocker.website/logtail/log 2>/dev/null >/dev/null &';
+        $this->command_uninstall =
+            'rm /var/www/seedboxdocker.website/logtail/log; echo 0 | sudo tee /opt/seedbox/variables/'.$this->display_name.'; sudo -u root sudo -u root docker rm -f '.$this->display_name.' 2>&1 | tee -a /var/www/seedboxdocker.website/logtail/log 2>/dev/null >/dev/null &';
+        $this->command_restart =
+            'rm /var/www/seedboxdocker.website/logtail/log; sudo -u root docker restart '.$this->display_name.' 2>&1 | tee -a /var/www/seedboxdocker.website/logtail/log 2>/dev/null >/dev/null &';
+        $this->command_stop =
+            'rm /var/www/seedboxdocker.website/logtail/log; sudo -u root docker stop '.$this->display_name.' 2>&1 | tee -a /var/www/seedboxdocker.website/logtail/log 2>/dev/null >/dev/null &';
 
         // ici on va surcharger ce qui n'est pas générique
-        switch ($my_service)
-        {
+        switch ($my_service) {
             case 'radarr':
                 $this->url = 'http://127.0.0.1:7878';
                 break;
@@ -70,18 +69,16 @@ class service
         /**
          * Chemin du fichier qui contient les infos.
          */
-        $filename = '/opt/seedbox/variables/' . $this->display_name;
+        $filename = '/opt/seedbox/variables/'.$this->display_name;
 
         $installed = false; // par défaut, on considère que le service n'est pas là
-        if (file_exists($filename))
-        {
-            $file     = fopen($filename, 'r');
+        if (file_exists($filename)) {
+            $file = fopen($filename, 'r');
             $contents = fread($file, filesize($filename));
         }
         $contents = substr($contents, 0); // on ne garde que le premier caractère
 
-        switch ($contents)
-        {
+        switch ($contents) {
             case 0:
                 // pas installé
                 break;
@@ -118,13 +115,12 @@ class service
         curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
         // on commence l'auth, a priori
         //curl_setopt($ch, CURLOPT_USERPWD, "$this->username:$this->password");
-        $result      = curl_exec($ch);
+        $result = curl_exec($ch);
         $status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);   //get status code
         curl_close($ch);
 
         $return_code = false;
-        if (200 == $status_code)
-        {
+        if (200 == $status_code) {
             $return_code = true;
         }
         $this->running = $return_code;
@@ -142,7 +138,7 @@ class service
         on ne stocke donc aucune info
         les infos seront lues dans le défilement des logs */
 
-        shell_exec($this->command_line);
+        shell_exec($this->command_install);
 
         return true;
     }
@@ -157,7 +153,7 @@ class service
         on ne stocke donc aucune info
         les infos seront lues dans le défilement des logs */
 
-        shell_exec($this->command_lineone);
+        shell_exec($this->command_uninstall);
 
         return true;
     }
@@ -172,7 +168,7 @@ class service
         on ne stocke donc aucune info
         les infos seront lues dans le défilement des logs */
 
-        shell_exec($this->command_linetwo);
+        shell_exec($this->command_restart);
 
         return true;
     }
@@ -184,79 +180,66 @@ class service
         on ne stocke donc aucune info
         les infos seront lues dans le défilement des logs */
 
-        shell_exec($this->command_linethree);
+        shell_exec($this->command_stop);
 
         return true;
     }
 
     public function display($display = true)
     {
-        $this->installed    = $this->is_installed();
-        $this->runnig       = $this->check();
+        $this->installed = $this->is_installed();
+        $this->runnig = $this->check();
         $this->display_text = '<div class="col-md-4 divappli ';
-        if (!$this->installed)
-        {
+        if (!$this->installed) {
             $this->display_text .= 'div-uninstalled ';
         }
-        $this->display_text .= 'id="div-' . $this->display_name . '" data-appli="' . $this->display_name . '" data-installed="';
-        if ($this->installed)
-        {
+        $this->display_text .= '" id="div-'.$this->display_name.'" data-appli="'.$this->display_name.'" data-installed="';
+        if ($this->installed) {
             $this->display_text .= '1';
-        } else
-        {
+        } else {
             $this->display_text .= '0';
         }
         $this->display_text .= '">
                                         <div class="post">
                                             <div class="card card-info card-outline">
                                                 <div class="card-body user-block">
-                                                    <img class="img-circle img-bordered-sm" src="https://www.scriptseedboxdocker.com/wp-content/uploads/icones/' . $this->display_name . '.png" alt="user image">
+                                                    <img class="img-circle img-bordered-sm" src="https://www.scriptseedboxdocker.com/wp-content/uploads/icones/'.$this->display_name.'.png" alt="user image">
                                                     <span class="username">
-                                                        <a href="#">' . ucfirst($this->display_name) . '</a>
+                                                        <a href="#">'.ucfirst($this->display_name).'</a>
                                                     </span>
                                                     <span class="description">Version 3.0.4.991</span>
                                                 </div>
 
                                                 <div class="card-footer" id="toto">
-                                                    <a class="link-black start-stop-button-' . $this->display_name . ' text-sm mr-2 bouton-start" data-appli="' . $this->display_name . '" id="reset-' . $this->display_name . '" name="reset-' . $this->display_name . '" style="';
-        if (!$this->installed)
-        {
+                                                    <a class="link-black start-stop-button-'.$this->display_name.' text-sm mr-2 bouton-start" data-appli="'.$this->display_name.'" id="reset-'.$this->display_name.'" name="reset-'.$this->display_name.'" style="';
+        if (!$this->installed) {
             $this->display_text .= 'display: none;';
         }
         $this->display_text .= 'cursor: pointer;"><i class="fas fa-share mr-1"></i>';
-        if($this->running)
-        {
+        if ($this->running) {
             $this->display_text .= 'Restart';
-        }
-        else
-        {
+        } else {
             $this->display_text .= 'Start';
         }
 
-
         $this->display_text .= '</a>
-                                                    <a class="link-black start-stop-button-' . $this->display_name . ' text-sm mr-2 bouton-stop" data-appli="' . $this->display_name . '" id="stop-' . $this->display_name . '" name="stop-' . $this->display_name . '" style="';
-        if (!$this->installed)
-        {
+                                                    <a class="link-black start-stop-button-'.$this->display_name.' text-sm mr-2 bouton-stop" data-appli="'.$this->display_name.'" id="stop-'.$this->display_name.'" name="stop-'.$this->display_name.'" style="';
+        if (!$this->installed) {
             $this->display_text .= 'display: none;';
         }
         $this->display_text .= ';cursor: pointer;"><i class="fas fa-share mr-1"></i>stop</a>
 
                                                     <span class="float-right">
-                                                        <button type="submit" name="' . $this->display_name . '" id="status-' . $this->display_name . '" class="btn btn-block ';
-        if ($this->installed)
-        {
+                                                        <button type="submit" name="'.$this->display_name.'" id="status-'.$this->display_name.'" class="btn btn-block ';
+        if ($this->installed) {
             $this->display_text .= 'btn-warning ';
-        } else
-        {
+        } else {
             $this->display_text .= 'btn-sucess ';
         }
-        $this->display_text .= 'btn-success btn-sm text-with bouton-install" data-appli="' . $this->display_name . '">';
-        if ($this->installed)
-        {
+        $this->display_text .= 'btn-success btn-sm text-with bouton-install" data-appli="'.$this->display_name.'">';
+        if ($this->installed) {
             $this->display_text .= 'Désinstaller';
-        } else
-        {
+        } else {
             $this->display_text .= 'Installer';
         }
         $this->display_text .= '</button>
@@ -267,9 +250,52 @@ class service
                                             </div>
                                         </div>
                                     </div>';
-        if ($display)
-        {
+        if ($display) {
             echo $this->display_text;
         }
+
+        return $this->display_text;
+    }
+
+    /**
+     * Cette fonction prend en entrée un tableau d'applis
+     * et va chercher toutes les infos nécessaires
+     * En retour on a un tableau avec en premier les applis installées et après les non installées
+     * par défaut, le display est à true, ce qui veut dire qu'on afficher les cartes des applis.
+     */
+    public static function get_all($input, $display = true)
+    {
+        // init des tableaux
+        $appli_installed = [];
+        $appli_uninstalled = [];
+
+        // on boucle sur chaque appli passée en param
+        foreach ($input as $appli) {
+            // on charge le service correspondant
+            $temp = new service($appli);
+            $temp->display_text = $temp->display(false);
+
+            if ($temp->is_installed()) {
+                $appli_installed[] = $temp;
+            } else {
+                $appli_uninstalled[] = $temp;
+            }
+            unset($temp);
+        }
+        $return_array = ['installed' => $appli_installed,
+                            'uninstalled' => $appli_uninstalled, ];
+
+        if ($display) {
+            $display_text = '';
+            foreach ($return_array['installed'] as $appli) {
+                $display_text .= $appli->display_text;
+            }
+            foreach ($return_array['uninstalled'] as $appli) {
+                $display_text .= $appli->display_text;
+            }
+            echo $display_text;
+        }
+
+        return $return_array;
     }
 }
