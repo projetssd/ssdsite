@@ -1,9 +1,7 @@
 <?php
-require_once 'conf.php';
-require_once 'php/classes/service.php';
+require_once "php/classes/service.php";
 ?>
 <!DOCTYPE html>
-<!-- commentaire par merrick -->
 <html>
 
 <head>
@@ -19,7 +17,6 @@ require_once 'php/classes/service.php';
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- overlayScrollbars -->
     <link rel="stylesheet" href="dist/css/adminlte.min.css">
-    <link rel="stylesheet" href="dist/css/ssd.css">
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <!-- Toastr -->
@@ -70,7 +67,7 @@ require_once 'php/classes/service.php';
                     </div>
                     <div class="modal-body">
                         <div class="embed-responsive embed-responsive-16by9 z-depth-1-half">
-                            <iframe class="embed-responsive-item" src="<?php echo BASE_URL; ?>/logtail/" allowfullscreen></iframe>
+                            <iframe class="embed-responsive-item" src="http://178.170.54.173/logtail/" allowfullscreen></iframe>
                         </div>
                     </div>
                     <div class="modal-footer float-right">
@@ -168,7 +165,7 @@ require_once 'php/classes/service.php';
                                         <li class="list-group-item">
                                             <b>Espace disque libre</b> <a class="float-right"><?php include 'php/disque.php'; ?></a>
                                         </li>
-                                        <li class="list-group-item">
+                                                    <li class="list-group-item">
                                             <b>Adresse IP</b> <a class="float-right"><?php include 'php/ip.php'; ?></a>
                                         </li>
                                     </ul>
@@ -231,7 +228,7 @@ require_once 'php/classes/service.php';
                                             <div class="p-2">
                                                 <form class="form-group ml-3 float-right">
                                                     <div class="custom-control custom-checkbox">
-                                                        <input class="custom-control-input" type="checkbox" id="installed_appli">
+                                                        <input class="custom-control-input" type="checkbox" id="installed_appli" checked="">
                                                         <label for="installed_appli" class="custom-control-label">Apps installés uniquement</label>
                                                     </div>
                                                 </form>
@@ -245,25 +242,16 @@ require_once 'php/classes/service.php';
                                 <div class="card-body">
                                     <div class="row">
                                         <?php
-                                        /**
-                                         * Explication : la fonction get_all affiche les applis en priorisant celles installées
-                                         * On met dans le tableau toutes les applis qu'on veut afficher.
-                                         */
-                                        $tableau_appli = [
-                                            'rutorrent',
-                                            'radarr',
-                                            'sonarr', ];
-                                        $service = new service('all');
-                                        $temp = $service->get_all($tableau_appli);
-
+                                        $service = new service('radarr');
+                                        $service->display();
+                                        $service = new service('sonarr');
+                                        $service->display();
+                                        $service = new service('rutorrent');
+                                        $service->display();
                                         ?>
-
-
                                     </div>
                                 </div>
                             </div>
-                            <!-- /.nav-tabs-custom -->
-
                         </div>
                         <!-- /.col -->
                     </div>
@@ -302,29 +290,6 @@ require_once 'php/classes/service.php';
     <!-- SweetAlert2 -->
     <script src="plugins/sweetalert2/sweetalert2.min.js"></script>
 
-    <script type="text/javascript">
-        $(function() {
-            const Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000
-            });
-
-            $('.toastrDefaultSuccess').click(function() {
-                toastr.success('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
-            });
-            $('.toastrDefaultInfo').click(function() {
-                toastr.info('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
-            });
-            $('.toastrDefaultError').click(function() {
-                toastr.error('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
-            });
-            $('.toastrDefaultWarning').click(function() {
-                toastr.warning('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
-            });
-        });
-    </script>
 
 </body>
 
