@@ -3,10 +3,16 @@ ne s'éxécute que quand la page est totalement chargée
  */
 $(document).ready(function() {
     // on va d'abord mettre les bons textes sur les bons boutons...
-    $(".bouton-install").each(function() {
+    
+    /*
+    Notes Merrick, je cache tout ça, çar c'est géré par le php au chargement de la page
+    mais on peut en avoir besoin plus loin
+    */
+    
+    /*$(".bouton-install").each(function() {
         let appli = $(this).attr("data-appli");
         $.ajax({
-            url: "http://178.170.54.173/ajax/check_service.php?service=" + appli
+            url: "ajax/check_service.php?service=" + appli
             // appel simple, en GET
             // on peut rajouter des options si besoin pour du POST
         }).done(function(data) {
@@ -15,7 +21,7 @@ $(document).ready(function() {
             // le résultat de la requête est maintenant dans la variable "data"
             if (data === "ok") {
                 // le service tourne
-                $("#status-" + appli).html("Désinstaller");
+                $("#status-" + appli).html("Désinstaller").removeClass("btn-success").addClass("btn-warning");
                 $(".start-stop-button-" + appli).show();
                 $("#div-" + appli).attr("data-installed", 1);
             }
@@ -23,13 +29,14 @@ $(document).ready(function() {
                 // le service ne tourne pas
                 $("#status-" + appli).html("Installer");
                 $(".start-stop-button-" + appli).hide();
-                $("#div-" + appli).attr("data-installed", 0);
+                $("#div-" + appli).attr("data-installed", 0).css('opacity', '0.5');
+                
             }
         }).fail(function() {
             console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
             $("#status-" + appli).html("Erreur ajax");
         });
-    });
+    });*/
 
 
     // on va maintenant intercepter le click sur le bouton status
@@ -40,10 +47,10 @@ $(document).ready(function() {
         // a voir si on refait un appel ajax pour vérifier ?
         if ($("#status-" + appli).html() === "Installer") {
             // on change le texte du bouton et on le met en disabled
-            $("#status-" + appli).html("Installation...").prop('disabled', true);
+            $("#status-" + appli).html("Installation...");
             // on lance un ajax qui va installer tout ça
             $.ajax({
-                url: "http://178.170.54.173/ajax/install_service.php?service=" + appli
+                url: "ajax/install_service.php?service=" + appli
             }).done(function(data) {
                 // On est dans le done, tout est ok
                 // la requête est passée
@@ -51,7 +58,7 @@ $(document).ready(function() {
                 // dont on ne fait rien
 
                 // on change le texte du bouton et on le remet en enable
-                $("#status-" + appli).html("Désinstaller").prop('disabled', false);
+                $("#status-" + appli).html("Désinstaller").removeClass("btn-success").addClass("btn-warning");
                 // on afficher les boutons start/stop
                 $(".start-stop-button-" + appli).show();
                 // on affiche les logs
@@ -66,19 +73,20 @@ $(document).ready(function() {
 
         }
         else if ($("#status-" + appli).html() === "Désinstaller") {
-            $("#status-" + appli).html("Désinstallation...").prop('disabled', true);
+            $("#status-" + appli).html("Désinstallation...");
             $.ajax({
-                url: "http://178.170.54.173/ajax/uninstall_service.php?service=" + appli
+                url: "ajax/uninstall_service.php?service=" + appli
             }).done(function(data) {
                 // On est dans le done, tout est ok
                 // la requête est passée
                 // le résultat de la requête est maintenant dans la variable "data"
-                $("#status-" + appli).html("Installer").prop('disabled', false);
+                $("#status-" + appli).html("Installer").removeClass("btn-warning").addClass("btn-success");
                 // on afficher les boutons start/stop
                 $(".start-stop-button-" + appli).hide();
                 // on affiche les logs
                 // il suffit d'afficher la dic modalYT1 qui contient déjà un iframe de défilement des logs
-                $('#modalYT1').modal('show');
+                // $('#modalYT1').modal('show');
+                toastr.success("Désinstallation de " + appli + " en cours");
             }).fail(function() {
                 console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
                 $("#status-" + appli).html("Erreur ajax");
@@ -97,16 +105,32 @@ $(document).ready(function() {
         console.log("Restart de " + appli);
 
         $.ajax({
-            url: "http://178.170.54.173/ajax/restart_service.php?service=" + appli
+            url: "ajax/restart_service.php?service=" + appli
         }).done(function(data) {
-
-            toastr.success("Redémarrage de " + appli + " en cours");
+          toastr.success("Redémarrage de " + appli + " en cours");
         }).fail(function() {
             console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
             $("#status-" + appli).html("Erreur ajax");
         });
 
+    });
 
+    //le bouton stop
+    $(".bouton-stop").click(function() {
+        console.log("Bouton stop clické");
+        let appli = $(this).attr("data-appli");
+        console.log("Arrêt de " + appli);
+
+        $.ajax({
+            url: "ajax/stop_service.php?service=" + appli
+        }).done(function(data) {
+            toastr.success("Arrêt de " + appli + " en cours");
+            $(".start-stop-button-" + appli).show();
+        }).fail(function() {
+            console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+            $(".start-stop-button-" + appli).show();
+            $("#status-" + appli).html("Erreur ajax");
+        });
     });
 
 
@@ -142,21 +166,14 @@ $(document).ready(function() {
                 let isinstalled = $(this).attr('data-installed');
                 if (isinstalled == 1) {
                     $(this).show();
-
                 }
                 else {
                     $(this).hide();
                 }
-
             });
-
         }
         else {
             $(".divappli").show();
         }
-
-
-
     });
-
 });

@@ -1,7 +1,9 @@
 <?php
-require_once "php/classes/service.php";
+require_once 'conf.php';
+require_once 'php/classes/service.php';
 ?>
 <!DOCTYPE html>
+<!-- commentaire par merrick -->
 <html>
 
 <head>
@@ -17,6 +19,7 @@ require_once "php/classes/service.php";
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- overlayScrollbars -->
     <link rel="stylesheet" href="dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="dist/css/ssd.css">
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <!-- Toastr -->
@@ -84,7 +87,7 @@ require_once "php/classes/service.php";
                     </div>
                     <div class="modal-body">
                         <div class="embed-responsive embed-responsive-16by9 z-depth-1-half" id="data-modal-libre">
-                            
+
                         </div>
                     </div>
                     <div class="modal-footer float-right">
@@ -185,7 +188,7 @@ require_once "php/classes/service.php";
                                     <h3 class="card-title">Dernières activités</h3>
                                 </div>
                                 <!-- /.card-header -->
-                                <div class="card-body">
+                                <div class="card-body" id="log_activites">
                                     <strong>Restart Plex</strong>
                                     <p class="text-muted">
                                         Le 02/11/2020 à 13h21, status OK
@@ -205,41 +208,57 @@ require_once "php/classes/service.php";
                         <div class="col-md-9">
                             <div class="card card-primary card-outline">
                                 <div class="card-header">
-                                    <h3 class="card-title p-2">
-                                        <i class="fas fa-edit"></i>
-                                        Applications
-                                    </h3>
-                                    <!-- START SEARCH FORM -->
-                                    <form class="form-group ml-3 float-right">
-                                        <div class="input-group input-group-sm">
-                                            <input class="form-control" type="search" placeholder="Search" aria-label="Search" id="searchappli">
-                                 
-                                        </div><br />
-                                        <div class="form-check">
-                                          <input type="checkbox" class="form-check-input"  id="installed_appli">
-                                          <label for="installed_appli">Uniquement installés</label>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <h3 class="card-title p-2">
+                                                <i class="fas fa-edit"></i>
+                                                Applications
+                                            </h3>
                                         </div>
-                                    </form>
-                                    <!-- END SEARCH FORM -->
+                                        <div class="col-md-8 d-flex flex-row-reverse">
+
+                                            <!-- START SEARCH FORM -->
+                                            <div class="p-2">
+                                                <form role="form">
+                                                    <div class="input-group input-group-sm">
+                                                        <input class="form-control" type="search" placeholder="Rechercher" aria-label="Search" id="searchappli">
+
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <!-- END SEARCH FORM -->
+                                            <!-- START APPS INSTALES -->
+                                            <div class="p-2">
+                                                <form class="form-group ml-3 float-right">
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input class="custom-control-input" type="checkbox" id="installed_appli">
+                                                        <label for="installed_appli" class="custom-control-label">Apps installés uniquement</label>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <!-- END APPS INSTALES -->
+                                        </div>
+                                    </div>
 
                                 </div><!-- /.card-header -->
                                 <!-- app -->
                                 <div class="card-body">
                                     <div class="row">
                                         <?php
-                                    $service = new service('radarr');
-                                    $service->display();
-                                     $service = new service('sonarr');
-                                    $service->display();
-                                    $service = new service('rutorrent');
-                                    $service->display();
-                                    ?>
-                   
-                                  
+                                        $service = new service('radarr');
+                                        $service->display();
+                                        $service = new service('sonarr');
+                                        $service->display();
+                                        $service = new service('rutorrent');
+                                        $service->display();
+                                        ?>
+
+
                                     </div>
                                 </div>
                             </div>
                             <!-- /.nav-tabs-custom -->
+                            <!--test de modif en groupe ajout Merrick-->
                             <!-- Start exemple toast-->
                             <div class="row">
                                 <div class="col-md-12">
