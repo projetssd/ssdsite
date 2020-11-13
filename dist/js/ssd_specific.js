@@ -53,11 +53,11 @@ $(document).ready(function() {
             // on lance un ajax qui va installer tout ça
             $.ajax({
                 url: "ajax/install_service.php?service=" + appli
-            }).done(function() {
+            }).done(function(data) {
                 // On est dans le done, tout est ok
                 // la requête est passée
-
-                // on change le texte du bouton et on le remet en enable
+                console.log("result " + data);
+                // on change le texte du bouton 
                 $("#status-" + appli).html("Désinstaller").removeClass("btn-success").addClass("btn-warning");
                 // on afficher les boutons start/stop
                 $(".start-stop-button-" + appli).show();
@@ -189,4 +189,46 @@ $(document).ready(function() {
             $(".divappli").show();
         }
     });
+
+    /* fonction de refresh automatique  */
+    window.setInterval(function() {
+        console.log('test régulier');
+        $(".divappli").each(function() {
+            let appli = $(this).attr('data-appli');
+            let divid = $(this).attr('id');
+            $.ajax({
+                url: "ajax/etat_service.php?service=" + appli,
+                dataType: "json"
+            }).done(function(data) {
+                let running = data.running;
+                let installed = data.installed;
+                //console.log('Etat service '+ appli + ', installed :' + installed + ', running ' + running);
+                // on va modifier le bouton en fonction de l'install
+                if (installed) {
+                    $("#status-" + appli).html("Désinstaller").removeClass("btn-success").addClass("btn-warning");
+                    $("#" + divid).removeClass('div-uninstalled');
+                    $(".start-stop-button-" + appli).show();
+                    // l'appli tourne, on va modifier les boutons si besoin
+                    if (running) {
+                        $("#texte-bouton-restart-" + appli).html("Redémarrer");
+                    }
+                    else {
+                        $("#texte-bouton-restart-" + appli).html("Démarrer");
+                    }
+                }
+                else {
+                    $("#status-" + appli).html("Installer").removeClass("btn-warning").addClass("btn-success");
+                    $("#" + divid).addClass('div-uninstalled');
+                    $(".start-stop-button-" + appli).hide();
+                }
+
+            }).fail(function() {
+                console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+                $("#status-" + appli).html("Erreur ajax");
+            });
+
+
+
+        });
+    }, 15000);
 });

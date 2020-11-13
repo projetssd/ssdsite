@@ -1,9 +1,9 @@
 <?php
 require_once 'conf.php';
 require_once 'php/classes/service.php';
+
 ?>
 <!DOCTYPE html>
-<!-- commentaire par merrick -->
 <html>
 
 <head>

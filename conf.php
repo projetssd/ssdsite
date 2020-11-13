@@ -2,7 +2,7 @@
 /**
  * URL de base par laquelle le service sera accessible.
  */
-define('BASE_URL', 'http://ssd.sdewitte.net/');
+define('BASE_URL', 'https://lucgeek.com/');
 /*
  * Nom du user de la seedbox
  */

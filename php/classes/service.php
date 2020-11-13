@@ -59,17 +59,18 @@ class service
         //
         // on commence par mettre tout ce qui es générique
         //
+        $logfile = '/opt/seedbox/docker/yohann/webserver/nginx/config/www/logtail/log';
         $this->display_name = trim($my_service); // on supprimer les espaces avant/après
         $this->command_install =
-            'rm /var/www/seedboxdocker.website/logtail/log; sudo -u root ansible-playbook /opt/seedbox-compose/includes/dockerapps/'.$this->display_name.'.yml 2>&1 | tee -a /var/www/seedboxdocker.website/logtail/log 2>/dev/null >/dev/null &';
+            'rm '.$logfile.'; sudo -u root ansible-playbook /opt/seedbox-compose/includes/dockerapps/'.$this->display_name.'.yml 2>&1 | tee -a '.$logfile.' 2>/dev/null >/dev/null &';
         $this->command_uninstall =
-            'rm /var/www/seedboxdocker.website/logtail/log; echo 0 | sudo tee /opt/seedbox/variables/'.$this->display_name.'; sudo -u root sudo -u root docker rm -f '.$this->display_name.' 2>&1 | tee -a /var/www/seedboxdocker.website/logtail/log 2>/dev/null >/dev/null &';
+            'rm '.$logfile.'; echo 0 | sudo tee /opt/seedbox/variables/'.$this->display_name.'; sudo -u root sudo -u root docker rm -f '.$this->display_name.' 2>&1 | tee -a '.$logfile.' 2>/dev/null >/dev/null &';
         $this->command_restart =
-            'rm /var/www/seedboxdocker.website/logtail/log; sudo -u root docker restart '.$this->display_name.' 2>&1 | tee -a /var/www/seedboxdocker.website/logtail/log 2>/dev/null >/dev/null &';
+            'rm '.$logfile.'; sudo -u root docker restart '.$this->display_name.' 2>&1 | tee -a '.$logfile.' 2>/dev/null >/dev/null &';
         $this->command_stop =
-            'rm /var/www/seedboxdocker.website/logtail/log; sudo -u root docker stop '.$this->display_name.' 2>&1 | tee -a /var/www/seedboxdocker.website/logtail/log 2>/dev/null >/dev/null &';
+            'rm '.$logfile.'; sudo -u root docker stop '.$this->display_name.' 2>&1 | tee -a'.$logfile.' 2>/dev/null >/dev/null &';
         $this->command_start =
-            'rm /var/www/seedboxdocker.website/logtail/log; sudo -u root docker start '.$this->display_name.' 2>&1 | tee -a /var/www/seedboxdocker.website/logtail/log 2>/dev/null >/dev/null &';
+            'rm '.$logfile.'; sudo -u root docker start '.$this->display_name.' 2>&1 | tee -a '.$logfile.'g 2>/dev/null >/dev/null &';
 
         // ici on va surcharger ce qui n'est pas générique
         switch ($my_service) {
@@ -262,9 +263,9 @@ class service
         }
         $this->display_text .= 'cursor: pointer;"><i class="fas fa-share mr-1"></i>';
         if ($this->running) {
-            $this->display_text .= 'Restart';
+            $this->display_text .= '<span id="texte-bouton-restart-' . $this->display_name . '">Redémarrer</span>';
         } else {
-            $this->display_text .= 'Start';
+            $this->display_text .= '<span id="texte-bouton-restart-' . $this->display_name . '">Démarrer</span>';
         }
 
         $this->display_text .= '</a>
