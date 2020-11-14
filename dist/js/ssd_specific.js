@@ -4,42 +4,6 @@ ne s'éxécute que quand la page est totalement chargée
 /* global $ */
 /*global toastr */
 $(document).ready(function() {
-    // on va d'abord mettre les bons textes sur les bons boutons...
-
-    /*
-    Notes Merrick, je cache tout ça, çar c'est géré par le php au chargement de la page
-    mais on peut en avoir besoin plus loin
-    */
-
-    /*$(".bouton-install").each(function() {
-        let appli = $(this).attr("data-appli");
-        $.ajax({
-            url: "ajax/check_service.php?service=" + appli
-            // appel simple, en GET
-            // on peut rajouter des options si besoin pour du POST
-        }).done(function(data) {
-            // On est dans le done, tout est ok
-            // la requête est passée
-            // le résultat de la requête est maintenant dans la variable "data"
-            if (data === "ok") {
-                // le service tourne
-                $("#status-" + appli).html("Désinstaller").removeClass("btn-success").addClass("btn-warning");
-                $(".start-stop-button-" + appli).show();
-                $("#div-" + appli).attr("data-installed", 1);
-            }
-            else {
-                // le service ne tourne pas
-                $("#status-" + appli).html("Installer");
-                $(".start-stop-button-" + appli).hide();
-                $("#div-" + appli).attr("data-installed", 0).css('opacity', '0.5');
-                
-            }
-        }).fail(function() {
-            console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
-            $("#status-" + appli).html("Erreur ajax");
-        });
-    });*/
-
 
     // on va intercepter le click sur le bouton status
     $(".bouton-install").click(function() {
@@ -161,7 +125,6 @@ $(document).ready(function() {
             let nomdiv = $(this).attr('data-appli');
             if (nomdiv.includes(searchcontent)) {
                 $("#" + iddiv).show();
-
             }
             else {
                 $("#" + iddiv).hide();
@@ -174,9 +137,7 @@ $(document).ready(function() {
     $("#installed_appli").change(function() {
         if ($(this).is(":checked")) {
             $(".divappli").each(function() {
-
                 let isinstalled = $(this).attr('data-installed');
-
                 if (isinstalled == 1) {
                     $(this).show();
                 }
@@ -192,7 +153,7 @@ $(document).ready(function() {
 
     /* fonction de refresh automatique  */
     window.setInterval(function() {
-        console.log('test régulier');
+        //console.log('test régulier');
         $(".divappli").each(function() {
             let appli = $(this).attr('data-appli');
             let divid = $(this).attr('id');
@@ -200,6 +161,9 @@ $(document).ready(function() {
                 url: "ajax/etat_service.php?service=" + appli,
                 dataType: "json"
             }).done(function(data) {
+                // le "data" est le retour de la page etat_service
+                // c'est un json prêt à être exploité, de la forme
+                // {"running":true,"installed":true}
                 let running = data.running;
                 let installed = data.installed;
                 //console.log('Etat service '+ appli + ', installed :' + installed + ', running ' + running);
@@ -221,14 +185,10 @@ $(document).ready(function() {
                     $("#" + divid).addClass('div-uninstalled');
                     $(".start-stop-button-" + appli).hide();
                 }
-
             }).fail(function() {
                 console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
                 $("#status-" + appli).html("Erreur ajax");
             });
-
-
-
         });
-    }, 15000);
+    }, 15000); // timer en ms
 });

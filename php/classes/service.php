@@ -106,7 +106,7 @@ class service
         /**
          * Chemin du fichier qui contient les infos.
          */
-        $filename = '/opt/seedbox/variables/'.$this->display_name;
+        $filename = '/opt/seedbox/status/'.$this->display_name;
 
         $installed = false; // par défaut, on considère que le service n'est pas là
 
