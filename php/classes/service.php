@@ -48,6 +48,8 @@ class service
     private $public_url;
     
     private $version;
+    
+    private $port;
 
     /**
      * service constructor.
@@ -82,15 +84,30 @@ class service
         switch ($my_service) {
             case 'radarr':
                 $this->url = 'http://127.0.0.1:7878';
+                $this->port = 7878;
                 break;
             case 'sonarr':
                 $this->url = 'http://127.0.0.1:8989';
+                $this->port = 8989;
                 break;
             case 'rutorrent':
                 $this->url = 'http://127.0.0.1:8080';
+                $this->port = 45000;
+                // cas particulier de ce fichier port 8080
+                /*$url = '**';
+                $json_docker = shell_exec('docker inspect rutorrent');
+                $tab_json = json_decode($json_docker, true);
+                $network = $tab_json[0]['NetworkSettings']['Networks']['bridge']['IPAddress'];
+                //print_r($network);
+                //echo $test;
+                //print_r($tab_retour);
+
+                $this->url = 'http://' . $network . ':8080';*/
+                //echo $this->url;
                 break;
             case 'lidarr':
                 $this->url = 'http://127.0.0.1:8686';
+                $this->port = 8686;
                 break;
             case 'all':
                 // cas particulier pour charger toutes les cases possibles
@@ -159,7 +176,8 @@ class service
      */
     public function check()
     {
-        $ch = curl_init();
+        // ancien code en curl, ne plus utiliser
+        /*$ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $this->url);
         curl_setopt($ch, CURLOPT_TIMEOUT, 30); //timeout after 30 seconds
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -172,9 +190,14 @@ class service
         if (200 == $status_code) {
             $return_code = true;
         }
-        $this->running = $return_code;
+        $this->running = $return_code;*/
+        $connection = @fsockopen('127.0.0.1', $this->port);
 
-        return $return_code;
+        if (is_resource($connection)) {
+            fclose($connection);
+            return true;
+        }
+        return false;
     }
 
     private function get_html($url)
@@ -192,9 +215,8 @@ class service
     private function get_version()
     {
         if (!$this->running) {
-            return false;
+            return ' container arrêté';
         }
-        
         switch ($this->display_name) {
             case 'radarr':
                 $html = $this->get_html($this->url . '/initialize.js');
@@ -213,14 +235,15 @@ class service
                
                     break;
             case 'rutorrent':
-
+                
                 $html = $this->get_html($this->url);
                 $doc = new DOMDocument();
                 if (!$doc->loadHTML($html)) {
                     // on n'a pas réussi à parser le document
-                    return false;
+                    $version = 'erreur dom';
                 }
-                $version = $doc->getElementById('rtorrentv')->nodeValue;
+                $version = $doc->getElementById('rtorrentv');
+                print_r($version, true);
                 break;
             case 'medusa':
                 $urlsearch = $this->url . '/config';
