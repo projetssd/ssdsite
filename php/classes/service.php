@@ -42,6 +42,10 @@ class service
      * @var bool Est-ce que l'appli tourne ?
      */
     private $running;
+    /**
+     * @var text url cliquable
+     */
+    private $public_url;
 
     /**
      * service constructor.
@@ -59,12 +63,12 @@ class service
         //
         // on commence par mettre tout ce qui es générique
         //
-        $logfile = '/opt/seedbox/docker/yohann/webserver/nginx/config/www/logtail/log';
+        $logfile = '/var/www/seedboxdocker.website/logtail/log';
         $this->display_name = trim($my_service); // on supprimer les espaces avant/après
         $this->command_install =
-            'rm '.$logfile.'; sudo -u root ansible-playbook /opt/seedbox-compose/includes/dockerapps/'.$this->display_name.'.yml 2>&1 | tee -a '.$logfile.' 2>/dev/null >/dev/null &';
+            'rm '.$logfile.'; sudo -u www-data /var/www/seedboxdocker.website/scripts/install.sh '.$this->display_name.' 2>&1 | tee -a '.$logfile.' 2>/dev/null >/dev/null &';
         $this->command_uninstall =
-            'rm '.$logfile.'; echo 0 | sudo tee /opt/seedbox/variables/'.$this->display_name.'; sudo -u root sudo -u root docker rm -f '.$this->display_name.' 2>&1 | tee -a '.$logfile.' 2>/dev/null >/dev/null &';
+            'rm '.$logfile.'; echo 0 | sudo tee /opt/seedbox/status/'.$this->display_name.'; sudo -u root sudo -u root docker rm -f '.$this->display_name.' 2>&1 >/dev/null &';
         $this->command_restart =
             'rm '.$logfile.'; sudo -u root docker restart '.$this->display_name.' 2>&1 | tee -a '.$logfile.' 2>/dev/null >/dev/null &';
         $this->command_stop =
@@ -222,6 +226,27 @@ class service
         shell_exec($this->command_stop);
 
         return true;
+    }
+    
+    private function get_public_url()
+    {
+        $handle = @fopen("/opt/seedbox/resume", "r");
+        if ($handle) {
+            while (!feof($handle)) {
+                $buffer = fgets($handle);
+                if (strpos($buffer, $this->display_name) !== false) {
+                    $matches[] = $buffer;
+                }
+            }
+            fclose($handle);
+        }
+        $matches = array_unique($matches);
+        if (count($matches) != 0) {
+            $this->public_url = $matches[0];
+        } else {
+            $this->public_url = false;
+        }
+        return $this->public_url;
     }
 
     /**
