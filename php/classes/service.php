@@ -179,6 +179,18 @@ class service
         return $return_code;
     }
 
+    private function get_html($url)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30); //timeout after 30 seconds
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
+        $html = curl_exec($ch);
+        curl_close($ch);
+        return $html;
+    }
+
     private function get_version()
     {
         if ($this->running)
@@ -188,15 +200,9 @@ class service
         switch ($this->display_name)
         {
             case 'radarr':
-                $urlsearch = $this->url . '/initialize.js';
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, $urlsearch);
-                curl_setopt($ch, CURLOPT_TIMEOUT, 30); //timeout after 30 seconds
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
-                $html = curl_exec($ch);
-                curl_close($ch);
-                $divsearch = 'version';
+                $html = $this->get_html($this->url . '/initialize.js');
+                $tab_json = json_decode($html,true);
+                $version = $tab_json['version'];
                 break;
             case 'medusa':
                 $urlsearch = $this->url . '/config';
@@ -204,10 +210,16 @@ class service
                 $divsearch = 'version';
                 break;
             case 'rutorrent':
-                $urlsearch = $this->url;
-                $type      = 'html';
-                $divsearch = 'rtorrentv';
+                $html = $this->get_html($this->url);
+                $doc = new DOMDocument();
+                if (!$doc->loadHTML($html))
+                {
+                    // on n'a pas réussi à parser le document
+                    return false;
+                }
+                $version = $doc->getElementById('rtorrentv')->nodeValue;
                 break;
+
             case 'lidarr':
                 $divsearch = 'rtorrentv';
                 break;
@@ -215,30 +227,7 @@ class service
             default:
                 die('Service non disponible');
         }
-        // on va charger la page dans la variable $html
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $urlsearch);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 30); //timeout after 30 seconds
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
-        $html = curl_exec($ch);
-        curl_close($ch);
 
-        if ($type == 'html')
-        {
-            $doc = new DOMDocument();
-            if (!$doc->loadHTML($html))
-            {
-                // on n'a pas réussi à parser le document
-                return false;
-            }
-            $version = $doc->getElementById($divsearch)->nodeValue;
-        }
-        if ($type == 'json')
-        {
-            $tab_json = json_decode($html,true);
-            $version = $tab_json[$divsearch];
-        }
         if (empty($version))
         {
             return false;
