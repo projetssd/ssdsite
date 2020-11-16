@@ -6,17 +6,7 @@ require_once "../php/classes/service.php";
 */
 $service = new service($_GET['service']);
 
-
-$running = false;
-if ($service->check()) {
-    $running = true;
-}
-
-$installed = false;
-if ($service->is_installed()) {
-    $installed = true;
-}
 $tab_retour = array(
-    "running" => $running,
-    "installed" => $installed);
+    "running" => $service->running,
+    "installed" => $service->installed);
 echo json_encode($tab_retour);
