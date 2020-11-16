@@ -46,6 +46,8 @@ class service
      * @var text url cliquable
      */
     private $public_url;
+    
+    private $version;
 
     /**
      * service constructor.
@@ -77,8 +79,7 @@ class service
             'rm '.$logfile.'; sudo -u root docker start '.$this->display_name.' 2>&1 | tee -a '.$logfile.'g 2>/dev/null >/dev/null &';
 
         // ici on va surcharger ce qui n'est pas générique
-        switch ($my_service)
-        {
+        switch ($my_service) {
             case 'radarr':
                 $this->url = 'http://127.0.0.1:7878';
                 break;
@@ -99,11 +100,11 @@ class service
             default:
                 die('Service non disponible');
         }
-        if ($my_service != 'all')
-        {
+        if ($my_service != 'all') {
             // on va remplir les valeurs par défaut
             $this->running   = $this->check();
             $this->installed = $this->is_installed();
+            $this->version = $this->get_version();
         }
     }
 
@@ -122,15 +123,13 @@ class service
         $installed = false; // par défaut, on considère que le service n'est pas là
 
         $contents = ''; // init de variable pour l'IDE
-        if (file_exists($filename))
-        {
+        if (file_exists($filename)) {
             $file     = fopen($filename, 'r');
             $contents = fread($file, filesize($filename));
         }
         $contents = substr($contents, 0); // on ne garde que le premier caractère
 
-        switch ($contents)
-        {
+        switch ($contents) {
             case 0:
                 // pas installé
                 break;
@@ -170,8 +169,7 @@ class service
         curl_close($ch);
 
         $return_code = false;
-        if (200 == $status_code)
-        {
+        if (200 == $status_code) {
             $return_code = true;
         }
         $this->running = $return_code;
@@ -193,47 +191,53 @@ class service
 
     private function get_version()
     {
-        if ($this->running)
-        {
+        if (!$this->running) {
             return false;
         }
-        switch ($this->display_name)
-        {
+        
+        switch ($this->display_name) {
             case 'radarr':
                 $html = $this->get_html($this->url . '/initialize.js');
-                $tab_json = json_decode($html,true);
-                $version = $tab_json['version'];
+               
+               $html = explode('=', $html);
+               $html = $html[1];
+               $html = str_replace('{', '', $html);
+               $html = str_replace('}', '', $html);
+               $html = explode(',', $html);
+               foreach ($html as $val) {
+                   $detail = explode(':', $val);
+                   if (trim($detail[0]) == 'version') {
+                       $version = str_replace("'", "", $detail[1]);
+                   }
+               }
+               
+                    break;
+            case 'rutorrent':
+
+                $html = $this->get_html($this->url);
+                $doc = new DOMDocument();
+                if (!$doc->loadHTML($html)) {
+                    // on n'a pas réussi à parser le document
+                    return false;
+                }
+                $version = $doc->getElementById('rtorrentv')->nodeValue;
                 break;
             case 'medusa':
                 $urlsearch = $this->url . '/config';
                 $type      = 'json';
                 $divsearch = 'version';
                 break;
-            case 'rutorrent':
-                $html = $this->get_html($this->url);
-                $doc = new DOMDocument();
-                if (!$doc->loadHTML($html))
-                {
-                    // on n'a pas réussi à parser le document
-                    return false;
-                }
-                $version = $doc->getElementById('rtorrentv')->nodeValue;
-                break;
+
 
             case 'lidarr':
                 $divsearch = 'rtorrentv';
                 break;
-
-            default:
-                die('Service non disponible');
         }
 
-        if (empty($version))
-        {
-            return false;
+        if (empty($version)) {
+            return ' inconnue';
         }
         return $version;
-
     }
 
     /**
@@ -272,12 +276,10 @@ class service
      */
     public function restart()
     {
-        if ($this->running)
-        {
+        if ($this->running) {
             // le service tourne, on va redémarrer
             shell_exec($this->command_restart);
-        } else
-        {
+        } else {
             // le service ne tourne pas, on le démarre
             shell_exec($this->command_start);
         }
@@ -328,16 +330,13 @@ class service
     public function display($display = true)
     {
         $this->display_text = '<div class="col-md-4 divappli ';
-        if (!$this->installed)
-        {
+        if (!$this->installed) {
             $this->display_text .= 'div-uninstalled ';
         }
         $this->display_text .= '" id="div-' . $this->display_name . '" data-appli="' . $this->display_name . '" data-installed="';
-        if ($this->installed)
-        {
+        if ($this->installed) {
             $this->display_text .= '1';
-        } else
-        {
+        } else {
             $this->display_text .= '0';
         }
         $this->display_text .= '">
@@ -348,47 +347,39 @@ class service
                                                     <span class="username">
                                                         <a href="#">' . ucfirst($this->display_name) . '</a>
                                                     </span>
-                                                    <span class="description">Version 3.0.4.991</span>
+                                                    <span class="description">Version ' . $this->version . '</span>
                                                 </div>
 
                                                 <div class="card-footer" id="toto">
                                                     <a class="link-black start-stop-button-' . $this->display_name . ' text-sm mr-2 bouton-start" data-appli="' . $this->display_name . '" id="reset-' . $this->display_name . '" style="';
-        if (!$this->installed)
-        {
+        if (!$this->installed) {
             $this->display_text .= 'display: none;';
         }
         $this->display_text .= 'cursor: pointer;"><i class="fas fa-share mr-1"></i>';
-        if ($this->running)
-        {
+        if ($this->running) {
             $this->display_text .= '<span id="texte-bouton-restart-' . $this->display_name . '">Redémarrer</span>';
-        } else
-        {
+        } else {
             $this->display_text .= '<span id="texte-bouton-restart-' . $this->display_name . '">Démarrer</span>';
         }
 
         $this->display_text .= '</a>
                                                     <a class="link-black start-stop-button-' . $this->display_name . ' text-sm mr-2 bouton-stop" data-appli="' . $this->display_name . '" id="stop-' . $this->display_name . '" style="';
-        if (!$this->installed)
-        {
+        if (!$this->installed) {
             $this->display_text .= 'display: none;';
         }
         $this->display_text .= ';cursor: pointer;"><i class="fas fa-share mr-1"></i>stop</a>
 
                                                     <span class="float-right">
                                                         <button type="submit" name="' . $this->display_name . '" id="status-' . $this->display_name . '" class="btn btn-block ';
-        if ($this->installed)
-        {
+        if ($this->installed) {
             $this->display_text .= 'btn-warning ';
-        } else
-        {
+        } else {
             $this->display_text .= 'btn-sucess ';
         }
         $this->display_text .= 'btn-success btn-sm text-with bouton-install" data-appli="' . $this->display_name . '">';
-        if ($this->installed)
-        {
+        if ($this->installed) {
             $this->display_text .= 'Désinstaller';
-        } else
-        {
+        } else {
             $this->display_text .= 'Installer';
         }
         $this->display_text .= '</button>
@@ -399,8 +390,7 @@ class service
                                             </div>
                                         </div>
                                     </div>';
-        if ($display)
-        {
+        if ($display) {
             echo $this->display_text;
         }
 
@@ -425,17 +415,14 @@ class service
         $appli_uninstalled = [];
 
         // on boucle sur chaque appli passée en param
-        foreach ($input as $appli)
-        {
+        foreach ($input as $appli) {
             // on charge le service correspondant
             $temp               = new service($appli);
             $temp->display_text = $temp->display(false);
 
-            if ($temp->is_installed())
-            {
+            if ($temp->is_installed()) {
                 $appli_installed[] = $temp;
-            } else
-            {
+            } else {
                 $appli_uninstalled[] = $temp;
             }
             unset($temp);
@@ -443,15 +430,12 @@ class service
         $return_array = ['installed'   => $appli_installed,
                          'uninstalled' => $appli_uninstalled,];
 
-        if ($display)
-        {
+        if ($display) {
             $display_text = '';
-            foreach ($return_array['installed'] as $appli)
-            {
+            foreach ($return_array['installed'] as $appli) {
                 $display_text .= $appli->display_text;
             }
-            foreach ($return_array['uninstalled'] as $appli)
-            {
+            foreach ($return_array['uninstalled'] as $appli) {
                 $display_text .= $appli->display_text;
             }
             echo $display_text;
