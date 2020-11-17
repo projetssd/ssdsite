@@ -58,7 +58,7 @@ class service
      * @var text Adresse ip du container
      */
     private $host;
-    
+
 
     /**
      * service constructor.
@@ -76,32 +76,36 @@ class service
         //
         // on commence par mettre tout ce qui es générique
         //
-        $logfile = '/var/www/seedboxdocker.website/logtail/log';
-        $this->display_name = trim($my_service); // on supprimer les espaces avant/après
-        $this->command_install =
-            'rm '.$logfile.'; sudo -u www-data /var/www/seedboxdocker.website/scripts/install.sh '.$this->display_name.' 2>&1 | tee -a '.$logfile.' 2>/dev/null >/dev/null &';
+        $logfile                 = '/var/www/seedboxdocker.website/logtail/log';
+        $this->display_name      = trim($my_service); // on supprimer les espaces avant/après
+        $this->command_install   =
+            'rm ' . $logfile . '; sudo -u www-data /var/www/seedboxdocker.website/scripts/install.sh ' . $this->display_name . ' 2>&1 | tee -a ' . $logfile . ' 2>/dev/null >/dev/null &';
         $this->command_uninstall =
-            'rm '.$logfile.'; echo 0 | sudo tee /opt/seedbox/status/'.$this->display_name.'; sudo -u root sudo -u root docker rm -f '.$this->display_name.' 2>&1 >/dev/null &';
-        $this->command_restart =
-            'rm '.$logfile.'; sudo -u root docker restart '.$this->display_name.' 2>&1 | tee -a '.$logfile.' 2>/dev/null >/dev/null &';
-        $this->command_stop =
-            'rm '.$logfile.'; sudo -u root docker stop '.$this->display_name.' 2>&1 | tee -a'.$logfile.' 2>/dev/null >/dev/null &';
-        $this->command_start =
-            'rm '.$logfile.'; sudo -u root docker start '.$this->display_name.' 2>&1 | tee -a '.$logfile.'g 2>/dev/null >/dev/null &';
+            'rm ' . $logfile . '; echo 0 | sudo tee /opt/seedbox/status/' . $this->display_name . '; sudo -u root sudo -u root docker rm -f ' . $this->display_name . ' 2>&1 >/dev/null &';
+        $this->command_restart   =
+            'rm ' . $logfile . '; sudo -u root docker restart ' . $this->display_name . ' 2>&1 | tee -a ' . $logfile . ' 2>/dev/null >/dev/null &';
+        $this->command_stop      =
+            'rm ' . $logfile . '; sudo -u root docker stop ' . $this->display_name . ' 2>&1 | tee -a' . $logfile . ' 2>/dev/null >/dev/null &';
+        $this->command_start     =
+            'rm ' . $logfile . '; sudo -u root docker start ' . $this->display_name . ' 2>&1 | tee -a ' . $logfile . 'g 2>/dev/null >/dev/null &';
         //
         // on va chercher l'ip du docker
         //
-        $retour = exec("docker inspect -f '{{.NetworkSettings.Networks.bridge.IPAddress}}' " . $this->display_name, $tab_retour, $code_retour);
-        if ($code_retour == 0) {
-            $this->url = 'http://' . $retour;
+        $retour =
+            exec("docker inspect -f '{{.NetworkSettings.Networks.bridge.IPAddress}}' " . $this->display_name, $tab_retour, $code_retour);
+        if ($code_retour == 0)
+        {
+            $this->url  = 'http://' . $retour;
             $this->host = $retour;
-        } else {
+        } else
+        {
             // docker non trouvé, on met l'ip locale histoire de ne pas laisser vide
             $this->url = 'http://127.0.0.1';
         }
 
         // ici on va surcharger ce qui n'est pas générique
-        switch ($my_service) {
+        switch ($my_service)
+        {
             case 'radarr':
                 $this->port = 7878;
                 break;
@@ -120,7 +124,7 @@ class service
             case 'jackett':
                 $this->port = 9117;
                 break;
-                
+
             case 'all':
                 // cas particulier pour charger toutes les cases possibles
                 // ne sert qu'à construire un tableau qu'on utilisera plus tard
@@ -130,27 +134,32 @@ class service
                 die('Service non disponible');
         }
         $this->url = "http://" . $this->host . ":" . $this->port;
-        
-        if ($my_service != 'all') {
+
+        if ($my_service != 'all')
+        {
             // on va remplir les valeurs par défaut
-            $this->running   = $this->check();
-            $this->installed = $this->is_installed();
+            $this->running    = $this->check();
+            $this->installed  = $this->is_installed();
             $this->public_url = false;
             // on récupère les url publiques
             // on lit le fichier
-            $file     = fopen('/opt/seedbox/resume', 'r');
+            $file    = fopen('/opt/seedbox/resume', 'r');
             $matches = array();
-            if ($file) {
-                while (!feof($file)) {
+            if ($file)
+            {
+                while (!feof($file))
+                {
                     $buffer = fgets($file);
-                    if (strpos($buffer, $this->display_name) !== false) {
+                    if (strpos($buffer, $this->display_name) !== false)
+                    {
                         $matches[] = $buffer;
                     }
                 }
                 fclose($file);
             }
-            if (count($matches) != 0) {
-                $tab_temp = explode('=', $matches[0]);
+            if (count($matches) != 0)
+            {
+                $tab_temp         = explode('=', $matches[0]);
                 $this->public_url = trim($tab_temp[1]);
             }
         }
@@ -171,13 +180,15 @@ class service
         $installed = false; // par défaut, on considère que le service n'est pas là
 
         $contents = ''; // init de variable pour l'IDE
-        if (file_exists($filename)) {
+        if (file_exists($filename))
+        {
             $file     = fopen($filename, 'r');
             $contents = fread($file, filesize($filename));
         }
         $contents = substr($contents, 0); // on ne garde que le premier caractère
 
-        switch ($contents) {
+        switch ($contents)
+        {
             case 0:
                 // pas installé
                 break;
@@ -208,19 +219,27 @@ class service
     public function check()
     {
         $connection = fsockopen($this->host, $this->port, $errno, $errstr);
-        if (!$connection) {
+        if (!$connection)
+        {
             echo "<!-- " . $this->host . " - " . $this->port . " - " . "$errstr ($errno)" . "-->";
-        } else {
-            if (is_resource($connection)) {
+        } else
+        {
+            if (is_resource($connection))
+            {
                 fclose($connection);
                 return true;
             }
         }
 
-        
+
         return false;
     }
 
+    /**
+     * Récupère le code html ou la sortie de page de l'url en entrée
+     * @param $url text URl à récupérer
+     * @return bool|string Code html de sortie
+     */
     private function get_html($url)
     {
         $ch = curl_init();
@@ -239,54 +258,63 @@ class service
         return $html;
     }
 
+    /**
+     * Sort le numéro de version de l'appli en cours
+     * @return mixed|string|string[]
+     */
     public function get_version()
     {
-        if (!$this->running) {
+        if (!$this->running)
+        {
             return ' container arrêté';
         }
-        switch ($this->display_name) {
+        switch ($this->display_name)
+        {
             case 'radarr':
             case 'sonarr':
             case 'lidarr':
-               $html = $this->get_html($this->url . '/initialize.js');
-               
-               $html = explode('=', $html);
-               $html = $html[1];
-               $html = str_replace('{', '', $html);
-               $html = str_replace('}', '', $html);
-               $html = explode(',', $html);
-               foreach ($html as $val) {
-                   $detail = explode(':', $val);
-                   if (trim($detail[0]) == 'version') {
-                       $version = str_replace("'", "", $detail[1]);
-                   }
-               }
-               
+                $html = $this->get_html($this->url . '/initialize.js');
+
+                $html = explode('=', $html);
+                $html = $html[1];
+                $html = str_replace('{', '', $html);
+                $html = str_replace('}', '', $html);
+                $html = explode(',', $html);
+                foreach ($html as $val)
+                {
+                    $detail = explode(':', $val);
+                    if (trim($detail[0]) == 'version')
+                    {
+                        $version = str_replace("'", "", $detail[1]);
+                    }
+                }
+
                 break;
-            
+
             case 'rutorrent':
                 passthru("/usr/bin/docker exec -it rutorrent /usr/bin/rtorrent -h|head -n 1");
                 /*print_r($tab_retour);
                 echo "<hr>";
                 print_r($code_retour);*/
-                
-                $version = $retour;
+
+                //$version = $retour;
                 break;
             case 'medusa':
-                $result = shell_exec("docker inspect -f '{{.Config.Labels.build_version}}' medusa");
-                $temp = explode('-', $result);
+                $result  = shell_exec("docker inspect -f '{{.Config.Labels.build_version}}' medusa");
+                $temp    = explode('-', $result);
                 $version = $temp[1];
                 break;
 
             case 'jackett':
-                
-                $html = $this->get_html($this->url . '/api/v2.0/server/config');
-                $json = json_decode($html, true);
+
+                $html    = $this->get_html($this->url . '/api/v2.0/server/config');
+                $json    = json_decode($html, true);
                 $version = $json['app_version'];
                 break;
         }
 
-        if (empty($version)) {
+        if (empty($version))
+        {
             return 'Version inconnue';
         }
         return $version;
@@ -328,10 +356,12 @@ class service
      */
     public function restart()
     {
-        if ($this->running) {
+        if ($this->running)
+        {
             // le service tourne, on va redémarrer
             shell_exec($this->command_restart);
-        } else {
+        } else
+        {
             // le service ne tourne pas, on le démarre
             shell_exec($this->command_start);
         }
@@ -351,22 +381,31 @@ class service
         return true;
     }
 
+    /**
+     * Récupère l'url publique de l'appli en cours
+     * @return bool|mixed|text L'url publique (cliquable) de l'appli en cours, ou false si pas troué
+     */
     private function get_public_url()
     {
         $handle = @fopen("/opt/seedbox/resume", "r");
-        if ($handle) {
-            while (!feof($handle)) {
+        if ($handle)
+        {
+            while (!feof($handle))
+            {
                 $buffer = fgets($handle);
-                if (strpos($buffer, $this->display_name) !== false) {
+                if (strpos($buffer, $this->display_name) !== false)
+                {
                     $matches[] = $buffer;
                 }
             }
             fclose($handle);
         }
         $matches = array_unique($matches);
-        if (count($matches) != 0) {
+        if (count($matches) != 0)
+        {
             $this->public_url = $matches[0];
-        } else {
+        } else
+        {
             $this->public_url = false;
         }
         return $this->public_url;
@@ -382,13 +421,16 @@ class service
     public function display($display = true)
     {
         $this->display_text = '<div class="col-md-4 divappli ';
-        if (!$this->installed) {
+        if (!$this->installed)
+        {
             $this->display_text .= 'div-uninstalled ';
         }
         $this->display_text .= '" id="div-' . $this->display_name . '" data-appli="' . $this->display_name . '" data-installed="';
-        if ($this->installed) {
+        if ($this->installed)
+        {
             $this->display_text .= '1';
-        } else {
+        } else
+        {
             $this->display_text .= '0';
         }
         $this->display_text .= '">
@@ -397,57 +439,52 @@ class service
                                                 <div class="card-body user-block">
                                                     <img class="img-circle img-bordered-sm" src="https://www.scriptseedboxdocker.com/wp-content/uploads/icones/' . $this->display_name . '.png" alt="user image">
                                                     <span class="username">';
-        if ($this->public_url !== false) {
-            $this->display_text .= '<a href="https://'  .$this->public_url . '" target="_blank">' . ucfirst($this->display_name) . '</a>';
-        } else {
+        if ($this->public_url !== false)
+        {
+            $this->display_text .= '<a href="https://' . $this->public_url . '" target="_blank">' . ucfirst($this->display_name) . '</a>';
+        } else
+        {
             $this->display_text .= ucfirst($this->display_name);
         }
-                                                        
-        $this->display_text .= '</span>
-                                                    <span class="description" id="version-' . $this->display_name . '"></span>
-                                                </div>
 
-                                                <div class="card-footer" id="toto">
-                                                    <a class="link-black start-stop-button-' . $this->display_name . ' text-sm mr-2 bouton-start" data-appli="' . $this->display_name . '" id="reset-' . $this->display_name . '" style="';
-        if (!$this->installed) {
+        $this->display_text .= '</span><span class="description" id="version-' . $this->display_name . '"></span></div><div class="card-footer" id="toto"><a class="link-black start-stop-button-' . $this->display_name . ' text-sm mr-2 bouton-start" data-appli="' . $this->display_name . '" id="reset-' . $this->display_name . '" style="';
+        if (!$this->installed)
+        {
             $this->display_text .= 'display: none;';
         }
         $this->display_text .= 'cursor: pointer;"><i class="fas fa-share mr-1"></i>';
-        if ($this->running) {
+        if ($this->running)
+        {
             $this->display_text .= '<span id="texte-bouton-restart-' . $this->display_name . '">Redémarrer</span>';
-        } else {
+        } else
+        {
             $this->display_text .= '<span id="texte-bouton-restart-' . $this->display_name . '">Démarrer</span>';
         }
 
-        $this->display_text .= '</a>
-                                                    <a class="link-black start-stop-button-' . $this->display_name . ' text-sm mr-2 bouton-stop" data-appli="' . $this->display_name . '" id="stop-' . $this->display_name . '" style="';
-        if (!$this->installed) {
+        $this->display_text .= '</a><a class="link-black start-stop-button-' . $this->display_name . ' text-sm mr-2 bouton-stop" data-appli="' . $this->display_name . '" id="stop-' . $this->display_name . '" style="';
+        if (!$this->installed)
+        {
             $this->display_text .= 'display: none;';
         }
-        $this->display_text .= ';cursor: pointer;"><i class="fas fa-share mr-1"></i>stop</a>
-
-                                                    <span class="float-right">
-                                                        <button type="submit" name="' . $this->display_name . '" id="status-' . $this->display_name . '" class="btn btn-block ';
-        if ($this->installed) {
+        $this->display_text .= ';cursor: pointer;"><i class="fas fa-share mr-1"></i>stop</a><span class="float-right"><button type="submit" name="' . $this->display_name . '" id="status-' . $this->display_name . '" class="btn btn-block ';
+        if ($this->installed)
+        {
             $this->display_text .= 'btn-warning ';
-        } else {
+        } else
+        {
             $this->display_text .= 'btn-sucess ';
         }
         $this->display_text .= 'btn-success btn-sm text-with bouton-install" data-appli="' . $this->display_name . '">';
-        if ($this->installed) {
+        if ($this->installed)
+        {
             $this->display_text .= 'Désinstaller';
-        } else {
+        } else
+        {
             $this->display_text .= 'Installer';
         }
-        $this->display_text .= '</button>
-
-                                                    </span>
-                                                    <!-- </form> -->
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>';
-        if ($display) {
+        $this->display_text .= '</button></span><!-- </form> --></div></div></div></div>';
+        if ($display)
+        {
             echo $this->display_text;
         }
 
@@ -472,14 +509,17 @@ class service
         $appli_uninstalled = [];
 
         // on boucle sur chaque appli passée en param
-        foreach ($input as $appli) {
+        foreach ($input as $appli)
+        {
             // on charge le service correspondant
             $temp               = new service($appli);
             $temp->display_text = $temp->display(false);
 
-            if ($temp->is_installed()) {
+            if ($temp->is_installed())
+            {
                 $appli_installed[] = $temp;
-            } else {
+            } else
+            {
                 $appli_uninstalled[] = $temp;
             }
             unset($temp);
@@ -487,12 +527,15 @@ class service
         $return_array = ['installed'   => $appli_installed,
                          'uninstalled' => $appli_uninstalled,];
 
-        if ($display) {
+        if ($display)
+        {
             $display_text = '';
-            foreach ($return_array['installed'] as $appli) {
+            foreach ($return_array['installed'] as $appli)
+            {
                 $display_text .= $appli->display_text;
             }
-            foreach ($return_array['uninstalled'] as $appli) {
+            foreach ($return_array['uninstalled'] as $appli)
+            {
                 $display_text .= $appli->display_text;
             }
             echo $display_text;
