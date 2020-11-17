@@ -151,6 +151,20 @@ $(document).ready(function() {
         }
     });
 
+    // récupération des version
+    $(".divappli").each(function() {
+        let appli = $(this).attr('data-appli');
+        console.log(appli);
+        $.ajax({
+            url: "ajax/check_version.php?service=" + appli,
+        }).done(function(data) {
+            $("#version-" + appli).html(data);
+        }).fail(function() {
+            console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+            $("#version-" . appli).html("erreur ajax");
+        });
+    });
+
     /* fonction de refresh automatique  */
     window.setInterval(function() {
         //console.log('test régulier');

@@ -7,10 +7,8 @@ require_once "../php/classes/service.php";
 $service = new service($_GET['service']);
 
 
-if ($service->running)
-{
+if ($service->running) {
     echo "ok";
-} else
-{
+} else {
     echo "bad";
 }

@@ -23,23 +23,23 @@ sudo grep $1 /opt/seedbox/variables/account.yml > /dev/null 2>&1
 if [ $? -eq 0 ]; then
   line=$(grep $1 /opt/seedbox/variables/account.yml | cut -d ':' -f2 | sed 's/ //g')
   fqdn="$1.$domain"
-  echo "$fqdn" | sudo tee -a /opt/seedbox/resume  > /dev/null
+  echo "$1 = $fqdn" | sudo tee -a /opt/seedbox/resume  > /dev/null
 else
   fqdn="$1.$domain"
-  echo "$fqdn" | sudo tee -a /opt/seedbox/resume  > /dev/null
+  echo "$1 = $fqdn" | sudo tee -a /opt/seedbox/resume  > /dev/null
 fi
 fqdn=""
 sudo ansible-vault encrypt /opt/seedbox/variables/account.yml > /dev/null 2>&1
 
 					sudo tee <<-EOF
 
-🚀 $1                               📓 https://wiki.scriptseedboxdocker.com
+🚀 $1                             📓 https://wiki.scriptseedboxdocker.com
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
                    Installation de $1 effectuée avec succés
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🚀 $1                               📓 https://wiki.scriptseedboxdocker.com
+🚀 $1                             📓 https://wiki.scriptseedboxdocker.com
 					EOF
 
 

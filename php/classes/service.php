@@ -50,6 +50,10 @@ class service
     private $version;
     
     private $port;
+    
+    private $host;
+    
+    //private $host;
 
     /**
      * service constructor.
@@ -79,6 +83,7 @@ class service
             'rm '.$logfile.'; sudo -u root docker stop '.$this->display_name.' 2>&1 | tee -a'.$logfile.' 2>/dev/null >/dev/null &';
         $this->command_start =
             'rm '.$logfile.'; sudo -u root docker start '.$this->display_name.' 2>&1 | tee -a '.$logfile.'g 2>/dev/null >/dev/null &';
+        $this->host = '127.0.0.1';
 
         // ici on va surcharger ce qui n'est pas générique
         switch ($my_service) {
@@ -93,22 +98,27 @@ class service
             case 'rutorrent':
                 $this->url = 'http://127.0.0.1:8080';
                 $this->port = 45000;
-                // cas particulier de ce fichier port 8080
-                /*$url = '**';
-                $json_docker = shell_exec('docker inspect rutorrent');
-                $tab_json = json_decode($json_docker, true);
-                $network = $tab_json[0]['NetworkSettings']['Networks']['bridge']['IPAddress'];
-                //print_r($network);
-                //echo $test;
-                //print_r($tab_retour);
-
-                $this->url = 'http://' . $network . ':8080';*/
-                //echo $this->url;
                 break;
             case 'lidarr':
                 $this->url = 'http://127.0.0.1:8686';
                 $this->port = 8686;
                 break;
+            case 'medusa':
+                $retour = exec("docker inspect -f '{{.NetworkSettings.Networks.bridge.IPAddress}}' medusa", $tab_retour, $code_retour);
+                if ($code_retour == 0) {
+                    $this->url = 'http://' . $retour . ':8081';
+                    //$this->host = $retour;
+                    //echo "**" . $retour . "**";
+                    $this->host = $retour;
+                } else {
+                    $this->url = 'http://127.0.0.1:8081';
+                }
+                
+                //echo $this->url;
+                //$this->url = 'http://127.0.0.1:8081';
+                $this->port = 8081;
+                
+                // no break
             case 'all':
                 // cas particulier pour charger toutes les cases possibles
                 // ne sert qu'à construire un tableau qu'on utilisera plus tard
@@ -121,7 +131,27 @@ class service
             // on va remplir les valeurs par défaut
             $this->running   = $this->check();
             $this->installed = $this->is_installed();
-            $this->version = $this->get_version();
+            // je commente le get_version, il ne sera pas lancé à la construction de la classe
+            //$this->version = $this->get_version();
+            // on récupère les url publiques
+            $file     = fopen('/opt/seedbox/resume', 'r');
+            if ($file) {
+                while (!feof($file)) {
+                    $buffer = fgets($file);
+                    if (strpos($buffer, $this->display_name) !== false) {
+                        $matches[] = $buffer;
+                    }
+                }
+                fclose($file);
+            }
+            //$matches = array_unique($matches);
+            
+            foreach ($matches as $val) {
+                $tab_temp = explode('=', $val);
+                if (trim($tab_temp[0]) == $my_service) {
+                    $this->public_url = trim($tab_temp[1]);
+                }
+            }
         }
     }
 
@@ -176,22 +206,7 @@ class service
      */
     public function check()
     {
-        // ancien code en curl, ne plus utiliser
-        /*$ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->url);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 30); //timeout after 30 seconds
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
-        curl_exec($ch);
-        $status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);   //get status code
-        curl_close($ch);
-
-        $return_code = false;
-        if (200 == $status_code) {
-            $return_code = true;
-        }
-        $this->running = $return_code;*/
-        $connection = @fsockopen('127.0.0.1', $this->port);
+        $connection = @fsockopen($this->host, $this->port);
 
         if (is_resource($connection)) {
             fclose($connection);
@@ -212,14 +227,16 @@ class service
         return $html;
     }
 
-    private function get_version()
+    public function get_version()
     {
         if (!$this->running) {
             return ' container arrêté';
         }
         switch ($this->display_name) {
             case 'radarr':
-                $html = $this->get_html($this->url . '/initialize.js');
+            case 'sonarr':
+            case 'lidarr':
+               $html = $this->get_html($this->url . '/initialize.js');
                
                $html = explode('=', $html);
                $html = $html[1];
@@ -233,7 +250,8 @@ class service
                    }
                }
                
-                    break;
+                break;
+            
             case 'rutorrent':
                 
                 $html = $this->get_html($this->url);
@@ -246,9 +264,8 @@ class service
                 print_r($version, true);
                 break;
             case 'medusa':
-                $urlsearch = $this->url . '/config';
-                $type      = 'json';
-                $divsearch = 'version';
+                $result = json_decode(shell_exec('docker inspect medusa'), true);
+                $version = $result[0]['Config']['Labels']['build_version'];
                 break;
 
 
@@ -368,9 +385,9 @@ class service
                                                 <div class="card-body user-block">
                                                     <img class="img-circle img-bordered-sm" src="https://www.scriptseedboxdocker.com/wp-content/uploads/icones/' . $this->display_name . '.png" alt="user image">
                                                     <span class="username">
-                                                        <a href="#">' . ucfirst($this->display_name) . '</a>
+                                                        <a href="https://'  .$this->public_url . '" target="_blank">' . ucfirst($this->display_name) . '</a>
                                                     </span>
-                                                    <span class="description">Version ' . $this->version . '</span>
+                                                    <span class="description" id="version-' . $this->display_name . '"></span>
                                                 </div>
 
                                                 <div class="card-footer" id="toto">

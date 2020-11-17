@@ -132,7 +132,7 @@ require_once "php/classes/service.php";
                     <div class="row mb-2">
                         <div class="col-sm-6">
                             <h1>
-                                Gestion du Serveur SSD
+                                Installation Rclone
                             </h1>
                         </div>
                         <div class="col-sm-6">
@@ -148,115 +148,127 @@ require_once "php/classes/service.php";
             <section class="content">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-md-3">
 
-                            <!-- Profile serveur -->
-                            <div class="card card-primary card-outline">
-                                <div class="card-body box-profile">
-
-                                    <h3 class="profile-username text-center">Nom du serveur</h3>
-
-                                    <p class="text-muted text-center"><?php include 'php/system.php'; ?></p>
-
-                                    <ul class="list-group list-group-unbordered mb-3">
-                                        <li class="list-group-item">
-                                            <b>En marche depuis</b> <a class="float-right"><?php include 'php/reboot.php'; ?></a>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <b>Espace disque libre</b> <a class="float-right"><?php include 'php/disque.php'; ?></a>
-                                        </li>
-                                                    <li class="list-group-item">
-                                            <b>Adresse IP</b> <a class="float-right"><?php include 'php/ip.php'; ?></a>
-                                        </li>
-                                    </ul>
-
-                                    <form action="/php/index.php" method="post">
-                                        <button type="submit" name="submit" class="btn btn-warning btn-block">Relancer Docker</button>
-                                    </form>
-
-                                </div>
-                                <!-- /.card-body -->
-                            </div>
-                            <!-- /.card -->
-
-                            <!-- Dernieres activites -->
-                            <div class="card card-primary">
+                        <!-- Start 1er etape -->
+                        <div class="col-md-6">
+                            <div class="card card-info">
                                 <div class="card-header">
-                                    <h3 class="card-title">Dernières activités</h3>
+                                    <h3 class="card-title">1er Étape : Identifiants API</h3>
                                 </div>
-                                <!-- /.card-header -->
-                                <div class="card-body" id="log_activites">
-                                    <strong>Restart Plex</strong>
-                                    <p class="text-muted">
-                                        Le 02/11/2020 à 13h21, status OK
-                                    </p>
-                                    <hr>
-                                    <strong>Installation Sonarr</strong>
-                                    <p class="text-muted">Le 02/11/2020 à 13h56, status OK</p>
-                                    <hr>
-                                    <strong>Backup auto</strong>
-                                    <p class="text-muted"> Le 02/11/2020 à 13h21, status OK</p>
-                                </div>
-                                <!-- /.card-body -->
-                            </div>
-                            <!-- /.card -->
-                        </div>
-                        <!-- /.col -->
-                        <div class="col-md-9">
-                            <div class="card card-primary card-outline">
-                                <div class="card-header">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <h3 class="card-title p-2">
-                                                <i class="fas fa-edit"></i>
-                                                Applications
-                                            </h3>
-                                        </div>
-                                        <div class="col-md-8 d-flex flex-row-reverse">
 
-                                            <!-- START SEARCH FORM -->
-                                            <div class="p-2">
-                                                <form role="form">
-                                                    <div class="input-group input-group-sm">
-                                                        <input class="form-control" type="search" placeholder="Rechercher" aria-label="Search" id="searchappli">
+                                <form role="form">
+                                    <div class="card-body">
 
-                                                    </div>
-                                                </form>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+
+                                                <div class="form-group">
+                                                    <label>Coller ID clients OAuth 2.0 :</label>
+                                                    <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                                                </div>
                                             </div>
-                                            <!-- END SEARCH FORM -->
-                                            <!-- START APPS INSTALES -->
-                                            <div class="p-2">
-                                                <form class="form-group ml-3 float-right">
-                                                    <div class="custom-control custom-checkbox">
-                                                        <input class="custom-control-input" type="checkbox" id="installed_appli" checked="">
-                                                        <label for="installed_appli" class="custom-control-label">Apps installés uniquement</label>
-                                                    </div>
-                                                </form>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label>Coller Mot de passe ID clients :</label>
+                                                    <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                                                </div>
                                             </div>
-                                            <!-- END APPS INSTALES -->
                                         </div>
                                     </div>
+                                    <div class="card-footer">
+                                        <button type="submit" class="btn btn-info float-right">Valider </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div> <!-- End 1er etape -->
 
-                                </div><!-- /.card-header -->
-                                <!-- app -->
+                        <!-- Start 2eme etape -->
+                        <div class="col-md-6">
+                            <div class="card card-secondary">
+                                <div class="card-header">
+                                    <h3 class="card-title">2ème Étape : Demande de Token</h3>
+                                </div>
+                                <form role="form">
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <label>Coller ID clients OAuth 2.0 :</label>
+                                            <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <button type="submit" class="btn btn-info float-right" onclick=" window.open('https://google.com','_blank')" >Valider </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div> <!-- End 2eme etape -->
+
+
+                    </div>
+                    <!-- /.card -->
+
+                    <div class="row">
+
+                        <!-- Start Explications-->
+                        <div class="col-md-6">
+                            <div class="card card-warning card-outline">
+                                <div class="card-header">
+                                    <h3 class="card-title">
+                                        <i class="fas fa-edit"></i>
+                                        Guide installation
+                                    </h3>
+                                </div>
                                 <div class="card-body">
                                     <div class="row">
-                                        <?php
-                                        $service = new service('radarr');
-                                        $service->display();
-                                        $service = new service('sonarr');
-                                        $service->display();
-                                        $service = new service('rutorrent');
-                                        $service->display();
-                                        ?>
+                                        <div class="col-5 col-sm-3">
+                                            <div class="nav flex-column nav-tabs h-100" id="vert-tabs-tab" role="tablist" aria-orientation="vertical">
+                                                <a class="nav-link active" id="vert-tabs-home-tab" data-toggle="pill" href="#vert-tabs-home" role="tab" aria-controls="vert-tabs-home" aria-selected="true">1er Étape</a>
+                                                <a class="nav-link" id="vert-tabs-profile-tab" data-toggle="pill" href="#vert-tabs-profile" role="tab" aria-controls="vert-tabs-profile" aria-selected="false">2ème Étape</a>
+                                                <a class="nav-link" id="vert-tabs-messages-tab" data-toggle="pill" href="#vert-tabs-messages" role="tab" aria-controls="vert-tabs-messages" aria-selected="false">3ème Étape</a>
+                                            </div>
+                                        </div>
+                                        <div class="col-7 col-sm-9">
+                                            <div class="tab-content" id="vert-tabs-tabContent">
+                                                <div class="tab-pane text-left fade show active" id="vert-tabs-home" role="tabpanel" aria-labelledby="vert-tabs-home-tab">
+                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin malesuada lacus ullamcorper dui molestie, sit amet congue quam finibus. Etiam ultricies nunc non magna feugiat commodo. Etiam odio magna, mollis auctor felis vitae, ullamcorper ornare ligula. Proin pellentesque tincidunt nisi, vitae ullamcorper felis aliquam id. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin id orci eu lectus blandit suscipit. Phasellus porta, ante et varius ornare.
+                                                </div>
+                                                <div class="tab-pane fade" id="vert-tabs-profile" role="tabpanel" aria-labelledby="vert-tabs-profile-tab">
+                                                    Mauris tincidunt mi at erat gravida, eget tristique urna bibendum. Mauris pharetra purus ut ligula tempor, et vulputate metus facilisis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Maecenas sollicitudin, nisi a luctus interdum, nisl ligula placerat mi, quis posuere purus ligula eu lectus. Donec nunc tellus, elementum sit amet ultricies at, posuere nec nunc. Nunc euismod pellentesque diam.
+                                                </div>
+                                                <div class="tab-pane fade" id="vert-tabs-messages" role="tabpanel" aria-labelledby="vert-tabs-messages-tab">
+                                                    Morbi turpis dolor, vulputate vitae felis non, tincidunt congue mauris. Phasellus volutpat augue id mi placerat mollis. Vivamus faucibus eu massa eget condimentum. Fusce nec hendrerit sem, ac tristique nulla. Integer vestibulum orci odio. Cras nec augue ipsum. Suspendisse ut velit condimentum, mattis urna a, malesuada nunc. Curabitur eleifend facilisis velit finibus tristique. Nam vulputate, eros non luctus efficitur, ipsum odio volutpat massa, sit amet sollicitudin est libero sed ipsum. Nulla lacinia.
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <!-- /.col -->
+                        </div> <!-- End Explications-->
+
+                        <!-- Start 3eme etape -->
+                        <div class="col-md-6">
+                            <div class="card card-success">
+                                <div class="card-header">
+                                    <h3 class="card-title">3ème Étape : Validation du Token</h3>
+                                </div>
+                                <form role="form">
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <label>Coller le token :</label>
+                                            <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <button type="submit" class="btn btn-info float-right">Valider </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div> <!-- End 2eme etape -->
+
+
                     </div>
-                    <!-- /.row -->
+
                 </div>
+
             </section>
             <!-- /.content -->
         </div>

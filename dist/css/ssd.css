@@ -5,3 +5,12 @@
 .div-uninstalled:hover {
   opacity: 0.8;
 }
+
+.logtailcss {
+    color: rgb(0, 0, 255);
+    /* équivalent à
+    color: blue;
+    color: #0000ff;
+    color: #00f;
+    color: hsl(0, 100%, 50%); */
+  }
