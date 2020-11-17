@@ -256,7 +256,8 @@ require_once 'php/classes/service.php';
                                             'rutorrent',
                                             'radarr',
                                             'sonarr',
-                                            'medusa'];
+                                            'medusa',
+                                            'jackett'];
                                         $service = new service('all');
                                         $temp = $service->get_all($tableau_appli);
 
