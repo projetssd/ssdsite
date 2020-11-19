@@ -1,3 +1,4 @@
+
 <?php
 require_once 'conf.php';
 require_once 'php/classes/service.php';
@@ -257,7 +258,10 @@ require_once 'php/classes/service.php';
                                             'radarr',
                                             'sonarr',
                                             'medusa',
-                                            'jackett'];
+                                            'jackett',
+                                            'lidarr',
+                                            'sensorr',
+                                            'emby'];
                                         $service = new service('all');
                                         $temp = $service->get_all($tableau_appli);
 

@@ -155,30 +155,39 @@ require_once "php/classes/service.php";
                                 <div class="card-header">
                                     <h3 class="card-title">1er Étape : Identifiants API</h3>
                                 </div>
-
+                                <form action="rclone/identifiant.php" method="post" id="idOfForm">
                                 <form role="form">
                                     <div class="card-body">
 
                                         <div class="row">
                                             <div class="col-sm-6">
-
                                                 <div class="form-group">
                                                     <label>Coller ID clients OAuth 2.0 :</label>
-                                                    <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                                                    <textarea class="form-control" rows="3" name="client_id" placeholder="Enter ..."></textarea>
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="form-group">
-                                                    <label>Coller Mot de passe ID clients :</label>
-                                                    <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                                                    <label>Coller ID secret OAuth 2.0 :</label>
+                                                    <textarea class="form-control" rows="3" name="client_secret" placeholder="Enter ..."></textarea>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="card-footer">
-                                        <button type="submit" class="btn btn-info float-right">Valider </button>
+                               </form>
+
+                               <button class="btn btn-info float-right" onclick="doPreview();">Valider</button>
+                               <script type="text/javascript">
+                               function doPreview()
+                               {
+                               form=document.getElementById('idOfForm');
+                               form.target='_blank';
+                               form.submit();
+                               form.action='rclone/identifiant.php';
+                               }
+                               </script>
                                     </div>
-                                </form>
                             </div>
                         </div> <!-- End 1er etape -->
 
@@ -186,17 +195,19 @@ require_once "php/classes/service.php";
                         <div class="col-md-6">
                             <div class="card card-secondary">
                                 <div class="card-header">
-                                    <h3 class="card-title">2ème Étape : Demande de Token</h3>
+                                    <h3 class="card-title">2ème Étape : Validation du Token</h3>
                                 </div>
+                                <form action="rclone/token.php" method="post">
+
                                 <form role="form">
                                     <div class="card-body">
                                         <div class="form-group">
-                                            <label>Coller ID clients OAuth 2.0 :</label>
-                                            <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
+                                            <label>Coller le token OAuth 2.0 :</label>
+                                            <textarea class="form-control" rows="3" name="token" placeholder="Enter ..."></textarea>
                                         </div>
                                     </div>
                                     <div class="card-footer">
-                                        <button type="submit" class="btn btn-info float-right" onclick=" window.open('https://google.com','_blank')" >Valider </button>
+                                        <button type="submit" class="btn btn-info float-right" >Valider </button>
                                     </div>
                                 </form>
                             </div>
@@ -248,21 +259,19 @@ require_once "php/classes/service.php";
                         <div class="col-md-6">
                             <div class="card card-success">
                                 <div class="card-header">
-                                    <h3 class="card-title">3ème Étape : Validation du Token</h3>
+                                    <h3 class="card-title"> Création Share drive effectuée - Affichage rclone.conf</h3>
                                 </div>
                                 <form role="form">
                                     <div class="card-body">
-                                        <div class="form-group">
-                                            <label>Coller le token :</label>
-                                            <textarea class="form-control" rows="3" placeholder="Enter ..."></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="card-footer">
-                                        <button type="submit" class="btn btn-info float-right">Valider </button>
+                                    <?php
+                                    $file='rclone/files/rclone.conf';
+                                    $contenu=file_get_contents($file);
+                                    echo "<pre>$contenu</pre>"; 
+                                    ?>
                                     </div>
                                 </form>
                             </div>
-                        </div> <!-- End 2eme etape -->
+                        </div> <!-- End 3eme etape -->
 
 
                     </div>
