@@ -1,0 +1,60 @@
+
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+
+        <footer class="main-footer">
+            <div class="float-right d-none d-sm-block">
+                <b>Version</b> 1.0.0
+            </div>
+            <strong>Copyright &copy; 2020 <a href="http://scriptseedboxdocker.com">SSD</a>.</strong> All rights
+            reserved.
+        </footer>
+
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+    </div>
+    <!-- ./wrapper -->
+
+    <!-- jQuery -->
+    <script src="plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="dist/js/adminlte.min.js"></script>
+    <script type="text/javascript" src="dist/js/ssd_specific.js"></script>
+    <!-- Toastr -->
+    <script src="plugins/toastr/toastr.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="plugins/sweetalert2/sweetalert2.min.js"></script>
+
+    <script type="text/javascript">
+        $(function() {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+
+            $('.toastrDefaultSuccess').click(function() {
+                toastr.success('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
+            });
+            $('.toastrDefaultInfo').click(function() {
+                toastr.info('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
+            });
+            $('.toastrDefaultError').click(function() {
+                toastr.error('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
+            });
+            $('.toastrDefaultWarning').click(function() {
+                toastr.warning('Lorem ipsum dolor sit amet, consetetur sadipscing elitr.')
+            });
+        });
+    </script>
+
+</body>
+
+</html>

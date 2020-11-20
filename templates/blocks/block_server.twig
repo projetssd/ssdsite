@@ -1,0 +1,28 @@
+  <!-- Profile serveur -->
+                            <div class="card card-primary card-outline">
+                                <div class="card-body box-profile">
+
+                                    <h3 class="profile-username text-center">Nom du serveur</h3>
+
+                                    <p class="text-muted text-center">{{ SERVER_NAME }}</p>
+
+                                    <ul class="list-group list-group-unbordered mb-3">
+                                        <li class="list-group-item">
+                                            <b>En marche depuis</b> <a class="float-right">{{ UPTIME }}</a>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <b>Espace disque libre</b> <a class="float-right">{{ FREE_DISK }} Go</a>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <b>Adresse IP</b> <a class="float-right">{{ IP }}</a>
+                                        </li>
+                                    </ul>
+
+                                    <form action="/php/index.php" method="post">
+                                        <button type="submit" name="submit" class="btn btn-warning btn-block">Relancer Docker</button>
+                                    </form>
+
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->

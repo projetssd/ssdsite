@@ -1,0 +1,17 @@
+{% include 'header.twig' %}
+
+ <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-3">
+                            {% block main_content %}
+                            {% include 'blocks/block_server.twig' %}
+                            {% include 'blocks/last_activities.twig' %}
+                            {% include 'blocks/applis.twig' %}
+                            {% endblock %}
+                             </div>
+                    <!-- /.row -->
+                </div>
+            </section>
+ {% include 'footer.twig' %}
