@@ -38,16 +38,6 @@ class ComposerStaticInite1dbfce0a3472b2671219364ea6c80d8
         ),
     );
 
-    public static $prefixesPsr0 = array (
-        'T' => 
-        array (
-            'Twig_' => 
-            array (
-                0 => __DIR__ . '/..' . '/twig/twig/lib',
-            ),
-        ),
-    );
-
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
     );
@@ -57,7 +47,6 @@ class ComposerStaticInite1dbfce0a3472b2671219364ea6c80d8
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInite1dbfce0a3472b2671219364ea6c80d8::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInite1dbfce0a3472b2671219364ea6c80d8::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInite1dbfce0a3472b2671219364ea6c80d8::$prefixesPsr0;
             $loader->classMap = ComposerStaticInite1dbfce0a3472b2671219364ea6c80d8::$classMap;
 
         }, null, ClassLoader::class);

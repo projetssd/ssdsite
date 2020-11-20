@@ -9,31 +9,31 @@ class service
     /**
      * @var string Url à checker pour que le service tourne
      */
-    private $url = '';
+    public $url = '';
     /**
      * @var string Nom de lappli
      */
-    private $display_name;
+    public $display_name;
     /**
      * @var string Ligne de commande pour installer
      */
-    private $command_install = '';
+    public $command_install = '';
     /**
      * @var string Ligne de commande pour désinstaller
      */
-    private $command_uninstall = '';
+    public $command_uninstall = '';
     /**
      * @var string Ligne de commande pour redémarrer
      */
-    private $command_restart = '';
+    public $command_restart = '';
     /**
      * @var string Ligne de commande pour arrêter une appli
      */
-    private $command_stop = '';
+    public $command_stop = '';
     /**
      * @var string Code html formatté pour afficher une "vignette" d'appli
      */
-    private $display_text;
+    public $display_text;
     /**
      * @var bool Est-ce que l'appli est installée ?
      */
@@ -45,19 +45,19 @@ class service
     /**
      * @var text url cliquable
      */
-    private $public_url;
+    public $public_url;
     /**
      * @var text Numéro de version
      */
-    private $version;
+    public $version;
     /**
      * @var integer Port utilisé par l'appli
      */
-    private $port;
+    public $port;
     /**
      * @var text Adresse ip du container
      */
-    private $host;
+    public $host;
 
 
     /**
@@ -213,15 +213,18 @@ class service
      */
     public function check()
     {
-        $connection = fsockopen($this->host, $this->port, $errno, $errstr);
-        if (!$connection) {
-            echo "<!-- " . $this->host . " - " . $this->port . " - " . "$errstr ($errno)" . "-->";
-        } else {
-            if (is_resource($connection)) {
-                fclose($connection);
-                return true;
+        if ($this->is_installed()) {
+            $connection = fsockopen($this->host, $this->port, $errno, $errstr);
+            if (!$connection) {
+                echo "<!-- " . $this->host . " - " . $this->port . " - " . "$errstr ($errno)" . "-->";
+            } else {
+                if (is_resource($connection)) {
+                    fclose($connection);
+                    return true;
+                }
             }
         }
+       
 
 
         return false;
@@ -232,7 +235,7 @@ class service
      * @param $url text URl à récupérer
      * @return bool|string Code html de sortie
      */
-    private function get_html($url)
+    public function get_html($url)
     {
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -280,12 +283,7 @@ class service
                 break;
 
             case 'rutorrent':
-                $retour = system("/usr/bin/docker exec -it rutorrent /usr/bin/rtorrent -h|head -n 1", $code_retour);
-                
-                /*echo "<hr>";
-                print_r($code_retour);*/
-
-                $version = $retour;
+                $version = 'image communauté Mondedié';
                 break;
             case 'medusa':
                 $result  = shell_exec("docker inspect -f '{{.Config.Labels.build_version}}' medusa");
@@ -370,7 +368,7 @@ class service
      * Récupère l'url publique de l'appli en cours
      * @return bool|mixed|text L'url publique (cliquable) de l'appli en cours, ou false si pas troué
      */
-    private function get_public_url()
+    public function get_public_url()
     {
         $handle = @fopen("/opt/seedbox/resume", "r");
         if ($handle) {
@@ -490,14 +488,15 @@ class service
         $return_array = ['installed'   => $appli_installed,
                          'uninstalled' => $appli_uninstalled,];
 
+       
+        $display_text = '';
+        foreach ($return_array['installed'] as $appli) {
+            $display_text .= $appli->display_text;
+        }
+        foreach ($return_array['uninstalled'] as $appli) {
+            $display_text .= $appli->display_text;
+        }
         if ($display) {
-            $display_text = '';
-            foreach ($return_array['installed'] as $appli) {
-                $display_text .= $appli->display_text;
-            }
-            foreach ($return_array['uninstalled'] as $appli) {
-                $display_text .= $appli->display_text;
-            }
             echo $display_text;
         }
 

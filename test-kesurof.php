@@ -58,6 +58,86 @@ require_once "php/classes/service.php";
                 <!-- END top navbar right links -->
             </ul>
         </nav>
+
+
+
+
+<!-- Modal: modalPoll -->
+<div class="modal fade right" id="modalPoll-1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true" data-backdrop="false">
+  <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
+    <div class="modal-content">
+      <!--Header-->
+      <div class="modal-header">
+        <p class="heading lead">SSD
+        </p>
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" class="white-text">×</span>
+        </button>
+      </div>
+
+      <!--Body-->
+      <div class="modal-body">
+
+        <!-- Radio -->
+        <div class="form-check mb-4">
+          <form action="rclone/token.php" method="post">
+            <input class="form-check-input" name="drive" type="radio" id="radio-179" value="gdrive" checked>
+            <label class="form-check-label" for="radio-179">Gdrive</label>
+        </div>
+
+        <div class="form-check mb-4">
+            <input class="form-check-input" name="drive" type="radio" id="radio-279" value="sharedrive">
+            <label class="form-check-label" for="radio-279">Share Drive</label>
+        </div>
+        <!-- Radio -->
+
+        <!--Basic textarea-->
+        <div class="md-form">
+          <label for="form79textarea">Nom du Gdrive - Share Drive</label>
+          <textarea type="text" name="nom" class="md-textarea form-control" rows="3"></textarea>
+        </div>
+
+        <div class="md-form">
+          <label for="form79textarea">Coller le token - Share Drive</label>
+          <textarea type="text" name="token" class="md-textarea form-control" rows="3"></textarea>
+        </div>
+
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer justify-content-center">
+        <button type="submit" class="btn btn-info">Valider</button>
+        </form>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- Modal: modalPoll -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         <!--Start content modal 2-->
         <div class="modal fade" id="modalYT1" style="display: none;" aria-hidden="true">
             <div class="modal-dialog modal-lg">
@@ -130,6 +210,7 @@ require_once "php/classes/service.php";
             <section class="content-header">
                 <div class="container-fluid">
                     <div class="row mb-2">
+
                         <div class="col-sm-6">
                             <h1>
                                 Installation Rclone
@@ -148,6 +229,7 @@ require_once "php/classes/service.php";
             <section class="content">
                 <div class="container-fluid">
                     <div class="row">
+
 
                         <!-- Start 1er etape -->
                         <div class="col-md-6">
@@ -197,17 +279,11 @@ require_once "php/classes/service.php";
                                 <div class="card-header">
                                     <h3 class="card-title">2ème Étape : Validation du Token</h3>
                                 </div>
-                                <form action="rclone/token.php" method="post">
-
-                                <form role="form">
-                                    <div class="card-body">
-                                        <div class="form-group">
-                                            <label>Coller le token OAuth 2.0 :</label>
-                                            <textarea class="form-control" rows="3" name="token" placeholder="Enter ..."></textarea>
-                                        </div>
+                                <form role="form" >
+                                    <div class="card-body" >
                                     </div>
                                     <div class="card-footer">
-                                        <button type="submit" class="btn btn-info float-right" >Valider </button>
+                                        <button type="button" class="btn btn-info" style="float: right;" data-toggle="modal" data-target="#modalPoll-1">Poursuivre avec la validation du token</button>
                                     </div>
                                 </form>
                             </div>
@@ -232,7 +308,7 @@ require_once "php/classes/service.php";
                                     <div class="row">
                                         <div class="col-5 col-sm-3">
                                             <div class="nav flex-column nav-tabs h-100" id="vert-tabs-tab" role="tablist" aria-orientation="vertical">
-                                                <a class="nav-link active" id="vert-tabs-home-tab" data-toggle="pill" href="#vert-tabs-home" role="tab" aria-controls="vert-tabs-home" aria-selected="true">1er Étape</a>
+                                                <a class="nav-link active" id="vert-tabs-home-tab" data-toggle="pill" href="#vert-tabs-home" role="tab" aria-controls="vert-tabs-home" aria-selected="true">rclone.conf</a>
                                                 <a class="nav-link" id="vert-tabs-profile-tab" data-toggle="pill" href="#vert-tabs-profile" role="tab" aria-controls="vert-tabs-profile" aria-selected="false">2ème Étape</a>
                                                 <a class="nav-link" id="vert-tabs-messages-tab" data-toggle="pill" href="#vert-tabs-messages" role="tab" aria-controls="vert-tabs-messages" aria-selected="false">3ème Étape</a>
                                             </div>
@@ -240,7 +316,7 @@ require_once "php/classes/service.php";
                                         <div class="col-7 col-sm-9">
                                             <div class="tab-content" id="vert-tabs-tabContent">
                                                 <div class="tab-pane text-left fade show active" id="vert-tabs-home" role="tabpanel" aria-labelledby="vert-tabs-home-tab">
-                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin malesuada lacus ullamcorper dui molestie, sit amet congue quam finibus. Etiam ultricies nunc non magna feugiat commodo. Etiam odio magna, mollis auctor felis vitae, ullamcorper ornare ligula. Proin pellentesque tincidunt nisi, vitae ullamcorper felis aliquam id. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin id orci eu lectus blandit suscipit. Phasellus porta, ante et varius ornare.
+                                                    Mauris tincidunt mi at erat gravida, eget tristique urna bibendum. Mauris pharetra purus ut ligula tempor, et vulputate metus facilisis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Maecenas sollicitudin, nisi a luctus interdum, nisl ligula placerat mi, quis posuere purus ligula eu lectus. Donec nunc tellus, elementum sit amet ultricies at, posuere nec nunc. Nunc euismod pellentesque diam.
                                                 </div>
                                                 <div class="tab-pane fade" id="vert-tabs-profile" role="tabpanel" aria-labelledby="vert-tabs-profile-tab">
                                                     Mauris tincidunt mi at erat gravida, eget tristique urna bibendum. Mauris pharetra purus ut ligula tempor, et vulputate metus facilisis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Maecenas sollicitudin, nisi a luctus interdum, nisl ligula placerat mi, quis posuere purus ligula eu lectus. Donec nunc tellus, elementum sit amet ultricies at, posuere nec nunc. Nunc euismod pellentesque diam.
@@ -259,7 +335,7 @@ require_once "php/classes/service.php";
                         <div class="col-md-6">
                             <div class="card card-success">
                                 <div class="card-header">
-                                    <h3 class="card-title"> Création Share drive effectuée - Affichage rclone.conf</h3>
+                                    <h3 class="card-title"> Création Share drive effectuée  -  Affichage rclone.conf</h3>
                                 </div>
                                 <form role="form">
                                     <div class="card-body">
