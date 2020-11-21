@@ -245,5 +245,7 @@ $(document).ready(function() {
         console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
         $("#free-disk").html("Erreur ajax");
     });
+    // etat des vignettes d'appli
+    
     test_etat();
 });
