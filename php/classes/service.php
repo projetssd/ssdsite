@@ -139,8 +139,8 @@ class service
 
         if ($my_service != 'all') {
             // on va remplir les valeurs par défaut
-            $this->running    = $this->check();
-            $this->installed  = $this->is_installed();
+            //$this->running    = $this->check();
+            //$this->installed  = $this->is_installed();
             $this->public_url = false;
             // on récupère les url publiques
             // on lit le fichier
@@ -259,7 +259,7 @@ class service
      */
     public function get_version()
     {
-        if (!$this->running) {
+        if (!$this->check()) {
             return ' container arrêté';
         }
         switch ($this->display_name) {
@@ -341,7 +341,7 @@ class service
      */
     public function restart()
     {
-        if ($this->running) {
+        if ($this->check()) {
             // le service tourne, on va redémarrer
             shell_exec($this->command_restart);
         } else {

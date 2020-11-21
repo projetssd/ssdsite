@@ -7,6 +7,7 @@ require_once "../php/classes/service.php";
 $service = new service($_GET['service']);
 
 $tab_retour = array(
-    "running" => $service->running,
-    "installed" => $service->installed);
+    "running" => $service->check(),
+    "installed" => $service->is_installed()
+    );
 echo json_encode($tab_retour);

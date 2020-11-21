@@ -3,6 +3,47 @@ ne s'éxécute que quand la page est totalement chargée
  */
 /* global $ */
 /*global toastr */
+
+function test_etat() {
+    $(".divappli").each(function() {
+
+        let appli = $(this).attr('data-appli');
+        $.ajax({
+            url: "ajax/etat_service.php?service=" + appli,
+            dataType: "json"
+        }).done(function(data) {
+            // le "data" est le retour de la page etat_service
+            // c'est un json prêt à être exploité, de la forme
+            // {"running":true,"installed":true}
+
+            let running = data.running;
+            let installed = data.installed;
+            // on va modifier le bouton en fonction de l'install
+            if (installed) {
+                $("#status-" + appli).html("Désinstaller").removeClass("btn-success").addClass("btn-warning");
+                $("#div-" + appli).removeClass('div-uninstalled');
+                $(".start-stop-button-" + appli).show();
+                // l'appli tourne, on va modifier les boutons si besoin
+                if (running) {
+                    $("#texte-bouton-restart-" + appli).html("Redémarrer");
+                }
+                else {
+                    $("#texte-bouton-restart-" + appli).html("Démarrer");
+                }
+            }
+            else {
+                $("#status-" + appli).html("Installer").removeClass("btn-warning").addClass("btn-success");
+                $("#div-" + appli).addClass('div-uninstalled');
+                $(".start-stop-button-" + appli).hide();
+            }
+        }).fail(function() {
+            console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+            $("#status-" + appli).html("Erreur ajax");
+        });
+    });
+
+}
+
 $(document).ready(function() {
 
     // on va intercepter le click sur le bouton status
@@ -153,56 +194,56 @@ $(document).ready(function() {
 
     // récupération des version
     $(".divappli").each(function() {
+
         let appli = $(this).attr('data-appli');
-        console.log(appli);
+        // on met la bonne image
+        $("#logo-" + appli).attr("src", "https://www.scriptseedboxdocker.com/wp-content/uploads/icones/" + appli + ".png");
         $.ajax({
             url: "ajax/check_version.php?service=" + appli,
         }).done(function(data) {
             $("#version-" + appli).html(data);
         }).fail(function() {
             console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
-            $("#version-" . appli).html("erreur ajax");
+            $("#version-".appli).html("erreur ajax");
         });
+        // est-ce que le service tourne ?
+
     });
 
     /* fonction de refresh automatique  */
     window.setInterval(function() {
-        //console.log('test régulier');
-        $(".divappli").each(function() {
-            let appli = $(this).attr('data-appli');
-            let divid = $(this).attr('id');
-            $.ajax({
-                url: "ajax/etat_service.php?service=" + appli,
-                dataType: "json"
-            }).done(function(data) {
-                // le "data" est le retour de la page etat_service
-                // c'est un json prêt à être exploité, de la forme
-                // {"running":true,"installed":true}
-                let running = data.running;
-                let installed = data.installed;
-                //console.log('Etat service '+ appli + ', installed :' + installed + ', running ' + running);
-                // on va modifier le bouton en fonction de l'install
-                if (installed) {
-                    $("#status-" + appli).html("Désinstaller").removeClass("btn-success").addClass("btn-warning");
-                    $("#" + divid).removeClass('div-uninstalled');
-                    $(".start-stop-button-" + appli).show();
-                    // l'appli tourne, on va modifier les boutons si besoin
-                    if (running) {
-                        $("#texte-bouton-restart-" + appli).html("Redémarrer");
-                    }
-                    else {
-                        $("#texte-bouton-restart-" + appli).html("Démarrer");
-                    }
-                }
-                else {
-                    $("#status-" + appli).html("Installer").removeClass("btn-warning").addClass("btn-success");
-                    $("#" + divid).addClass('div-uninstalled');
-                    $(".start-stop-button-" + appli).hide();
-                }
-            }).fail(function() {
-                console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
-                $("#status-" + appli).html("Erreur ajax");
-            });
-        });
+        test_etat();
     }, 15000); // timer en ms
+
+    // statut du serveur
+    $.ajax({
+        url: "ajax/system_release.php",
+    }).done(function(data) {
+        $("#server-version").html(data);
+
+    }).fail(function() {
+        console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+        $("#server-version").html("Erreur ajax");
+    });
+    // uptime
+    $.ajax({
+        url: "ajax/uptime.php",
+    }).done(function(data) {
+        $("#uptime").html(data);
+
+    }).fail(function() {
+        console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+        $("#uptime").html("Erreur ajax");
+    });
+    // disque libre
+    $.ajax({
+        url: "ajax/disque.php",
+    }).done(function(data) {
+        $("#free-disk").html(data);
+
+    }).fail(function() {
+        console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+        $("#free-disk").html("Erreur ajax");
+    });
+    test_etat();
 });
