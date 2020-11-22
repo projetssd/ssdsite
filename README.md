@@ -2,7 +2,7 @@
 
 ## Comment coder à plusieurs ?
 
-###Créer un environnement de dev  
+### Créer un environnement de dev  
 - installer nginx
 - cloner le dépot
 - tout configurer pour que ça marche (à compléter)
