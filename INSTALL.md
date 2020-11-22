@@ -41,6 +41,19 @@ location ~ \.php$ {
 ```
 vérifiez la version que vous avez dans /run/php pour éventuellement modifier la ligne fastcgi_pass
 
+Ajouter le index.php aux pages de démarrage autorisées
+``` 
+# Add index.php to the list if you are using PHP
+index index.php index.html index.htm index.nginx-debian.html;
+```
+et sauvegardez le fichier /etc/nginx/sites-enables/default.
+
+
+Ajoutez le user www-data au groupe docker
+```
+usermod -aG docker www-data
+```
+
 Redémarrez nginx
 ```
 systemctl restart nginx
