@@ -31,10 +31,6 @@ class service
      */
     public $command_stop = '';
     /**
-     * @var string Code html formatté pour afficher une "vignette" d'appli
-     */
-    public $display_text;
-    /**
      * @var bool Est-ce que l'appli est installée ?
      */
     public $installed;
@@ -74,20 +70,14 @@ class service
          * C'est ce service qui sera utilisé dans toutes les fonctions qui suivent
          */
         //
-        // on commence par mettre tout ce qui es générique
+        // on commence par mettre tout ce qui est générique
         //
-        $logfile                 = '/var/www/seedboxdocker.website/logtail/log';
         $this->display_name      = trim($my_service); // on supprimer les espaces avant/après
-        $this->command_install   = 'nohup sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . ' install &';
-        
-        $this->command_uninstall =
-            'rm ' . $logfile . '; echo 0 | sudo tee /opt/seedbox/status/' . $this->display_name . '; sudo -u root sudo -u root docker rm -f ' . $this->display_name . ' 2>&1 >/dev/null &';
-        $this->command_restart   =
-            'rm ' . $logfile . '; sudo -u root docker restart ' . $this->display_name . ' 2>&1 | tee -a ' . $logfile . ' 2>/dev/null >/dev/null &';
-        $this->command_stop      =
-            'rm ' . $logfile . '; sudo -u root docker stop ' . $this->display_name . ' 2>&1 | tee -a' . $logfile . ' 2>/dev/null >/dev/null &';
-        $this->command_start     =
-            'rm ' . $logfile . '; sudo -u root docker start ' . $this->display_name . ' 2>&1 | tee -a ' . $logfile . 'g 2>/dev/null >/dev/null &';
+        $this->command_install   = 'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . ' install';
+        $this->command_uninstall = 'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . ' uninstall';
+        $this->command_restart   = 'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . ' restart';
+        $this->command_stop      = 'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . ' stop';
+        $this->command_start     = 'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . ' start';
         //
         // on va chercher l'ip du docker
         //
