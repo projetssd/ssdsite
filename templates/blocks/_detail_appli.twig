@@ -2,7 +2,7 @@
 <div class="post">
     <div class="card card-info card-outline">
         <div class="card-body user-block">
-            <img class="img-circle img-bordered-sm" src="https://www.scriptseedboxdocker.com/wp-content/uploads/icones/{{ MYAPPLI.display_name }}.png" alt="{{ MYAPPLI.display_name }}">
+            <img class="img-circle img-bordered-sm" id="logo-{{ MYAPPLI.display_name }}" alt="{{ MYAPPLI.display_name }}">
             <span class="username">{% if MYAPPLI.public_url != false%}<a href="https://{{ MYAPPLI.public_url }}" target="_blank">{{ MYAPPLI.display_name|capitalize  }}</a>{% else %}{{ MYAPPLI.display_name|capitalize  }}{% endif %}</span>
             <span class="description" id="version-{{ MYAPPLI.display_name }}"></span>
         </div>
@@ -14,16 +14,12 @@
                         {% if MYAPPLI.running %}Redémarrer{% else %}Démarrer{% endif %}
                     </span>
             </a>
-            <a class="link-black start-stop-button-{{ MYAPPLI.display_name }} text-sm mr-2 bouton-stop" data-appli="{{ MYAPPLI.display_name }}" id="stop-{{ MYAPPLI.display_name }}" style="{% if not MYAPPLI.installed %}display: none;{% endif %};cursor: pointer;">
+            <a class="link-black start-stop-button-{{ MYAPPLI.display_name }} text-sm mr-2 bouton-stop" data-appli="{{ MYAPPLI.display_name }}" id="stop-{{ MYAPPLI.display_name }}" style="cursor: pointer;">
                 <i class="fas fa-share mr-1"></i>stop
             </a>
             <span class="float-right">
-                <button type="submit" name="{{ MYAPPLI.display_name }}" id="status-{{ MYAPPLI.display_name }}" class="btn btn-block {% if MYAPPLI.installed %}btn-warning{% else %}btn-sucess{% endif %}btn-sm text-with bouton-install" data-appli="{ MYAPPLI.display_name }}">
-                  {% if MYAPPLI.installed %}  
-                  Désinstaller
-                  {% else %}
-                  Installer
-                  {% endif %}
+                <button type="submit" name="{{ MYAPPLI.display_name }}" id="status-{{ MYAPPLI.display_name }}" class="btn btn-block btn-warning btn-sm text-with bouton-install" data-appli="{{ MYAPPLI.display_name }}">
+
                 </button>
             </span>
         </div>

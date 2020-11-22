@@ -12,12 +12,23 @@
  */
 require_once __DIR__ . '/../conf.php';
 
+$prod = false;
+if (isset($_GET['prod'])) {
+    $prod = $_GET['prod'];
+}
+
 
 // initialisation de twig (morteur de template)
 require __DIR__ . '/../vendor/autoload.php';
 $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../templates');
-$twig = new \Twig\Environment($loader, ['debug' => true,]);
-$twig->addExtension(new \Twig\Extension\DebugExtension());
+if ($prod) {
+    $twig = new \Twig\Environment($loader, ['cache' => __DIR__ .'/../cache']);
+} else {
+    $twig = new \Twig\Environment($loader, ['debug' => true,]);
+    $twig->addExtension(new \Twig\Extension\DebugExtension());
+}
+
+
 
 /**
  * Autochargement des classes manquantes

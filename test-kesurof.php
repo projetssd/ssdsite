@@ -59,84 +59,54 @@ require_once "php/classes/service.php";
             </ul>
         </nav>
 
+        <!-- Modal: modalPoll -->
+        <div class="modal fade right" id="modalPoll-1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+          aria-hidden="true" data-backdrop="false">
+          <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
+            <div class="modal-content">
+              <!--Header-->
+              <div class="modal-header">
+                <p class="heading lead">SSD
+                </p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true" class="white-text">×</span>
+                </button>
+              </div>
+              <!--Body-->
+              <div class="modal-body">
+                <!-- Radio -->
+                <div class="form-check mb-4">
+                  <form action="rclone/token.php" method="post">
+                    <input class="form-check-input" name="drive" type="radio" id="radio-179" value="gdrive" checked>
+                    <label class="form-check-label" for="radio-179">Gdrive</label>
+                </div>
 
+                <div class="form-check mb-4">
+                    <input class="form-check-input" name="drive" type="radio" id="radio-279" value="sharedrive">
+                    <label class="form-check-label" for="radio-279">Share Drive</label>
+                </div>
+                <!-- Radio -->
 
+                <!--Basic textarea-->
+                <div class="md-form">
+                  <label for="form79textarea">Nom du Gdrive - Share Drive</label>
+                  <textarea type="text" name="nom" class="md-textarea form-control" rows="3"></textarea>
+                </div>
 
-<!-- Modal: modalPoll -->
-<div class="modal fade right" id="modalPoll-1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-  aria-hidden="true" data-backdrop="false">
-  <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
-    <div class="modal-content">
-      <!--Header-->
-      <div class="modal-header">
-        <p class="heading lead">SSD
-        </p>
-
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true" class="white-text">×</span>
-        </button>
-      </div>
-
-      <!--Body-->
-      <div class="modal-body">
-
-        <!-- Radio -->
-        <div class="form-check mb-4">
-          <form action="rclone/token.php" method="post">
-            <input class="form-check-input" name="drive" type="radio" id="radio-179" value="gdrive" checked>
-            <label class="form-check-label" for="radio-179">Gdrive</label>
+                <div class="md-form">
+                  <label for="form79textarea">Coller le token</label>
+                  <textarea type="text" name="token" class="md-textarea form-control" rows="3"></textarea>
+                </div>
+              </div>
+              <!--Footer-->
+              <div class="modal-footer justify-content-center">
+                 <button type="submit" class="btn btn-info">Valider</button>
+                </form>
+              </div>
+            </div>
+          </div>
         </div>
-
-        <div class="form-check mb-4">
-            <input class="form-check-input" name="drive" type="radio" id="radio-279" value="sharedrive">
-            <label class="form-check-label" for="radio-279">Share Drive</label>
-        </div>
-        <!-- Radio -->
-
-        <!--Basic textarea-->
-        <div class="md-form">
-          <label for="form79textarea">Nom du Gdrive - Share Drive</label>
-          <textarea type="text" name="nom" class="md-textarea form-control" rows="3"></textarea>
-        </div>
-
-        <div class="md-form">
-          <label for="form79textarea">Coller le token - Share Drive</label>
-          <textarea type="text" name="token" class="md-textarea form-control" rows="3"></textarea>
-        </div>
-
-      </div>
-
-      <!--Footer-->
-      <div class="modal-footer justify-content-center">
-        <button type="submit" class="btn btn-info">Valider</button>
-        </form>
-
-      </div>
-
-    </div>
-  </div>
-</div>
-<!-- Modal: modalPoll -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        <!-- Modal: modalPoll -->
 
         <!--Start content modal 2-->
         <div class="modal fade" id="modalYT1" style="display: none;" aria-hidden="true">
@@ -258,7 +228,6 @@ require_once "php/classes/service.php";
                                     </div>
                                     <div class="card-footer">
                                </form>
-
                                <button class="btn btn-info float-right" onclick="doPreview();">Valider</button>
                                <script type="text/javascript">
                                function doPreview()

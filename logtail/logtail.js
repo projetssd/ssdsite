@@ -154,6 +154,7 @@ function show_log() {
     if (fix_rn)
         t = t.replace(/\n/g, "\r\n");
 
+
     $(dataelem).text(t);
     if (!reverse)
         scroll(-1);

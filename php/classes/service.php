@@ -31,10 +31,6 @@ class service
      */
     public $command_stop = '';
     /**
-     * @var string Code html formatté pour afficher une "vignette" d'appli
-     */
-    public $display_text;
-    /**
      * @var bool Est-ce que l'appli est installée ?
      */
     public $installed;
@@ -74,20 +70,14 @@ class service
          * C'est ce service qui sera utilisé dans toutes les fonctions qui suivent
          */
         //
-        // on commence par mettre tout ce qui es générique
+        // on commence par mettre tout ce qui est générique
         //
-        $logfile                 = '/var/www/seedboxdocker.website/logtail/log';
         $this->display_name      = trim($my_service); // on supprimer les espaces avant/après
-        $this->command_install   =
-            'rm ' . $logfile . '; sudo -u www-data /var/www/seedboxdocker.website/scripts/install.sh ' . $this->display_name . ' 2>&1 | tee -a ' . $logfile . ' 2>/dev/null >/dev/null &';
-        $this->command_uninstall =
-            'rm ' . $logfile . '; echo 0 | sudo tee /opt/seedbox/status/' . $this->display_name . '; sudo -u root sudo -u root docker rm -f ' . $this->display_name . ' 2>&1 >/dev/null &';
-        $this->command_restart   =
-            'rm ' . $logfile . '; sudo -u root docker restart ' . $this->display_name . ' 2>&1 | tee -a ' . $logfile . ' 2>/dev/null >/dev/null &';
-        $this->command_stop      =
-            'rm ' . $logfile . '; sudo -u root docker stop ' . $this->display_name . ' 2>&1 | tee -a' . $logfile . ' 2>/dev/null >/dev/null &';
-        $this->command_start     =
-            'rm ' . $logfile . '; sudo -u root docker start ' . $this->display_name . ' 2>&1 | tee -a ' . $logfile . 'g 2>/dev/null >/dev/null &';
+        $this->command_install   = 'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . ' install';
+        $this->command_uninstall = 'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . ' uninstall';
+        $this->command_restart   = 'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . ' restart';
+        $this->command_stop      = 'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . ' stop';
+        $this->command_start     = 'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . ' start';
         //
         // on va chercher l'ip du docker
         //
@@ -139,8 +129,8 @@ class service
 
         if ($my_service != 'all') {
             // on va remplir les valeurs par défaut
-            $this->running    = $this->check();
-            $this->installed  = $this->is_installed();
+            //$this->running    = $this->check();
+            //$this->installed  = $this->is_installed();
             $this->public_url = false;
             // on récupère les url publiques
             // on lit le fichier
@@ -216,7 +206,7 @@ class service
         if ($this->is_installed()) {
             $connection = fsockopen($this->host, $this->port, $errno, $errstr);
             if (!$connection) {
-                echo "<!-- " . $this->host . " - " . $this->port . " - " . "$errstr ($errno)" . "-->";
+                return false;
             } else {
                 if (is_resource($connection)) {
                     fclose($connection);
@@ -244,6 +234,7 @@ class service
         curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_COOKIESESSION, true);
+        // on met un fichier à la con pour que le cookie fonctionne
         curl_setopt($ch, CURLOPT_COOKIEJAR, '/tmp/toto');
         curl_setopt($ch, CURLOPT_COOKIEFILE, '/tmp/toto');
 
@@ -259,7 +250,7 @@ class service
      */
     public function get_version()
     {
-        if (!$this->running) {
+        if (!$this->check()) {
             return ' container arrêté';
         }
         switch ($this->display_name) {
@@ -316,7 +307,7 @@ class service
         impossible de catcher la sortie
         on ne stocke donc aucune info
         les infos seront lues dans le défilement des logs */
-
+        echo "commande " . $this->command_install;
         shell_exec($this->command_install);
 
         return true;
@@ -341,7 +332,7 @@ class service
      */
     public function restart()
     {
-        if ($this->running) {
+        if ($this->check()) {
             // le service tourne, on va redémarrer
             shell_exec($this->command_restart);
         } else {
@@ -389,72 +380,7 @@ class service
         return $this->public_url;
     }
 
-    /**
-     * Génère le code html de l'appli en cours.
-     *
-     * @param bool $display Si True, on affiche le résultat, si false, on ne fait que setter la variable
-     *
-     * @return string Le code html formatté
-     */
-    public function display($display = true)
-    {
-        $this->display_text = '<div class="col-md-4 divappli ';
-        if (!$this->installed) {
-            $this->display_text .= 'div-uninstalled ';
-        }
-        $this->display_text .= '" id="div-' . $this->display_name . '" data-appli="' . $this->display_name . '" data-installed="';
-        if ($this->installed) {
-            $this->display_text .= '1';
-        } else {
-            $this->display_text .= '0';
-        }
-        $this->display_text .= '">
-                                        <div class="post">
-                                            <div class="card card-info card-outline">
-                                                <div class="card-body user-block">
-                                                    <img class="img-circle img-bordered-sm" src="https://www.scriptseedboxdocker.com/wp-content/uploads/icones/' . $this->display_name . '.png" alt="user image">
-                                                    <span class="username">';
-        if ($this->public_url !== false) {
-            $this->display_text .= '<a href="https://' . $this->public_url . '" target="_blank">' . ucfirst($this->display_name) . '</a>';
-        } else {
-            $this->display_text .= ucfirst($this->display_name);
-        }
-
-        $this->display_text .= '</span><span class="description" id="version-' . $this->display_name . '"></span></div><div class="card-footer" id="toto"><a class="link-black start-stop-button-' . $this->display_name . ' text-sm mr-2 bouton-start" data-appli="' . $this->display_name . '" id="reset-' . $this->display_name . '" style="';
-        if (!$this->installed) {
-            $this->display_text .= 'display: none;';
-        }
-        $this->display_text .= 'cursor: pointer;"><i class="fas fa-share mr-1"></i>';
-        if ($this->running) {
-            $this->display_text .= '<span id="texte-bouton-restart-' . $this->display_name . '">Redémarrer</span>';
-        } else {
-            $this->display_text .= '<span id="texte-bouton-restart-' . $this->display_name . '">Démarrer</span>';
-        }
-
-        $this->display_text .= '</a><a class="link-black start-stop-button-' . $this->display_name . ' text-sm mr-2 bouton-stop" data-appli="' . $this->display_name . '" id="stop-' . $this->display_name . '" style="';
-        if (!$this->installed) {
-            $this->display_text .= 'display: none;';
-        }
-        $this->display_text .= ';cursor: pointer;"><i class="fas fa-share mr-1"></i>stop</a><span class="float-right"><button type="submit" name="' . $this->display_name . '" id="status-' . $this->display_name . '" class="btn btn-block ';
-        if ($this->installed) {
-            $this->display_text .= 'btn-warning ';
-        } else {
-            $this->display_text .= 'btn-sucess ';
-        }
-        $this->display_text .= 'btn-success btn-sm text-with bouton-install" data-appli="' . $this->display_name . '">';
-        if ($this->installed) {
-            $this->display_text .= 'Désinstaller';
-        } else {
-            $this->display_text .= 'Installer';
-        }
-        $this->display_text .= '</button></span><!-- </form> --></div></div></div></div>';
-        if ($display) {
-            echo $this->display_text;
-        }
-
-        return $this->display_text;
-    }
-
+   
     /**
      * Cette fonction prend en entrée un tableau d'applis
      * et va chercher toutes les infos nécessaires
@@ -476,7 +402,7 @@ class service
         foreach ($input as $appli) {
             // on charge le service correspondant
             $temp               = new service($appli);
-            $temp->display_text = $temp->display(false);
+            
 
             if ($temp->is_installed()) {
                 $appli_installed[] = $temp;
@@ -489,17 +415,7 @@ class service
                          'uninstalled' => $appli_uninstalled,];
 
        
-        $display_text = '';
-        foreach ($return_array['installed'] as $appli) {
-            $display_text .= $appli->display_text;
-        }
-        foreach ($return_array['uninstalled'] as $appli) {
-            $display_text .= $appli->display_text;
-        }
-        if ($display) {
-            echo $display_text;
-        }
-
+       
         return $return_array;
     }
 }
