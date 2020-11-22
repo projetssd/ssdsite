@@ -18,7 +18,7 @@ Si vous changez le chemin, pensez à modifier les étapes suivantes
 apt install nginx php-fpm php-mysql php-curl php-dom
 ```
 Ca va sortir en erreur, c'est normal. Nginx essaie de démarrer sur le port 80 alors qu'il y a déjà traefik dessus. 
-## modifier le conf nginx
+## modifier la conf nginx
 
 Editer le fichier /etc/nginx/sites-enables/default
 
@@ -46,7 +46,7 @@ Redémarrez nginx
 systemctl restart nginx
 ```
 
-## ajoutez un sous domain
+## ajoutez un sous domaine
 Dans votre provider dns (cloudflare ou autre), ajoutez un sous domaine en A ou CNAME vers votre serveur (par exemple ssd.monserveur.net)
 crééz le fichier ssdsite.toml dans /opt/seedbox/docker/traefik/rules
 ```
@@ -68,6 +68,20 @@ crééz le fichier ssdsite.toml dans /opt/seedbox/docker/traefik/rules
 Changez la dernière ligne avec l'adresse publique de votre serveur
 
 Vous devriez maintenant accéder à https://ssd.monserveur.net
+
+## Autoriser le user a faire du sudo
+
+tapez 
+```
+visudo
+```
+pour éditer le fichier sudoers 
+(n'éditez JAMAIS directement le fichier /etc/sudoers, la commande visudo permet de voir qu'il n'y a pas d'anomalie avant de sauvegarder)
+et ajoutez la ligne
+```
+www-data ALL=(ALL) NOPASSWD:/var/www/ssdsite/scripts/manage_service.sh
+```
+a la fin
 
 ## Voir le README.md pour travailler sur ce projet
 
