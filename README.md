@@ -19,3 +19,6 @@ Une fois que la fonctionnalité est ok, testée, pensez à commiter votre branch
 ### Faire une pull request
 Venir sur l'interface de github, et faire une pull request.
 Cela va vérifier que votre branche est ok avec le master, et une fois validée, votre branché sera mergée au master.
+
+Une fois mergé, ce sera poussé sur https://lucgeek.com/
+Ce serveur ne doit plus servir de dev, ce sera un serveur de validation pour contrôler que tout est ok.
