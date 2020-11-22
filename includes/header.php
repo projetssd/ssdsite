@@ -1,4 +1,15 @@
 <?php
+/**
+ * Fichier header
+ * Doit être appelé avant chaque page, y compris les ajax
+ * Permet de définir tout ce qui est commun au site et de charger les classes
+ * automatiquement
+ */
+
+
+/**
+ * On charge la conf
+ */
 require_once __DIR__ . '/../conf.php';
 
 
@@ -17,5 +28,4 @@ function my_autoloader($class)
         require_once __DIR__ . '/../php/classes/' . $class . '.php';
     }
 }
-
 spl_autoload_register('my_autoloader');
