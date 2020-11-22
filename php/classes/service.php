@@ -39,11 +39,11 @@ class service
      */
     public $running;
     /**
-     * @var text url cliquable
+     * @var string url cliquable
      */
     public $public_url;
     /**
-     * @var text Numéro de version
+     * @var string Numéro de version
      */
     public $version;
     /**
@@ -51,7 +51,7 @@ class service
      */
     public $port;
     /**
-     * @var text Adresse ip du container
+     * @var string Adresse ip du container
      */
     public $host;
 
@@ -73,26 +73,34 @@ class service
         // on commence par mettre tout ce qui est générique
         //
         $this->display_name      = trim($my_service); // on supprimer les espaces avant/après
-        $this->command_install   = 'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . ' install';
-        $this->command_uninstall = 'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . ' uninstall';
-        $this->command_restart   = 'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . ' restart';
-        $this->command_stop      = 'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . ' stop';
-        $this->command_start     = 'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . ' start';
+        $this->command_install   =
+            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . ' install';
+        $this->command_uninstall =
+            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . ' uninstall';
+        $this->command_restart   =
+            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . ' restart';
+        $this->command_stop      =
+            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . ' stop';
+        $this->command_start     =
+            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . ' start';
         //
         // on va chercher l'ip du docker
         //
         $retour =
             exec("docker inspect -f '{{.NetworkSettings.Networks.bridge.IPAddress}}' " . $this->display_name, $tab_retour, $code_retour);
-        if ($code_retour == 0) {
+        if ($code_retour == 0)
+        {
             $this->url  = 'http://' . $retour;
             $this->host = $retour;
-        } else {
+        } else
+        {
             // docker non trouvé, on met l'ip locale histoire de ne pas laisser vide
             $this->url = 'http://127.0.0.1';
         }
 
         // ici on va surcharger ce qui n'est pas générique
-        switch ($my_service) {
+        switch ($my_service)
+        {
             case 'radarr':
                 $this->port = 7878;
                 break;
@@ -127,7 +135,8 @@ class service
         }
         $this->url = "http://" . $this->host . ":" . $this->port;
 
-        if ($my_service != 'all') {
+        if ($my_service != 'all')
+        {
             // on va remplir les valeurs par défaut
             //$this->running    = $this->check();
             //$this->installed  = $this->is_installed();
@@ -136,16 +145,20 @@ class service
             // on lit le fichier
             $file    = fopen('/opt/seedbox/resume', 'r');
             $matches = array();
-            if ($file) {
-                while (!feof($file)) {
+            if ($file)
+            {
+                while (!feof($file))
+                {
                     $buffer = fgets($file);
-                    if (strpos($buffer, $this->display_name) !== false) {
+                    if (strpos($buffer, $this->display_name) !== false)
+                    {
                         $matches[] = $buffer;
                     }
                 }
                 fclose($file);
             }
-            if (count($matches) != 0) {
+            if (count($matches) != 0)
+            {
                 $tab_temp         = explode('=', $matches[0]);
                 $this->public_url = trim($tab_temp[1]);
             }
@@ -167,13 +180,15 @@ class service
         $installed = false; // par défaut, on considère que le service n'est pas là
 
         $contents = ''; // init de variable pour l'IDE
-        if (file_exists($filename)) {
+        if (file_exists($filename))
+        {
             $file     = fopen($filename, 'r');
             $contents = fread($file, filesize($filename));
         }
         $contents = substr($contents, 0); // on ne garde que le premier caractère
 
-        switch ($contents) {
+        switch ($contents)
+        {
             case 0:
                 // pas installé
                 break;
@@ -203,18 +218,21 @@ class service
      */
     public function check()
     {
-        if ($this->is_installed()) {
+        if ($this->is_installed())
+        {
             $connection = fsockopen($this->host, $this->port, $errno, $errstr);
-            if (!$connection) {
+            if (!$connection)
+            {
                 return false;
-            } else {
-                if (is_resource($connection)) {
+            } else
+            {
+                if (is_resource($connection))
+                {
                     fclose($connection);
                     return true;
                 }
             }
         }
-       
 
 
         return false;
@@ -222,7 +240,7 @@ class service
 
     /**
      * Récupère le code html ou la sortie de page de l'url en entrée
-     * @param $url text URl à récupérer
+     * @param $url string URl à récupérer
      * @return bool|string Code html de sortie
      */
     public function get_html($url)
@@ -250,10 +268,12 @@ class service
      */
     public function get_version()
     {
-        if (!$this->check()) {
+        if (!$this->check())
+        {
             return ' container arrêté';
         }
-        switch ($this->display_name) {
+        switch ($this->display_name)
+        {
             case 'radarr':
             case 'sonarr':
             case 'lidarr':
@@ -264,9 +284,11 @@ class service
                 $html = str_replace('{', '', $html);
                 $html = str_replace('}', '', $html);
                 $html = explode(',', $html);
-                foreach ($html as $val) {
+                foreach ($html as $val)
+                {
                     $detail = explode(':', $val);
-                    if (trim($detail[0]) == 'version') {
+                    if (trim($detail[0]) == 'version')
+                    {
                         $version = str_replace("'", "", $detail[1]);
                     }
                 }
@@ -290,7 +312,8 @@ class service
                 break;
         }
 
-        if (empty($version)) {
+        if (empty($version))
+        {
             return 'Version inconnue';
         }
         return $version;
@@ -332,10 +355,12 @@ class service
      */
     public function restart()
     {
-        if ($this->check()) {
+        if ($this->check())
+        {
             // le service tourne, on va redémarrer
             shell_exec($this->command_restart);
-        } else {
+        } else
+        {
             // le service ne tourne pas, on le démarre
             shell_exec($this->command_start);
         }
@@ -357,30 +382,36 @@ class service
 
     /**
      * Récupère l'url publique de l'appli en cours
-     * @return bool|mixed|text L'url publique (cliquable) de l'appli en cours, ou false si pas troué
+     * @return bool|mixed|string L'url publique (cliquable) de l'appli en cours, ou false si pas troué
      */
     public function get_public_url()
     {
-        $handle = @fopen("/opt/seedbox/resume", "r");
-        if ($handle) {
-            while (!feof($handle)) {
+        $handle  = @fopen("/opt/seedbox/resume", "r");
+        $matches = array();
+        if ($handle)
+        {
+            while (!feof($handle))
+            {
                 $buffer = fgets($handle);
-                if (strpos($buffer, $this->display_name) !== false) {
+                if (strpos($buffer, $this->display_name) !== false)
+                {
                     $matches[] = $buffer;
                 }
             }
             fclose($handle);
         }
         $matches = array_unique($matches);
-        if (count($matches) != 0) {
+        if (count($matches) != 0)
+        {
             $this->public_url = $matches[0];
-        } else {
+        } else
+        {
             $this->public_url = false;
         }
         return $this->public_url;
     }
 
-   
+
     /**
      * Cette fonction prend en entrée un tableau d'applis
      * et va chercher toutes les infos nécessaires
@@ -388,34 +419,32 @@ class service
      * par défaut, le display est à true, ce qui veut dire qu'on afficher les cartes des applis.
      *
      * @param $input : tableau des applis à afficher
-     * @param bool $display : est-ce qu'on affiche ou pas le résultat ?
      *
      * @return array[] : tableau des applis
      */
-    public static function get_all($input, $display = true)
+    public static function get_all($input)
     {
         // init des tableaux
         $appli_installed   = [];
         $appli_uninstalled = [];
 
         // on boucle sur chaque appli passée en param
-        foreach ($input as $appli) {
+        foreach ($input as $appli)
+        {
             // on charge le service correspondant
-            $temp               = new service($appli);
-            
+            $temp = new service($appli);
 
-            if ($temp->is_installed()) {
+
+            if ($temp->is_installed())
+            {
                 $appli_installed[] = $temp;
-            } else {
+            } else
+            {
                 $appli_uninstalled[] = $temp;
             }
             unset($temp);
         }
-        $return_array = ['installed'   => $appli_installed,
-                         'uninstalled' => $appli_uninstalled,];
-
-       
-       
-        return $return_array;
+        return ['installed'   => $appli_installed,
+                'uninstalled' => $appli_uninstalled,];
     }
 }
