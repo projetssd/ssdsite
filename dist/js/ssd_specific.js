@@ -56,6 +56,7 @@ $(document).ready(function() {
             // on change le texte du bouton 
             $("#status-" + appli).html("Installation...");
             // on lance un ajax qui va installer tout ça
+            $('#modalYT1').modal('show');
             $.ajax({
                 url: "ajax/install_service.php?service=" + appli
             }).done(function(data) {
@@ -68,7 +69,7 @@ $(document).ready(function() {
                 $(".start-stop-button-" + appli).show();
                 // on affiche les logs
                 // il suffit d'afficher la dic modalYT1 qui contient déjà un iframe de défilement des logs
-                $('#modalYT1').modal('show');
+                
                 // on met à jour les infos de la div
                 $("#div-" + appli).attr("data-installed", 1).removeClass('div-uninstalled');
             }).fail(function() {

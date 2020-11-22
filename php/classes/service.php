@@ -78,8 +78,8 @@ class service
         //
         $logfile                 = '/var/www/seedboxdocker.website/logtail/log';
         $this->display_name      = trim($my_service); // on supprimer les espaces avant/après
-        $this->command_install   =
-            'rm ' . $logfile . '; sudo -u www-data /var/www/seedboxdocker.website/scripts/install.sh ' . $this->display_name . ' 2>&1 | tee -a ' . $logfile . ' 2>/dev/null >/dev/null &';
+        $this->command_install   = 'nohup sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . ' install &';
+        
         $this->command_uninstall =
             'rm ' . $logfile . '; echo 0 | sudo tee /opt/seedbox/status/' . $this->display_name . '; sudo -u root sudo -u root docker rm -f ' . $this->display_name . ' 2>&1 >/dev/null &';
         $this->command_restart   =
@@ -317,7 +317,7 @@ class service
         impossible de catcher la sortie
         on ne stocke donc aucune info
         les infos seront lues dans le défilement des logs */
-
+        echo "commande " . $this->command_install;
         shell_exec($this->command_install);
 
         return true;
