@@ -17,7 +17,13 @@ Si vous changez le chemin, pensez à modifier les étapes suivantes
 ```
 apt install nginx php-fpm php-mysql php-curl php-dom composer
 ```
-Ca va sortir en erreur, c'est normal. Nginx essaie de démarrer sur le port 80 alors qu'il y a déjà traefik dessus. 
+Ca va sortir en erreur, c'est normal. Nginx essaie de démarrer sur le port 80 alors qu'il y a déjà traefik dessus.
+
+## Récupérer les dépendances
+Depuis le répertoire du projet, lancer la commande
+```
+composer install
+``` 
 ## modifier la conf nginx
 
 Editer le fichier /etc/nginx/sites-enables/default
