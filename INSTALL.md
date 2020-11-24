@@ -15,7 +15,7 @@ Si vous changez le chemin, pensez à modifier les étapes suivantes
 ## Installer les dépendances
 
 ```
-apt install nginx php-fpm php-mysql php-curl php-dom
+apt install nginx php-fpm php-mysql php-curl php-dom composer
 ```
 Ca va sortir en erreur, c'est normal. Nginx essaie de démarrer sur le port 80 alors qu'il y a déjà traefik dessus. 
 ## modifier la conf nginx
