@@ -83,6 +83,51 @@
         </div>
         
         <!--End content modal 2-->
+
+        <!-- Modal: modalPoll -->
+        <div class="modal fade right" id="modalPoll" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+          aria-hidden="true" data-backdrop="false">
+          <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
+            <div class="modal-content">
+              <!--Header-->
+              <div class="modal-header">
+                <p class="heading lead">SSD
+                </p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true" class="white-text">×</span>
+                </button>
+              </div>
+              <!--Body-->
+              <div class="modal-body post">
+                <!-- Radio -->
+                <div class="form-check mb-4">
+                    <input class="form-check-input" name="subdomain" type="radio" id="radio-179" value="test A" checked>
+                    <label class="form-check-label" for="radio-179">test</label>
+                </div>
+
+                <div class="form-check mb-4">
+                    <input class="form-check-input" name="subdomain" type="radio" id="radio-279" value="test B">
+                    <label class="form-check-label" for="radio-279">test</label>
+                </div>
+                <!-- Radio -->
+
+                <!--Basic textarea-->
+                <div class="md-form">
+                  <label for="form79textarea">Nom du sous domaine</label>
+                  <textarea type="text" name="nom" class="md-textarea form-control" rows="3"></textarea>
+                </div>
+              </div>
+              <!--Footer-->
+              <!-- Notes j'ai deporté la classe bouton-install dans le button modal -->
+              <div class="modal-footer justify-content-center" data-appli="{{ MYAPPLI.display_name }}">
+               <!-- Notes j'ai deporté la classe bouton-install dans le button modal, la variable data-appli ne semble pas etre efficace -->
+                 <button type="submit" id="modal" class="btn-success bouton-install" data-appli="{{ MYAPPLI.display_name }}">Valider</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Modal: modalPoll -->
+
          <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->

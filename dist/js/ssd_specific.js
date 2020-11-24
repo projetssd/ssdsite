@@ -46,17 +46,26 @@ function test_etat() {
 
 $(document).ready(function() {
 
+    $(".affichage-modal").click(function() {
+        $('#modalPoll').modal('show');
+    });
+
     // on va intercepter le click sur le bouton status
     $(".bouton-install").click(function() {
         let appli = $(this).attr("data-appli");
         console.log("Appli appelée " + appli)
         // on va considérer que le texte du bouton est ok
         // a voir si on refait un appel ajax pour vérifier ?
-        if ($("#status-" + appli).html() === "Installer") {
+        // je pose une verification sur l id modal pour verifier que le bouton s appelle bien "Valider"
+        if ($("#modal").html() === "Valider") {
+            let appli = $(this).attr("data-appli");
             // on change le texte du bouton 
             $("#status-" + appli).html("Installation...");
             // on lance un ajax qui va installer tout ça
+            // là je ferme le modal, jusque là ca va et le modal "modalYT1" se lance
+            $('#modalPoll').modal('hide');
             $('#modalYT1').modal('show');
+            // l'ajax ne se lance pas, car je pense que la variable appli n'est pas transmise au modal et c'est là ou je bloque
             $.ajax({
                 url: "ajax/install_service.php?service=" + appli
             }).done(function(data) {

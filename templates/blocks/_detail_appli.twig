@@ -18,8 +18,8 @@
                 <i class="fas fa-share mr-1"></i>stop
             </a>
             <span class="float-right">
-                <button type="submit" name="{{ MYAPPLI.display_name }}" id="status-{{ MYAPPLI.display_name }}" class="btn btn-block btn-warning btn-sm text-with bouton-install" data-appli="{{ MYAPPLI.display_name }}">
-
+                <!-- Notes j'ai deporté la classe bouton-install dans le button modal et remplacé par une classe affichage-modal que j'ai declaré dasn le fichier js, j'ai mis le modal dans header.wig -->
+                <button type="submit" name="{{ MYAPPLI.display_name }}" id="status-{{ MYAPPLI.display_name }}" class="btn btn-block btn-warning btn-sm text-with affichage-modal" data-appli="{{ MYAPPLI.display_name }}">
                 </button>
             </span>
         </div>
