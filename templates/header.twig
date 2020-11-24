@@ -91,7 +91,7 @@
             <div class="modal-content">
               <!--Header-->
               <div class="modal-header">
-                <p class="heading lead">SSD
+                <p class="heading lead">Installation de l'application <span id="nomappliencours"></span>
                 </p>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true" class="white-text">×</span>
@@ -119,9 +119,8 @@
               </div>
               <!--Footer-->
               <!-- Notes j'ai deporté la classe bouton-install dans le button modal -->
-              <div class="modal-footer justify-content-center" data-appli="{{ MYAPPLI.display_name }}">
-               <!-- Notes j'ai deporté la classe bouton-install dans le button modal, la variable data-appli ne semble pas etre efficace -->
-                 <button type="submit" id="modal" class="btn-success bouton-install" data-appli="{{ MYAPPLI.display_name }}">Valider</button>
+              <div class="modal-footer justify-content-center">
+                 <button type="submit" id="validation_install_appli" class="btn-success bouton-install" data-appli="">Valider</button>
               </div>
             </div>
           </div>
