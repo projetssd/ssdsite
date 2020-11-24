@@ -122,21 +122,6 @@
               <div class="modal-footer justify-content-center">
                  <button type="submit" id="validation_install_appli" class="btn-success bouton-install" data-appli="">Valider</button>
               </div>
-                <!--Footer-->
-                <!-- Notes j'ai deporté la classe bouton-install dans le button modal -->
-                <div class="modal-footer justify-content-center" data-appli="{{ MYAPPLI.display_name }}">
-                    <!-- Notes j'ai deporté la classe bouton-install dans le button modal, la variable data-appli ne semble pas etre efficace -->
-
-                    <!-- NOTE MERRICK
-                  Attention, ton bouton contient data-appli="{{ MYAPPLI.display_name }}"
-                  ce qui est une erreur. Au moment où tu créé ta modal, tu ne sais pas quelle appli il va gérer
-                  Il vaut mieux dont laisser cette valeur à vide, et la modifier dynamiquement par la suite
-                  (voir le fichier javascript)
-                  -->
-                    <button type="submit" id="modal" class="btn-success bouton-install"
-                            data-appli="{{ MYAPPLI.display_name }}">Valider
-                    </button>
-                </div>
             </div>
           </div>
         </div>
