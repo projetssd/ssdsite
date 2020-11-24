@@ -46,12 +46,20 @@ function test_etat() {
 
 $(document).ready(function() {
 
-    $(".affichage-modal").click(function() {
+    /**
+     * NOTE MERRICK
+     * OK, tu affiches la modal, mais entre guillements, c'est tout...
+     * tu dois faire d'autres choses avant de l'afficher
+     * - détecter pour quelle appli tu as cliqué (tu as plein d'exemples dessous)
+     * - éventuellement modifier le texte de la modal  pour dire sur quelle appli tu es
+     * - modifier une propriété du bouton bouton-install pour lui dire à quelle appli il va correspondre
+     */
+    $(".affichage-modal").click(function () {
         $('#modalPoll').modal('show');
     });
 
     // on va intercepter le click sur le bouton status
-    $(".bouton-install").click(function() {
+    $(".bouton-install").click(function () {
         let appli = $(this).attr("data-appli");
         console.log("Appli appelée " + appli)
         // on va considérer que le texte du bouton est ok
