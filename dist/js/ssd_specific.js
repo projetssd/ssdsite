@@ -47,24 +47,20 @@ function test_etat() {
 $(document).ready(function() {
 
     $(".check_install").click(function () {
-    var checkBox = document.getElementById("myCheck");
-    var text = document.getElementById("text");
-    var subdomain = document.getElementById("subdomain");
-    if (checkBox.checked == true){
-      text.style.display = "block";
-      subdomain.style.display = "block";
-    } else {
-      text.style.display = "none";
-      subdomain.style.display = "none";
+    if ($('#myCheck').is(':checked')) {
+      $("#text").show();
+      $("#subdomain").show();
+      } else {
+      $("#text").hide();
+      $("#subdomain").hide();
     }
     });
 
     $(".affichage-modal").click(function () {
             let appli = $(this).attr("data-appli");
-            let subdomain = $(this).attr("data-subdomain");
             $("#nomappliencours").html(appli);
             $("#validation_install_appli").attr('data-appli', appli);
-            $('#modalPoll').modal('show'); 
+            $('#modalPoll').modal('show');
     });
 
     // on va intercepter le click sur le bouton status
@@ -73,8 +69,14 @@ $(document).ready(function() {
         console.log("Appli appelée " + appli)
         // on va considérer que le texte du bouton est ok
         // a voir si on refait un appel ajax pour vérifier ?
-        // je pose une verification sur l id modal pour verifier que le bouton s appelle bien "Valider"
         if ($("#validation_install_appli").html() === "Installer") {
+
+            if ($("#subdomain").val() !== "") {
+            let subdomain = $(this).attr("data-subdomain");
+            $("#subdomain").val(subdomain);
+            $("#validation_install_appli").attr('data-subdomain', subdomain);
+            }
+
             // on change le texte du bouton
             $("#status-" + appli).html("Installation...");
             // on lance un ajax qui va installer tout ça

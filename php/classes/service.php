@@ -11,6 +11,10 @@ class service
      */
     public $url = '';
     /**
+     * @var string Url à checker pour que le service tourne
+     */
+    public $subdomain = '';
+    /**
      * @var string Nom de lappli
      */
     public $display_name;
@@ -72,9 +76,10 @@ class service
         //
         // on commence par mettre tout ce qui est générique
         //
+        $this->subdomain = $subdomain;
         $this->display_name      = trim($my_service); // on supprimer les espaces avant/après
         $this->command_install   =
-            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . ' install';
+            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . $this->subdomain . ' install';
         $this->command_uninstall =
             'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . ' uninstall';
         $this->command_restart   =

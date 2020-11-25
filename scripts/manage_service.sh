@@ -4,7 +4,7 @@
 ########################################
 
 function install() {
-    LOGFILE=/var/www/ssdsite/logtail/log
+    LOGFILE=/var/www/lastharo/logtail/log
     rm -f $LOGFILE
 
     source /opt/seedbox-compose/includes/variables.sh
@@ -13,6 +13,7 @@ function install() {
     ansible-vault decrypt /opt/seedbox/variables/account.yml > /dev/null 2>&1
     
     domain=$(cat /tmp/domain)
+    echo "$2" | tee /opt/seedbox/domain  > /dev/null
     
     if [[ ! -d "$CONFDIR/conf" ]]; then
       mkdir -p $CONFDIR/conf > /dev/null 2>&1
@@ -53,12 +54,14 @@ EOF
 }
 
 SERVICE=$1
+SUBDOMAIN=$3
 ACTION=$2
+
 
 
 case $ACTION in
   install) 
-    install $1
+    install $1 $3
   
   ;;
   
