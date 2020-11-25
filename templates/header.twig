@@ -81,7 +81,6 @@
                 </div>
             </div>
         </div>
-        
         <!--End content modal 2-->
 
         <!-- Modal: modalPoll -->
@@ -99,28 +98,20 @@
               </div>
               <!--Body-->
               <div class="modal-body post">
-                <!-- Radio -->
-                <div class="form-check mb-4">
-                    <input class="form-check-input" name="subdomain" type="radio" id="radio-179" value="test A" checked>
-                    <label class="form-check-label" for="radio-179">test</label>
+                <!-- Checkbox -->
+                <div class="checkbox">
+                    <input type="checkbox" id="myCheck" class="check_install">  Sous Domaines Personalisés
                 </div>
-
-                <div class="form-check mb-4">
-                    <input class="form-check-input" name="subdomain" type="radio" id="radio-279" value="test B">
-                    <label class="form-check-label" for="radio-279">test</label>
-                </div>
-                <!-- Radio -->
-
-                <!--Basic textarea-->
-                <div class="md-form">
-                  <label for="form79textarea">Nom du sous domaine</label>
-                  <textarea type="text" name="nom" class="md-textarea form-control" rows="3"></textarea>
+                <!-- Checkbox -->
+                <div>
+                   <p></p>
+                   <p id="text" style="display:none">Nom du sous domaine</p>
+                  <input type="" id="subdomain" class="form-control" style="display:none" placeholder="Enter ..."></input>                
                 </div>
               </div>
               <!--Footer-->
-              <!-- Notes j'ai deporté la classe bouton-install dans le button modal -->
               <div class="modal-footer justify-content-center">
-                 <button type="submit" id="validation_install_appli" class="btn-success bouton-install" data-appli="">Valider</button>
+                 <button type="submit" id="validation_install_appli" class="btn-success bouton-install" data-appli="">Installer</button>
               </div>
             </div>
           </div>
