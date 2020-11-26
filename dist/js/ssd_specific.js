@@ -74,7 +74,7 @@ $(document).ready(function () {
                 console.log('Subdomain n est pas vide');
 
                 // let subdomain = $(this).attr("data-subdomain");
-                let subdomain = $("#subdomain").val();
+                var subdomain = $("#subdomain").val();
                 console.log('Subdomain a la valeur ' + subdomain);
                 $("#validation_install_appli").attr('data-subdomain', subdomain);
             }
