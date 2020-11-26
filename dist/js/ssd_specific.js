@@ -90,6 +90,7 @@ $(document).ready(function () {
             $('#modalPoll').modal('hide');
             $('#modalYT1').modal('show');
             // l'ajax ne se lance pas, car je pense que la variable appli n'est pas transmise au modal et c'est là ou je bloque
+            console.log('Subdomain a ENCORE la valeur ' + subdomain);
             $.ajax({
                 url: "ajax/install_service.php?service=" + appli + "&subdomain=" + subdomain
             }).done(function (data) {
