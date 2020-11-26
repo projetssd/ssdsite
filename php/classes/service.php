@@ -334,7 +334,7 @@ class service
         impossible de catcher la sortie
         on ne stocke donc aucune info
         les infos seront lues dans le défilement des logs */
-        $this->command_install .= " " . $this->subdomain;
+        $this->command_install .= " " . $subdomain;
         echo "commande " . $this->command_install;
         shell_exec($this->command_install);
 
