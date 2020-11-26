@@ -72,8 +72,8 @@ $(document).ready(function() {
         if ($("#validation_install_appli").html() === "Installer") {
 
             if ($("#subdomain").val() !== "") {
-            let subdomain = $(this).attr("data-subdomain");
-            $("#subdomain").val(subdomain);
+            // let subdomain = $(this).attr("data-subdomain");
+            let subdomain = $("#subdomain").val();
             $("#validation_install_appli").attr('data-subdomain', subdomain);
             }
 
