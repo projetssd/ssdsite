@@ -78,7 +78,7 @@ class service
         //
         $this->display_name      = trim($my_service); // on supprimer les espaces avant/après
         $this->command_install   =
-            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . $this->subdomain . ' install';
+            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . ' install';
         $this->command_uninstall =
             'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . ' uninstall';
         $this->command_restart   =
@@ -328,12 +328,13 @@ class service
      *
      * @return bool always true
      */
-    public function install()
+    public function install($subdomain)
     {
         /* la commande d'install se termine par un & et donc rend la main tout de suite
         impossible de catcher la sortie
         on ne stocke donc aucune info
         les infos seront lues dans le défilement des logs */
+        $this->command_install .= " " . $this->subdomain;
         echo "commande " . $this->command_install;
         shell_exec($this->command_install);
 
