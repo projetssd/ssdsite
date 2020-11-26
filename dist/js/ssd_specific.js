@@ -85,7 +85,7 @@ $(document).ready(function() {
             $('#modalYT1').modal('show');
             // l'ajax ne se lance pas, car je pense que la variable appli n'est pas transmise au modal et c'est là ou je bloque
             $.ajax({
-                url: "ajax/install_service.php?service=" + appli + subdomain
+                url: "ajax/install_service.php?service=" + appli + "&subdomain=" + subdomain
             }).done(function(data) {
                 // On est dans le done, tout est ok
                 // la requête est passée

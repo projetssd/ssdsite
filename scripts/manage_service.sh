@@ -54,15 +54,14 @@ EOF
 }
 
 SERVICE=$1
-SUBDOMAIN=$3
-ACTION=$2
+SUBDOMAIN=$2
+ACTION=$3
 
 
 
 case $ACTION in
   install) 
-    install $1 $3
-  
+    install $1 $2
   ;;
   
   *) 
