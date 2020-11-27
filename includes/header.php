@@ -7,10 +7,7 @@
  */
 
 
-/**
- * On charge la conf
- */
-require_once __DIR__ . '/../conf.php';
+
 
 $prod = false;
 if (isset($_GET['prod'])) {
