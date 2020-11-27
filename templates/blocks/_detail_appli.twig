@@ -3,9 +3,9 @@
     <div class="card card-info card-outline">
         <div class="card-body user-block">
             <img class="img-circle img-bordered-sm" id="logo-{{ MYAPPLI.display_name }}" alt="{{ MYAPPLI.display_name }}">
-            {% if MYAPPLI.public_url != false%}<a href="https://{{ MYAPPLI.public_url }}" target="_blank">{%  endif %}
+            {% if MYAPPLI.public_url != false%}<a href="https://{{ MYAPPLI.public_url }}" target="_blank">{% else %}<a>{%  endif %}
                 <span class="username" id="nomAppli-{{ MYAPPLI.display_name }}">{{ MYAPPLI.display_name|capitalize  }}</span>
-                {% if MYAPPLI.public_url != false%}</a>{% endif %}
+                </a>
             <span class="description" id="version-{{ MYAPPLI.display_name }}"></span>
         </div>
         <div class="card-footer" id="toto">
