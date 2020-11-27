@@ -4,7 +4,7 @@
         <div class="card-body user-block">
             <img class="img-circle img-bordered-sm" id="logo-{{ MYAPPLI.display_name }}" alt="{{ MYAPPLI.display_name }}">
             {% if MYAPPLI.public_url != false%}<a href="https://{{ MYAPPLI.public_url }}" target="_blank">{%  endif %}
-                <span class="username" id="nomAppli">{{ MYAPPLI.display_name|capitalize  }}</span>
+                <span class="username" id="nomAppli-{{ MYAPPLI.display_name }}">{{ MYAPPLI.display_name|capitalize  }}</span>
                 {% if MYAPPLI.public_url != false%}</a>{% endif %}
             <span class="description" id="version-{{ MYAPPLI.display_name }}"></span>
         </div>

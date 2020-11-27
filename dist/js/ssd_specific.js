@@ -20,6 +20,7 @@ function test_etat() {
             let running = data.running;
             let installed = data.installed;
             let public_url = data.public_url;
+            let version = data.version;
             // on va modifier le bouton en fonction de l'install
             if (installed) {
                 $("#status-" + appli).html("Désinstaller").removeClass("btn-success").addClass("btn-warning");
@@ -28,15 +29,18 @@ function test_etat() {
                 // l'appli tourne, on va modifier les boutons si besoin
                 if (running) {
                     $("#texte-bouton-restart-" + appli).html("Redémarrer");
+                    $("#version-" + appli).html(version);
                 } else {
                     $("#texte-bouton-restart-" + appli).html("Démarrer");
+
                 }
-                $("#nomAppli").wrap('<a href="' + public_url + '" target="_blank">');
+                $("#nomAppli-" + appli).wrap('<a href="' + public_url + '" target="_blank">');
+
             } else {
                 $("#status-" + appli).html("Installer").removeClass("btn-warning").addClass("btn-success");
                 $("#div-" + appli).addClass('div-uninstalled');
                 $(".start-stop-button-" + appli).hide();
-                $("#nomAppli").unwrap();
+                $("#nomAppli-" + appli).unwrap();
             }
         }).fail(function () {
             console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
@@ -100,9 +104,7 @@ $(document).ready(function () {
                 var subdomain = $("#subdomain").val();
                 console.log('Subdomain a la valeur ' + subdomain);
                 $("#validation_install_appli").attr('data-subdomain', subdomain);
-            }
-            else
-            {
+            } else {
                 console.log('Subdomain est VIDE !');
             }
 
@@ -286,5 +288,5 @@ $(document).ready(function () {
     test_etat();
     // on met à blanc les valeurs
     $("#subdomain").val('');
-    $("#myCheck").prop( "checked", false );
+    $("#myCheck").prop("checked", false);
 });

@@ -5,10 +5,26 @@ require_once "../php/classes/service.php";
    en url : https://mondomain.com/check_service.php?service=radarr
 */
 $service = new service($_GET['service']);
+$public_url = false;
+$installed = false;
+$running = false;
+$version = '';
+
+if($service->is_installed())
+{
+    $installed = true;
+    $public_url = $service->get_public_url();
+    if($service->check())
+    {
+        $running = true;
+        $version = $service->get_version();
+    }
+}
 
 $tab_retour = array(
-    "running" => $service->check(),
-    "installed" => $service->is_installed(),
-    "public_url" => $service->public_url
+    "running" => $running,
+    "installed" => $installed,
+    "public_url" => $public_url,
+    "version" => $version
     );
 echo json_encode($tab_retour);
