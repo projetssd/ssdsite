@@ -284,4 +284,7 @@ $(document).ready(function () {
     // etat des vignettes d'appli
 
     test_etat();
+    // on met à blanc les valeurs
+    $("#subdomain").val('');
+    $("#myCheck").prop( "checked", false );
 });
