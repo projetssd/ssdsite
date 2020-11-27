@@ -9,44 +9,51 @@ function test_etat() {
     $(".divappli").each(function () {
 
         let appli = $(this).attr('data-appli');
-        $.ajax({
-            url: "ajax/etat_service.php?service=" + appli,
-            dataType: "json"
-        }).done(function (data) {
-            // le "data" est le retour de la page etat_service
-            // c'est un json prêt à être exploité, de la forme
-            // {"running":true,"installed":true}
+        if ($("#status-" + appli).html() === "Installation...") {
+            console.log('Appli en cours d install');
 
-            let running = data.running;
-            let installed = data.installed;
-            let public_url = data.public_url;
-            let version = data.version;
-            // on va modifier le bouton en fonction de l'install
-            if (installed) {
-                $("#status-" + appli).html("Désinstaller").removeClass("btn-success").addClass("btn-warning");
-                $("#div-" + appli).removeClass('div-uninstalled');
-                $(".start-stop-button-" + appli).show();
-                // l'appli tourne, on va modifier les boutons si besoin
-                if (running) {
-                    $("#texte-bouton-restart-" + appli).html("Redémarrer");
-                    $("#version-" + appli).html(version);
+        } else {
+
+            $.ajax({
+                url: "ajax/etat_service.php?service=" + appli,
+                dataType: "json"
+            }).done(function (data) {
+                // le "data" est le retour de la page etat_service
+                // c'est un json prêt à être exploité, de la forme
+                // {"running":true,"installed":true}
+
+                let running = data.running;
+                let installed = data.installed;
+                let public_url = data.public_url;
+                let version = data.version;
+                // on va modifier le bouton en fonction de l'install
+                if (installed) {
+                    $("#status-" + appli).html("Désinstaller").removeClass("btn-success").addClass("btn-warning");
+                    $("#div-" + appli).removeClass('div-uninstalled');
+                    $(".start-stop-button-" + appli).show();
+                    // l'appli tourne, on va modifier les boutons si besoin
+                    if (running) {
+                        $("#texte-bouton-restart-" + appli).html("Redémarrer");
+                        $("#version-" + appli).html(version);
+                    } else {
+                        $("#texte-bouton-restart-" + appli).html("Démarrer");
+                        $("#version-" + appli).html("Service non démarré");
+
+                    }
+                    $("#nomAppli-" + appli).unwrap().wrap('<a href="' + public_url + '" target="_blank">');
+
                 } else {
-                    $("#texte-bouton-restart-" + appli).html("Démarrer");
-                    $("#version-" + appli).html("Service non démarré");
-
+                    $("#status-" + appli).html("Installer").removeClass("btn-warning").addClass("btn-success");
+                    $("#div-" + appli).addClass('div-uninstalled');
+                    $(".start-stop-button-" + appli).hide();
+                    $("#nomAppli-" + appli).unwrap().wrap('<a>');
                 }
-                $("#nomAppli-" + appli).unwrap().wrap('<a href="' + public_url + '" target="_blank">');
+            }).fail(function () {
+                console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+                $("#status-" + appli).html("Erreur ajax");
+            });
+        }
 
-            } else {
-                $("#status-" + appli).html("Installer").removeClass("btn-warning").addClass("btn-success");
-                $("#div-" + appli).addClass('div-uninstalled');
-                $(".start-stop-button-" + appli).hide();
-                $("#nomAppli-" + appli).unwrap().wrap('<a>');
-            }
-        }).fail(function () {
-            console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
-            $("#status-" + appli).html("Erreur ajax");
-        });
     });
 
 }
