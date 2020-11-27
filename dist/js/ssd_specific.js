@@ -19,7 +19,7 @@ function test_etat() {
 
             let running = data.running;
             let installed = data.installed;
-            let public_url = data.publi_url;
+            let public_url = data.public_url;
             // on va modifier le bouton en fonction de l'install
             if (installed) {
                 $("#status-" + appli).html("Désinstaller").removeClass("btn-success").addClass("btn-warning");
