@@ -2,7 +2,7 @@
 <div class="post">
     <div class="card card-info card-outline">
         <div class="card-body user-block">
-            <img class="img-circle img-bordered-sm user-block" id="logo-{{ MYAPPLI.display_name }}" alt="{{ MYAPPLI.display_name }}">
+            <img class="img-circle img-bordered-sm" id="logo-{{ MYAPPLI.display_name }}" alt="{{ MYAPPLI.display_name }}" style="height: 20px;width: 20px;">
             {% if MYAPPLI.public_url != false%}<a href="https://{{ MYAPPLI.public_url }}" target="_blank">{%  endif %}
                 <span class="username" id="nomAppli-{{ MYAPPLI.display_name }}">{{ MYAPPLI.display_name|capitalize  }}</span>
                 {% if MYAPPLI.public_url != false%}</a>{% endif %}
