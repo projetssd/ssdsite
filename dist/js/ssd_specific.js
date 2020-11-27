@@ -128,6 +128,8 @@ $(document).ready(function () {
 
                 // on met à jour les infos de la div
                 $("#div-" + appli).attr("data-installed", 1).removeClass('div-uninstalled');
+                // on rafraichit les applis
+                test_etat();
             }).fail(function () {
                 console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
                 $("#status-" + appli).html("Erreur ajax");
