@@ -57,9 +57,31 @@ $(document).ready(function () {
 
     $(".affichage-modal").click(function () {
         let appli = $(this).attr("data-appli");
-        $("#nomappliencours").html(appli);
-        $("#validation_install_appli").attr('data-appli', appli);
-        $('#modalPoll').modal('show');
+        if ($("#status-" + appli).html() === "Installer") {
+            $("#nomappliencours").html(appli);
+            $("#validation_install_appli").attr('data-appli', appli);
+            $('#modalPoll').modal('show');
+        } else if ($("#status-" + appli).html() === "Désinstaller") {
+            $("#status-" + appli).html("Désinstallation...");
+            $.ajax({
+                url: "ajax/uninstall_service.php?service=" + appli
+            }).done(function () {
+                // On est dans le done, tout est ok
+                // la requête est passée
+                $("#status-" + appli).html("Installer").removeClass("btn-warning").addClass("btn-success");
+                // on cache les boutons start/stop
+                $(".start-stop-button-" + appli).hide();
+                // on affiche le toaster
+                toastr.success("Désinstallation de " + appli + " en cours");
+                // on ajoute la transparence
+                $("#div-" + appli).addClass('div-uninstalled');
+            }).fail(function () {
+                console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+                $("#status-" + appli).html("Erreur ajax");
+            });
+        } else {
+            console.log('Erreur sur le texte du bouton, impossible de continuer');
+        }
     });
 
     // on va intercepter le click sur le bouton status
@@ -72,8 +94,6 @@ $(document).ready(function () {
 
             if ($("#subdomain").val() !== "") {
                 console.log('Subdomain n est pas vide');
-
-                // let subdomain = $(this).attr("data-subdomain");
                 var subdomain = $("#subdomain").val();
                 console.log('Subdomain a la valeur ' + subdomain);
                 $("#validation_install_appli").attr('data-subdomain', subdomain);
@@ -89,7 +109,6 @@ $(document).ready(function () {
             // là je ferme le modal, jusque là ca va et le modal "modalYT1" se lance
             $('#modalPoll').modal('hide');
             $('#modalYT1').modal('show');
-            // l'ajax ne se lance pas, car je pense que la variable appli n'est pas transmise au modal et c'est là ou je bloque
             console.log('Subdomain a ENCORE la valeur ' + subdomain);
             $.ajax({
                 url: "ajax/install_service.php?service=" + appli + "&subdomain=" + subdomain
@@ -106,24 +125,6 @@ $(document).ready(function () {
 
                 // on met à jour les infos de la div
                 $("#div-" + appli).attr("data-installed", 1).removeClass('div-uninstalled');
-            }).fail(function () {
-                console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
-                $("#status-" + appli).html("Erreur ajax");
-            });
-        } else if ($("#status-" + appli).html() === "Désinstaller") {
-            $("#status-" + appli).html("Désinstallation...");
-            $.ajax({
-                url: "ajax/uninstall_service.php?service=" + appli
-            }).done(function () {
-                // On est dans le done, tout est ok
-                // la requête est passée
-                $("#status-" + appli).html("Installer").removeClass("btn-warning").addClass("btn-success");
-                // on cache les boutons start/stop
-                $(".start-stop-button-" + appli).hide();
-                // on affiche le toaster
-                toastr.success("Désinstallation de " + appli + " en cours");
-                // on ajoute la transparence
-                $("#div-" + appli).addClass('div-uninstalled');
             }).fail(function () {
                 console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
                 $("#status-" + appli).html("Erreur ajax");
