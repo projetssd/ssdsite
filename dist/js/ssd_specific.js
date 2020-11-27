@@ -32,6 +32,7 @@ function test_etat() {
                     $("#version-" + appli).html(version);
                 } else {
                     $("#texte-bouton-restart-" + appli).html("Démarrer");
+                    $("#version-" + appli).html("Service non démarré");
 
                 }
                 $("#nomAppli-" + appli).unwrap().wrap('<a href="' + public_url + '" target="_blank">');
