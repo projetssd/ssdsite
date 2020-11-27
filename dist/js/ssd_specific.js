@@ -2,86 +2,86 @@
 ne s'éxécute que quand la page est totalement chargée
  */
 /* global $ */
+
 /*global toastr */
 
 function test_etat() {
-    $(".divappli").each(function() {
+    $(".divappli").each(function () {
 
         let appli = $(this).attr('data-appli');
-        $.ajax({
-            url: "ajax/etat_service.php?service=" + appli,
-            dataType: "json"
-        }).done(function(data) {
-            // le "data" est le retour de la page etat_service
-            // c'est un json prêt à être exploité, de la forme
-            // {"running":true,"installed":true}
+        if ($("#status-" + appli).html() === "Installation...") {
+            console.log('Appli en cours d install');
 
-            let running = data.running;
-            let installed = data.installed;
-            // on va modifier le bouton en fonction de l'install
-            if (installed) {
-                $("#status-" + appli).html("Désinstaller").removeClass("btn-success").addClass("btn-warning");
-                $("#div-" + appli).removeClass('div-uninstalled');
-                $(".start-stop-button-" + appli).show();
-                // l'appli tourne, on va modifier les boutons si besoin
-                if (running) {
-                    $("#texte-bouton-restart-" + appli).html("Redémarrer");
-                }
-                else {
-                    $("#texte-bouton-restart-" + appli).html("Démarrer");
-                }
-            }
-            else {
-                $("#status-" + appli).html("Installer").removeClass("btn-warning").addClass("btn-success");
-                $("#div-" + appli).addClass('div-uninstalled');
-                $(".start-stop-button-" + appli).hide();
-            }
-        }).fail(function() {
-            console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
-            $("#status-" + appli).html("Erreur ajax");
-        });
-    });
+        } else {
 
-}
-
-$(document).ready(function() {
-
-    // on va intercepter le click sur le bouton status
-    $(".bouton-install").click(function() {
-        let appli = $(this).attr("data-appli");
-        console.log("Appli appelée " + appli)
-        // on va considérer que le texte du bouton est ok
-        // a voir si on refait un appel ajax pour vérifier ?
-        if ($("#status-" + appli).html() === "Installer") {
-            // on change le texte du bouton 
-            $("#status-" + appli).html("Installation...");
-            // on lance un ajax qui va installer tout ça
-            $('#modalYT1').modal('show');
             $.ajax({
-                url: "ajax/install_service.php?service=" + appli
-            }).done(function(data) {
-                // On est dans le done, tout est ok
-                // la requête est passée
-                console.log("result " + data);
-                // on change le texte du bouton 
-                $("#status-" + appli).html("Désinstaller").removeClass("btn-success").addClass("btn-warning");
-                // on afficher les boutons start/stop
-                $(".start-stop-button-" + appli).show();
-                // on affiche les logs
-                // il suffit d'afficher la dic modalYT1 qui contient déjà un iframe de défilement des logs
-                
-                // on met à jour les infos de la div
-                $("#div-" + appli).attr("data-installed", 1).removeClass('div-uninstalled');
-            }).fail(function() {
+                url: "ajax/etat_service.php?service=" + appli,
+                dataType: "json"
+            }).done(function (data) {
+                // le "data" est le retour de la page etat_service
+                // c'est un json prêt à être exploité, de la forme
+                // {"running":true,"installed":true}
+
+                let running = data.running;
+                let installed = data.installed;
+                let public_url = data.public_url;
+                let version = data.version;
+                // on va modifier le bouton en fonction de l'install
+                if (installed) {
+                    $("#status-" + appli).html("Désinstaller").removeClass("btn-success").addClass("btn-warning");
+                    $("#div-" + appli).removeClass('div-uninstalled');
+                    $(".start-stop-button-" + appli).show();
+                    // l'appli tourne, on va modifier les boutons si besoin
+                    if (running) {
+                        $("#texte-bouton-restart-" + appli).html("Redémarrer");
+                        $("#version-" + appli).html(version);
+                    } else {
+                        $("#texte-bouton-restart-" + appli).html("Démarrer");
+                        $("#version-" + appli).html("Service non démarré");
+
+                    }
+                    $("#nomAppli-" + appli).unwrap().wrap('<a href="https://' + public_url + '" target="_blank">');
+
+                } else {
+                    $("#status-" + appli).html("Installer").removeClass("btn-warning").addClass("btn-success");
+                    $("#div-" + appli).addClass('div-uninstalled');
+                    $(".start-stop-button-" + appli).hide();
+                    $("#nomAppli-" + appli).unwrap().wrap('<a>');
+                    $("#version-" + appli).html("Application non installée");
+                }
+            }).fail(function () {
                 console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
                 $("#status-" + appli).html("Erreur ajax");
             });
         }
-        else if ($("#status-" + appli).html() === "Désinstaller") {
+
+    });
+
+}
+
+$(document).ready(function () {
+
+    $(".check_install").click(function () {
+        if ($('#myCheck').is(':checked')) {
+            $("#text").show();
+            $("#subdomain").show();
+        } else {
+            $("#text").hide();
+            $("#subdomain").hide();
+        }
+    });
+
+    $(".affichage-modal").click(function () {
+        let appli = $(this).attr("data-appli");
+        if ($("#status-" + appli).html() === "Installer") {
+            $("#nomappliencours").html(appli);
+            $("#validation_install_appli").attr('data-appli', appli);
+            $('#modalPoll').modal('show');
+        } else if ($("#status-" + appli).html() === "Désinstaller") {
             $("#status-" + appli).html("Désinstallation...");
             $.ajax({
                 url: "ajax/uninstall_service.php?service=" + appli
-            }).done(function() {
+            }).done(function () {
                 // On est dans le done, tout est ok
                 // la requête est passée
                 $("#status-" + appli).html("Installer").removeClass("btn-warning").addClass("btn-success");
@@ -91,19 +91,68 @@ $(document).ready(function() {
                 toastr.success("Désinstallation de " + appli + " en cours");
                 // on ajoute la transparence
                 $("#div-" + appli).addClass('div-uninstalled');
-            }).fail(function() {
+            }).fail(function () {
                 console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
                 $("#status-" + appli).html("Erreur ajax");
             });
+        } else {
+            console.log('Erreur sur le texte du bouton, impossible de continuer');
         }
-        else {
+    });
+
+    // on va intercepter le click sur le bouton status
+    $(".bouton-install").click(function () {
+        let appli = $(this).attr("data-appli");
+        console.log("Appli appelée " + appli)
+        // on va considérer que le texte du bouton est ok
+        // a voir si on refait un appel ajax pour vérifier ?
+        if ($("#validation_install_appli").html() === "Installer") {
+
+            if ($("#subdomain").val() !== "") {
+                console.log('Subdomain n est pas vide');
+                var subdomain = $("#subdomain").val();
+                console.log('Subdomain a la valeur ' + subdomain);
+                $("#validation_install_appli").attr('data-subdomain', subdomain);
+            } else {
+                console.log('Subdomain est VIDE !');
+            }
+
+            // on change le texte du bouton
+            $("#status-" + appli).html("Installation...");
+            // on lance un ajax qui va installer tout ça
+            // là je ferme le modal, jusque là ca va et le modal "modalYT1" se lance
+            $('#modalPoll').modal('hide');
+            $('#modalYT1').modal('show');
+            console.log('Subdomain a ENCORE la valeur ' + subdomain);
+            $.ajax({
+                url: "ajax/install_service.php?service=" + appli + "&subdomain=" + subdomain
+            }).done(function (data) {
+                // On est dans le done, tout est ok
+                // la requête est passée
+                console.log("result " + data);
+                // on change le texte du bouton 
+                $("#status-" + appli).html("Désinstaller").removeClass("btn-success").addClass("btn-warning");
+                // on afficher les boutons start/stop
+                $(".start-stop-button-" + appli).show();
+                // on affiche les logs
+                // il suffit d'afficher la dic modalYT1 qui contient déjà un iframe de défilement des logs
+
+                // on met à jour les infos de la div
+                $("#div-" + appli).attr("data-installed", 1).removeClass('div-uninstalled');
+                // on rafraichit les applis
+                test_etat();
+            }).fail(function () {
+                console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+                $("#status-" + appli).html("Erreur ajax");
+            });
+        } else {
             console.log('Erreur sur le texte du bouton, impossible de continuer');
         }
 
     });
 
     //le bouton restart
-    $(".bouton-start").click(function() {
+    $(".bouton-start").click(function () {
         console.log("Bouton start clické");
         let appli = $(this).attr("data-appli");
         console.log("Restart de " + appli);
@@ -113,7 +162,7 @@ $(document).ready(function() {
             url: "ajax/check_service.php?service=" + appli
             // appel simple, en GET
             // on peut rajouter des options si besoin pour du POST
-        }).done(function(data) {
+        }).done(function (data) {
             // On est dans le done, tout est ok
             // la requête est passée
             // le résultat de la requête est maintenant dans la variable "data"
@@ -122,16 +171,16 @@ $(document).ready(function() {
                 $("#reset-" + appli).html("Redémarrer");
                 texte_alerte = 'Démarrage';
             }
-        }).fail(function() {
+        }).fail(function () {
             console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
             $("#status-" + appli).html("Erreur ajax");
         });
         //
         $.ajax({
             url: "ajax/restart_service.php?service=" + appli
-        }).done(function() {
+        }).done(function () {
             toastr.success(texte_alerte + " de " + appli + " en cours");
-        }).fail(function() {
+        }).fail(function () {
             console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
             $("#status-" + appli).html("Erreur ajax");
         });
@@ -139,17 +188,17 @@ $(document).ready(function() {
     });
 
     //le bouton stop
-    $(".bouton-stop").click(function() {
+    $(".bouton-stop").click(function () {
         console.log("Bouton stop clické");
         let appli = $(this).attr("data-appli");
         console.log("Arrêt de " + appli);
 
         $.ajax({
             url: "ajax/stop_service.php?service=" + appli
-        }).done(function() {
+        }).done(function () {
             toastr.success("Arrêt de " + appli + " en cours");
             $(".start-stop-button-" + appli).show();
-        }).fail(function() {
+        }).fail(function () {
             console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
             $(".start-stop-button-" + appli).show();
             $("#status-" + appli).html("Erreur ajax");
@@ -158,17 +207,16 @@ $(document).ready(function() {
 
 
     // gestion de la zone de recherche
-    $("#searchappli").on('input', function() {
+    $("#searchappli").on('input', function () {
         let searchcontent = $("#searchappli").val();
         searchcontent = searchcontent.toLowerCase();
-        $(".divappli").each(function() {
+        $(".divappli").each(function () {
 
             let iddiv = $(this).attr('id');
             let nomdiv = $(this).attr('data-appli');
             if (nomdiv.includes(searchcontent)) {
                 $("#" + iddiv).show();
-            }
-            else {
+            } else {
                 $("#" + iddiv).hide();
             }
         });
@@ -176,34 +224,32 @@ $(document).ready(function() {
 
 
     // gestion de la case à cocher pour afficher les applis installées
-    $("#installed_appli").change(function() {
+    $("#installed_appli").change(function () {
         if ($(this).is(":checked")) {
-            $(".divappli").each(function() {
+            $(".divappli").each(function () {
                 let isinstalled = $(this).attr('data-installed');
                 if (isinstalled == 1) {
                     $(this).show();
-                }
-                else {
+                } else {
                     $(this).hide();
                 }
             });
-        }
-        else {
+        } else {
             $(".divappli").show();
         }
     });
 
     // récupération des version
-    $(".divappli").each(function() {
+    $(".divappli").each(function () {
 
         let appli = $(this).attr('data-appli');
         // on met la bonne image
         $("#logo-" + appli).attr("src", "https://www.scriptseedboxdocker.com/wp-content/uploads/icones/" + appli + ".png");
         $.ajax({
             url: "ajax/check_version.php?service=" + appli,
-        }).done(function(data) {
+        }).done(function (data) {
             $("#version-" + appli).html(data);
-        }).fail(function() {
+        }).fail(function () {
             console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
             $("#version-".appli).html("erreur ajax");
         });
@@ -212,41 +258,44 @@ $(document).ready(function() {
     });
 
     /* fonction de refresh automatique  */
-    window.setInterval(function() {
+    window.setInterval(function () {
         test_etat();
     }, 15000); // timer en ms
 
     // statut du serveur
     $.ajax({
         url: "ajax/system_release.php",
-    }).done(function(data) {
+    }).done(function (data) {
         $("#server-version").html(data);
 
-    }).fail(function() {
+    }).fail(function () {
         console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
         $("#server-version").html("Erreur ajax");
     });
     // uptime
     $.ajax({
         url: "ajax/uptime.php",
-    }).done(function(data) {
+    }).done(function (data) {
         $("#uptime").html(data);
 
-    }).fail(function() {
+    }).fail(function () {
         console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
         $("#uptime").html("Erreur ajax");
     });
     // disque libre
     $.ajax({
         url: "ajax/disque.php",
-    }).done(function(data) {
+    }).done(function (data) {
         $("#free-disk").html(data);
 
-    }).fail(function() {
+    }).fail(function () {
         console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
         $("#free-disk").html("Erreur ajax");
     });
     // etat des vignettes d'appli
-    
+
     test_etat();
+    // on met à blanc les valeurs
+    $("#subdomain").val('');
+    $("#myCheck").prop("checked", false);
 });

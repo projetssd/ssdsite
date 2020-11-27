@@ -2,7 +2,7 @@
 /**
  * URL de base par laquelle le service sera accessible.
  */
-define('BASE_URL', 'https://lucgeek.com/');
+define('BASE_URL', 'https://lastharo.com/');
 /*
  * Nom du user de la seedbox
  */

@@ -81,9 +81,44 @@
                 </div>
             </div>
         </div>
-        
         <!--End content modal 2-->
-         <!-- Main Sidebar Container -->
+
+        <!-- Modal: modalPoll -->
+        <div class="modal fade right" id="modalPoll" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+          aria-hidden="true" data-backdrop="false">
+          <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
+            <div class="modal-content">
+              <!--Header-->
+              <div class="modal-header">
+                <p class="heading lead">Installation de l'application <span id="nomappliencours"></span>
+                </p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true" class="white-text">×</span>
+                </button>
+              </div>
+              <!--Body-->
+              <div class="modal-body post">
+                <!-- Checkbox -->
+                <div class="checkbox">
+                    <input type="checkbox" id="myCheck" class="check_install">  Sous Domaines Personalisés
+                </div>
+                <!-- Checkbox -->
+                <div>
+                   <p></p>
+                   <p id="text" style="display:none">Nom du sous domaine</p>
+                   <input type="text" id="subdomain" class="form-control" style="display:none" placeholder="Enter ..."></input>
+                </div>
+              </div>
+              <!--Footer-->
+              <div class="modal-footer justify-content-center">
+                 <button type="submit" id="validation_install_appli" class="btn-success bouton-install" data-appli="" data-subdomain="">Installer</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Modal: modalPoll -->
+
+        <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
             <a href="index.php" class="brand-link">
