@@ -13,6 +13,10 @@ $prod = false;
 if (isset($_GET['prod'])) {
     $prod = $_GET['prod'];
 }
+if(file_exists(__DIR__ . '/../PROD'))
+{
+    $prod = true;
+}
 
 
 // initialisation de twig (morteur de template)
