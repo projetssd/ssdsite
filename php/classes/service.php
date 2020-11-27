@@ -413,7 +413,10 @@ class service
         $matches = array_unique($matches);
         if (count($matches) != 0)
         {
-            $this->public_url = $matches[0];
+
+            $tab_temp         = explode('=', $matches[0]);
+            $this->public_url = trim($tab_temp[1]);
+
         } else
         {
             $this->public_url = false;
