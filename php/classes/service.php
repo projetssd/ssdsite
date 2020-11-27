@@ -144,28 +144,33 @@ class service
             // on va remplir les valeurs par défaut
             //$this->running    = $this->check();
             //$this->installed  = $this->is_installed();
+
             $this->public_url = false;
-            // on récupère les url publiques
-            // on lit le fichier
-            $file    = fopen('/opt/seedbox/resume', 'r');
-            $matches = array();
-            if ($file)
+            if ($this->is_installed())
             {
-                while (!feof($file))
+                // on récupère les url publiques
+                // on lit le fichier
+                $file    = fopen('/opt/seedbox/resume', 'r');
+                $matches = array();
+                if ($file)
                 {
-                    $buffer = fgets($file);
-                    if (strpos($buffer, $this->display_name) !== false)
+                    while (!feof($file))
                     {
-                        $matches[] = $buffer;
+                        $buffer = fgets($file);
+                        if (strpos($buffer, $this->display_name) !== false)
+                        {
+                            $matches[] = $buffer;
+                        }
                     }
+                    fclose($file);
                 }
-                fclose($file);
+                if (count($matches) != 0)
+                {
+                    $tab_temp         = explode('=', $matches[0]);
+                    $this->public_url = trim($tab_temp[1]);
+                }
             }
-            if (count($matches) != 0)
-            {
-                $tab_temp         = explode('=', $matches[0]);
-                $this->public_url = trim($tab_temp[1]);
-            }
+
         }
     }
 
