@@ -40,13 +40,14 @@ function test_etat() {
                         $("#version-" + appli).html("Service non démarré");
 
                     }
-                    $("#nomAppli-" + appli).unwrap().wrap('<a href="' + public_url + '" target="_blank">');
+                    $("#nomAppli-" + appli).unwrap().wrap('<a href="https://' + public_url + '" target="_blank">');
 
                 } else {
                     $("#status-" + appli).html("Installer").removeClass("btn-warning").addClass("btn-success");
                     $("#div-" + appli).addClass('div-uninstalled');
                     $(".start-stop-button-" + appli).hide();
                     $("#nomAppli-" + appli).unwrap().wrap('<a>');
+                    $("#version-" + appli).html("Application non installée");
                 }
             }).fail(function () {
                 console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
