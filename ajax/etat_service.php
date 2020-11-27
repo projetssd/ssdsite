@@ -8,6 +8,7 @@ $service = new service($_GET['service']);
 
 $tab_retour = array(
     "running" => $service->check(),
-    "installed" => $service->is_installed()
+    "installed" => $service->is_installed(),
+    "public_url" => $service->public_url
     );
 echo json_encode($tab_retour);

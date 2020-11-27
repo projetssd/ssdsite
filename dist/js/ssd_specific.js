@@ -19,6 +19,7 @@ function test_etat() {
 
             let running = data.running;
             let installed = data.installed;
+            let public_url = data.publi_url;
             // on va modifier le bouton en fonction de l'install
             if (installed) {
                 $("#status-" + appli).html("Désinstaller").removeClass("btn-success").addClass("btn-warning");
@@ -30,10 +31,12 @@ function test_etat() {
                 } else {
                     $("#texte-bouton-restart-" + appli).html("Démarrer");
                 }
+                $("#nomAppli").wrap('<a href="' + public_url + '" target="_blank">');
             } else {
                 $("#status-" + appli).html("Installer").removeClass("btn-warning").addClass("btn-success");
                 $("#div-" + appli).addClass('div-uninstalled');
                 $(".start-stop-button-" + appli).hide();
+                $("#nomAppli").unwrap();
             }
         }).fail(function () {
             console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
