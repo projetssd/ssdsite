@@ -33,7 +33,7 @@ function install() {
     sed -i '/transcodes/a sub:' /opt/seedbox/variables/account.yml 
     fi
 
-    if [ ! -z $2 ]; then
+    if [ $2 != "undefined" ]; then
     sed -i "/$1/d" /opt/seedbox/variables/account.yml > /dev/null 2>&1
     sed -i "/sub/a \ \ \ $1: $2" /opt/seedbox/variables/account.yml > /dev/null 2>&1
     fi
@@ -48,7 +48,6 @@ function install() {
 
     grep $1 /opt/seedbox/variables/account.yml > /dev/null 2>&1
     if [ $? -eq 0 ]; then
-      line=$(grep $1 /opt/seedbox/variables/account.yml | cut -d ':' -f2 | sed 's/ //g')
       fqdn="$2.$domain"
       echo "$1 = $fqdn" | tee -a /opt/seedbox/resume  > /dev/null
     else
@@ -75,9 +74,6 @@ EOF
 SERVICE=$1
 ACTION=$2
 SUBDOMAIN=$3
-
-
-
 
 case $ACTION in
   install) 
