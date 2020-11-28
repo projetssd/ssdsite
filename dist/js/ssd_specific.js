@@ -71,6 +71,12 @@ $(document).ready(function () {
         }
     });
 
+
+    $(".install-modal").click(function () {
+        $('#seedbox').modal('show');
+    });
+
+
     $(".affichage-modal").click(function () {
         let appli = $(this).attr("data-appli");
         if ($("#status-" + appli).html() === "Installer") {
@@ -99,6 +105,30 @@ $(document).ready(function () {
             console.log('Erreur sur le texte du bouton, impossible de continuer');
         }
     });
+
+    $(".validation-modal").click(function () {
+        if ($("#validation").html() === "Valider") {
+             $('#seedbox').modal('hide');
+             if ($("#utilisateur").val() !== "") {
+                console.log('l\'utilisateur n est pas vide');
+                var utilisateur = $("#utilisateur").val();
+                console.log('l\'utlisateur a la valeur ' + utilisateur);
+                $("#validation").attr('data-utilisateur', utilisateur);
+            } else {
+                console.log('Lutilisateur est VIDE !');
+            }
+            $.ajax({
+                url: "ajax/install_seedbox.php?utilisateur=" + utilisateur
+            }).done(function (data) {
+                // On est dans le done, tout est ok
+                // la requête est passée
+                console.log("result " + data);
+            }).fail(function () {
+                console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+            });
+        }
+    });
+
 
     // on va intercepter le click sur le bouton status
     $(".bouton-install").click(function () {

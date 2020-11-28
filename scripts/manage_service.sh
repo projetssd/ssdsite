@@ -3,6 +3,10 @@
 # Gestion des services SSD
 ########################################
 
+function configure() {
+touch /opt/seedbox/$1
+}
+
 
 function uninstall() {
 ansible-vault decrypt /opt/seedbox/variables/account.yml > /dev/null 2>&1
@@ -81,6 +85,9 @@ case $ACTION in
   ;;
   uninstall)
     uninstall $1
+  ;;
+  configure)
+    configure $1
   ;;
   *) 
   echo "Action indéfinie"

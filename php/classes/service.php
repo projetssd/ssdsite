@@ -4,6 +4,7 @@
  * Class service
  * Classe permettant la manipulation des services (applis).
  */
+
 class service
 {
     /**
@@ -18,6 +19,10 @@ class service
      * @var string Nom de lappli
      */
     public $subdomain;
+    /**
+     * @var string Nom de lappli
+     */
+    public $utilisateur;
     /**
      * @var string Ligne de commande pour installer
      */
@@ -34,6 +39,10 @@ class service
      * @var string Ligne de commande pour arrêter une appli
      */
     public $command_stop = '';
+    /**
+     * @var string Ligne de commande pour arrêter une appli
+     */
+    public $command_configure = '';
     /**
      * @var bool Est-ce que l'appli est installée ?
      */
@@ -87,6 +96,8 @@ class service
             'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . ' stop';
         $this->command_start     =
             'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . ' start';
+       // $this->command_configure =
+       //     'sudo ' . __DIR__ . '/../../scripts/user.sh configure';
         //
         // on va chercher l'ip du docker
         //
@@ -461,3 +472,9 @@ class service
                 'uninstalled' => $appli_uninstalled,];
     }
 }
+
+    function configure($utilisateur)
+    {
+        $command = shell_exec('sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $utilisateur . ' configure');
+        return true;    
+    }
