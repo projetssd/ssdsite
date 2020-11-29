@@ -19,10 +19,7 @@ class service
      * @var string Nom de lappli
      */
     public $subdomain;
-    /**
-     * @var string Nom de lappli
-     */
-    public $utilisateur;
+
     /**
      * @var string Ligne de commande pour installer
      */
@@ -342,6 +339,8 @@ class service
     /**
      * Installe l'appli de la classe en cours.
      *
+     *
+     * @param $subdomain string Sous domaine de l'application
      * @return bool always true
      */
     public function install($subdomain)
@@ -473,8 +472,4 @@ class service
     }
 }
 
-    function configure($utilisateur)
-    {
-        $command = shell_exec('sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $utilisateur . ' configure');
-        return true;    
-    }
+
