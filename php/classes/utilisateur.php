@@ -11,6 +11,14 @@ class utilisateur
     public $utilisateur;
 
     /**
+     * utilisateur constructor.
+     * @param $user Nom de l'utilisateur
+     */
+    public function __construct($user)
+    {
+        $this->utilisateur = $user;
+     }
+    /**
      * @return bool Configuration d'un utilisateur
      */
     function configure()
