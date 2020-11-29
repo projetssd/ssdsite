@@ -47,7 +47,7 @@ $asset_css = '';
 $asset_js = '';
 if ($prod) {
     $config = [
-        'pipeline' => true,
+        'pipeline' => 'auto',
         'public_dir' => __DIR__ ,
         'css_dir' => 'dist/css',
         'js_dir' => 'dist/js'

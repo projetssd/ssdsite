@@ -16,7 +16,7 @@ class service
      */
     public $display_name;
     /**
-     * @var string Nom de lappli
+     * @var string Sous domain de l'application
      */
     public $subdomain;
 
