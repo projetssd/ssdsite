@@ -71,11 +71,23 @@ $(document).ready(function () {
         }
     });
 
+    $(".plex_install").click(function () {
+        if ($('#plex').is(':checked')) {
+            $("#user_text").show();
+            $("#idplex").show();
+            $("#pass_text").show();
+            $("#passplex").show();
+        } else {
+            $("#user_text").hide();
+            $("#idplex").hide();
+            $("#pass_text").hide();
+            $("#passplex").hide();
+        }
+    });
 
     $(".install-modal").click(function () {
         $('#seedbox').modal('show');
     });
-
 
     $(".affichage-modal").click(function () {
         let appli = $(this).attr("data-appli");
@@ -106,6 +118,7 @@ $(document).ready(function () {
         }
     });
 
+    // on va créer un compte utilisateur
     $(".validation-modal").click(function () {
         if ($("#validation").html() === "Valider") {
              $('#seedbox').modal('hide');
@@ -113,12 +126,22 @@ $(document).ready(function () {
                 console.log('l\'utilisateur n est pas vide');
                 var utilisateur = $("#utilisateur").val();
                 console.log('l\'utlisateur a la valeur ' + utilisateur);
-                $("#validation").attr('data-utilisateur', utilisateur);
+                var passe = $("#passe").val();
+                console.log('Mot de passe a la valeur success ');
+                var email = $("#email").val();
+                console.log('Email a la valeur success ');
+                var domaine = $("#domaine").val();
+                console.log('Domaine a la valeur success ');
+                var idplex = $("#idplex").val();
+                console.log('ID Plex a la valeur success ');
+                var passplex = $("#passplex").val();
+                console.log('Pass Plex a la valeur success ');
             } else {
-                console.log('Lutilisateur est VIDE !');
+                console.log('l\'utilisateur est VIDE !');
             }
             $.ajax({
-                url: "ajax/install_seedbox.php?utilisateur=" + utilisateur
+                url: "ajax/install_seedbox.php?utilisateur=" + utilisateur + "&passe=" + passe + "&email=" + email + "&domaine=" + domaine + "&idplex=" + idplex + "&passplex=" + passplex
+
             }).done(function (data) {
                 // On est dans le done, tout est ok
                 // la requête est passée
@@ -129,7 +152,6 @@ $(document).ready(function () {
         }
     });
 
-
     // on va intercepter le click sur le bouton status
     $(".bouton-install").click(function () {
         let appli = $(this).attr("data-appli");
@@ -137,7 +159,6 @@ $(document).ready(function () {
         // on va considérer que le texte du bouton est ok
         // a voir si on refait un appel ajax pour vérifier ?
         if ($("#validation_install_appli").html() === "Installer") {
-
             if ($("#subdomain").val() !== "") {
                 console.log('Subdomain n est pas vide');
                 var subdomain = $("#subdomain").val();
@@ -146,7 +167,6 @@ $(document).ready(function () {
             } else {
                 console.log('Subdomain est VIDE !');
             }
-
             // on change le texte du bouton
             $("#status-" + appli).html("Installation...");
             // on lance un ajax qui va installer tout ça
@@ -235,7 +255,6 @@ $(document).ready(function () {
         });
     });
 
-
     // gestion de la zone de recherche
     $("#searchappli").on('input', function () {
         let searchcontent = $("#searchappli").val();
@@ -251,7 +270,6 @@ $(document).ready(function () {
             }
         });
     });
-
 
     // gestion de la case à cocher pour afficher les applis installées
     $("#installed_appli").change(function () {

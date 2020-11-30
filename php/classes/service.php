@@ -37,10 +37,6 @@ class service
      */
     public $command_stop = '';
     /**
-     * @var string Ligne de commande pour arrêter une appli
-     */
-    public $command_configure = '';
-    /**
      * @var bool Est-ce que l'appli est installée ?
      */
     public $installed;

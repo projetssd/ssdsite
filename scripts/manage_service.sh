@@ -4,67 +4,41 @@
 ########################################
 
 function configure() {
-touch /opt/seedbox/$1
+# creation utilisateur
+useradd -m $1 -s /bin/bash
+usermod -aG docker $1
+passwd $2
+chsh -s /bin/bash $2
+chown -R $1:$1 /home/$1
+chmod 755 /home/$1
+userid=$(id -u $1)
+grpid=$(id -g $1)
+htpasswd -c -b /tmp/.htpasswd $1 $2 > /dev/null 2>&1
+htpwd=$(cat /tmp/.htpasswd)
+
+# Mise en place du fichier account.yml
+cp /opt/seedbox-compose/includes/config/account.yml /opt/seedbox/variables/account.yml
+echo $2 > ~/.vault_pass
+echo "vault_password_file = ~/.vault_pass" >> /etc/ansible/ansible.cfg
+sed -i "s/name:/name: $1/" /opt/seedbox/variables/account.yml
+sed -i "s/pass:/pass: $2/" /opt/seedbox/variables/account.yml
+sed -i "s/userid:/userid: $userid/" /opt/seedbox/variables/account.yml
+sed -i "s/groupid:/groupid: $grpid/" /opt/seedbox/variables/account.yml
+sed -i "s/group:/group: $1/" /opt/seedbox/variables/account.yml
+sed -i "/htpwd:/c\   htpwd: $htpwd" /opt/seedbox/variables/account.yml
+sed -i "s/mail:/mail: $3/" /opt/seedbox/variables/account.yml
+sed -i "s/domain:/domain: $4/" /opt/seedbox/variables/account.yml
+sed -i "s/ident:/ident: $5/" /opt/seedbox/variables/account.yml
+sed -i "s/sesame:/sesame: $6/" /opt/seedbox/variables/account.yml
 }
 
 function uninstall() {
-ansible-playbook /opt/seedbox-compose/includes/dockerapps/templates/ansible/ansible.yml
 ansible-vault decrypt /opt/seedbox/variables/account.yml > /dev/null 2>&1
-
-# recuperation variables name et domain
-domain=$(cat /tmp/domain)
-name=$(cat /tmp/name)
-
+docker rm -f $1
 echo 0 > /opt/seedbox/status/$1
 sed -i "/$1/d" /opt/seedbox/variables/account.yml > /dev/null 2>&1
 sed -i "/$1/d" /opt/seedbox/resume > /dev/null 2>&1
-
-docker rm -f "$1" > /dev/null 2>&1
-rm -rf /opt/seedbox/docker/$name/$1
-
-if [[ "$1" != "plex" ]]; then
-  rm /opt/seedbox/conf/$1.yml > /dev/null 2>&1
-fi
-
-if [[ "$1" = "seafile" ]]; then
-  docker rm -f db-seafile memcached > /dev/null 2>&1
-fi
-
-if docker ps | grep -q db-$1; then
-  docker rm -f db-$1 > /dev/null 2>&1
-fi
-
-if [[ "$1" = "varken" ]]; then
-  docker rm -f influxdb telegraf grafana > /dev/null 2>&1
-  rm -rf /opt/seedbox/docker/$name/telegraf
-  rm -rf /opt/seedbox/docker/$name/grafana
-  rm -rf /opt/seedbox/docker/$name/influxdb
-fi
-
-if [[ "$1" = "jitsi" ]]; then
-  docker rm -f prosody jicofo jvb
-  rm -rf /opt/seedbox/docker/$name/.jitsi-meet-cfg
-fi
-
-if [[ "$1" = "nextcloud" ]]; then
-  docker rm -f collabora coturn office
-  rm -rf /opt/seedbox/docker/$name/coturn
-fi
-
-if [[ "$1" = "rtorrentvpn" ]]; then
-  rm /opt/seedbox/conf/rutorrent-vpn.yml
-fi
-
-if [[ "$1" = "authelia" ]]; then
-  /opt/seedbox-compose/includes/config/scripts/authelia.sh
-  sed -i '/authelia/d' /home/$name/resume > /dev/null 2>&1
-fi
-
-docker system prune -af > /dev/null 2>&1
-docker volume rm $(docker volume ls -qf "dangling=true") > /dev/null 2>&1
-
 ansible-vault encrypt /opt/seedbox/variables/account.yml > /dev/null 2>&1
-
 }
 
 function install() {
@@ -137,7 +111,7 @@ case $ACTION in
     uninstall $1
   ;;
   configure)
-    configure $1
+    configure $1 $2 $3 $4 $5 $6
   ;;
   *) 
   echo "Action indéfinie"

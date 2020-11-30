@@ -134,18 +134,59 @@
               <!--Body-->
               <div class="modal-body post">
                  <form class="form-inline">
-                  <div class="form-group mb-2>
-                    <label for="nom" class="sr-only"></label>
-                    <input type="text" class="form-control-plaintext" id="nom" value="Nom d'utilisateur">
-                  </div>
-                  <div class="form-group mx-sm-3 mb-2">
-                    <label for="utilisateur" class="sr-only"></label>
-                    <input type="text" class="form-control" id="utilisateur" placeholder="Enter...">
-                  </div>
+                    <div class="form-group mb-2>
+                      <label class="sr-only"></label>
+                      <input type="text" class="form-control-plaintext" value="Nom d'utilisateur">
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                      <label for="utilisateur" class="sr-only"></label>
+                      <input type="text" class="form-control" id="utilisateur" placeholder="Enter...">
+                    </div>
+                    <div class="form-group mb-2>
+                      <label class="sr-only"></label>
+                      <input type="text" class="form-control-plaintext" value="Passe">
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                      <label for="passe" class="sr-only"></label>
+                      <input type="text" class="form-control" id="passe" placeholder="Enter...">
+                    </div>
+                    <div class="form-group mb-2>
+                      <label class="sr-only"></label>
+                      <input type="text" class="form-control-plaintext" value="Email">
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                      <label for="email" class="sr-only"></label>
+                      <input type="text" class="form-control" id="email" placeholder="Enter...">
+                    </div>
+                    <div class="form-group mb-2>
+                      <label class="sr-only"></label>
+                      <input type="text" class="form-control-plaintext" value="Domaine">
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                      <label for="domaine" class="sr-only"></label>
+                      <input type="text" class="form-control" id="domaine" placeholder="Enter...">
+                    </div>
+                    <div class="modal-body">
+                    <!-- Checkbox -->
+                    <div class="checkbox">
+                      <input type="checkbox" id="plex" class="plex_install">  Utilisateurs Plex
+                    </div>
+                    <!-- Checkbox -->
+                    <div>
+                    <p></p>
+                    <p id="user_text" style="display:none">Nom d'utilisateur plex</p>
+                      <input type="text" class="form-control" id="idplex" style="display:none" placeholder="Enter ..."></input>
+                    </div>
+                    <div>
+                     <p></p>
+                     <p id="pass_text" style="display:none">Mot de passe plex</p>
+                       <input type="text" class="form-control" id="passplex" style="display:none" placeholder="Enter ..."></input>
+                    </div>
               </div>
+             </div>
               <!--Footer-->
                   <div class="modal-footer justify-content-center">
-                    <button type="submit" id="validation" class="btn-success validation-modal" data-utilisateur="">Valider</button>
+                    <button type="submit" id="validation" class="btn-success validation-modal">Valider</button>
                   </div>
               </form>              
             </div>
