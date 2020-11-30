@@ -7,6 +7,12 @@ $email = $_GET['email'];
 $domaine = $_GET['domaine'];
 $idplex = $_GET['idplex'];
 $passplex = $_GET['passplex'];
+$idcloud = $_GET['idcloud'];
+$passcloud = $_GET['passcloud'];
+$idoauth = $_GET['idoauth'];
+$clientoauth = $_GET['clientoauth'];
+$mailoauth = $_GET['mailoauth'];
+
 $user = new utilisateur($utilisateur);
 $user->configure($passe, $email, $domaine, $idplex, $passplex);
 echo 'ok';

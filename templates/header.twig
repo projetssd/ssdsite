@@ -174,16 +174,51 @@
                     <!-- Checkbox -->
                     <div>
                     <p></p>
-                    <p id="user_text" style="display:none">Nom d'utilisateur plex</p>
+                    <p id="user_text" style="display:none">Nom d'utilisateur Plex</p>
                       <input type="text" class="form-control" id="idplex" style="display:none" placeholder="Enter ..."></input>
                     </div>
                     <div>
-                     <p></p>
-                     <p id="pass_text" style="display:none">Mot de passe plex</p>
+                    <p></p>
+                       <p id="pass_text" style="display:none">Mot de passe Plex</p>
                        <input type="text" class="form-control" id="passplex" style="display:none" placeholder="Enter ..."></input>
                     </div>
+                    <p></p>
+                    <!-- Checkbox -->
+                    <div class="checkbox">
+                      <input type="checkbox" id="cloud" class="cloudflare_install">  Cloudflare
+                    </div>
+                    <!-- Checkbox -->
+                    <div>
+                    <p></p>
+                    <p id="idcloud_text" style="display:none">Mail Cloudflare</p>
+                      <input type="text" class="form-control" id="idcloud" style="display:none" placeholder="Enter ..."></input>
+                    </div>
+                    <div>
+                    <p></p>
+                       <p id="passcloud_text" style="display:none">Mot de passe Cloudflare</p>
+                       <input type="text" class="form-control" id="passcloud" style="display:none" placeholder="Enter ..."></input>
+                    </div>
+                    <p></p>
+                    <!-- Checkbox -->
+                    <div class="checkbox">
+                      <input type="checkbox" id="oauth" class="oauth_install">  Google OAuth 2.0
+                    </div>
+                    <!-- Checkbox -->
+                    <div>
+                    <p></p>
+                    <p id="idoauth_text" style="display:none">Client OAuth 2.0</p>
+                      <input type="text" class="form-control" id="idoauth" style="display:none" placeholder="Enter ..."></input>
+                    </div>
+                    <div>
+                    <p></p>
+                       <p id="clientoauth_text" style="display:none">Secret OAuth 2.0</p>
+                       <input type="text" class="form-control" id="clientoauth" style="display:none" placeholder="Enter ..."></input>
+                    </div>
+                    <p></p>
+                       <p id="mailoauth_text" style="display:none">Mail(s) OAuth 2.0 Autorisé(s)</p>
+                       <input type="text" class="form-control" id="mailoauth" style="display:none" placeholder="Enter ..."></input>
+                    </div>
               </div>
-             </div>
               <!--Footer-->
                   <div class="modal-footer justify-content-center">
                     <button type="submit" id="validation" class="btn-success validation-modal">Valider</button>

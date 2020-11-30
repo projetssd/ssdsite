@@ -85,6 +85,40 @@ $(document).ready(function () {
         }
     });
 
+    $(".cloudflare_install").click(function () {
+        if ($('#cloud').is(':checked')) {
+            $("#idcloud_text").show();
+            $("#idcloud").show();
+            $("#passcloud_text").show();
+            $("#passcloud").show();
+        } else {
+            $("#idcloud_text").hide();
+            $("#idcloud").hide();
+            $("#passcloud_text").hide();
+            $("#passcloud").hide();
+        }
+    });
+
+    $(".oauth_install").click(function () {
+        if ($('#oauth').is(':checked')) {
+            $("#idoauth_text").show();
+            $("#idoauth").show();
+            $("#clientoauth_text").show();
+            $("#clientoauth").show();
+            $("#mailoauth_text").show();
+            $("#mailoauth").show();
+
+        } else {
+            $("#idoauth_text").hide();
+            $("#idoauth").hide();
+            $("#clientoauth_text").hide();
+            $("#clientoauth").hide();
+            $("#clientoauth").hide();
+            $("#mailoauth_text").hide();
+            $("#mailoauth").hide();
+        }
+    });
+
     $(".install-modal").click(function () {
         $('#seedbox').modal('show');
     });
@@ -136,12 +170,21 @@ $(document).ready(function () {
                 console.log('ID Plex a la valeur success ');
                 var passplex = $("#passplex").val();
                 console.log('Pass Plex a la valeur success ');
+                var idcloud = $("#idcloud").val();
+                console.log('Id cloudflare a la valeur success ');
+                var passcloud = $("#passcloud").val();
+                console.log('Pass cloudflare a la valeur success ');
+                var idoauth = $("#idoauth").val();
+                console.log('ID OAuth a la valeur success ');
+                var clientoauth = $("#clientoauth").val();
+                console.log('Client OAuth a la valeur success ');
+                var mailoauth = $("#mailoauth").val();
+                console.log('Mails OAuth a la valeur success ');
             } else {
                 console.log('l\'utilisateur est VIDE !');
             }
             $.ajax({
-                url: "ajax/install_seedbox.php?utilisateur=" + utilisateur + "&passe=" + passe + "&email=" + email + "&domaine=" + domaine + "&idplex=" + idplex + "&passplex=" + passplex
-
+                url: "ajax/install_seedbox.php?utilisateur=" + utilisateur + "&passe=" + passe + "&email=" + email + "&domaine=" + domaine + "&idplex=" + idplex + "&passplex=" + passplex + "&idcloud=" + idcloud + "&passcloud=" + passcloud + "&idoauth=" + idoauth + "&clientoauth=" + clientoauth + "&mailoauth=" + mailoauth
             }).done(function (data) {
                 // On est dans le done, tout est ok
                 // la requête est passée
