@@ -14,5 +14,5 @@ $clientoauth = $_GET['clientoauth'];
 $mailoauth = $_GET['mailoauth'];
 
 $user = new utilisateur($utilisateur);
-$user->configure($passe, $email, $domaine, $idplex, $passplex);
+$user->configure($passe, $email, $domaine, $idplex, $passplex, $idcloud, $passcloud, $idoauth, $clientoauth, $mailoauth);
 echo 'ok';

@@ -5,7 +5,7 @@
 
 
 function configure() {
-PATH=/opt/seedbox/variables/account.yml
+ACCOUNT=/opt/seedbox/variables/account.yml
 
 # creation utilisateur
 useradd -m $1 -s /bin/bash
@@ -20,23 +20,24 @@ htpasswd -c -b /tmp/.htpasswd $1 $2 > /dev/null 2>&1
 htpwd=$(cat /tmp/.htpasswd)
 
 # Mise en place du fichier account.yml
-cp /opt/seedbox-compose/includes/config/account.yml $PATH
+cp /opt/seedbox-compose/includes/config/account.yml $ACCOUNT
 echo $2 > ~/.vault_pass
 echo "vault_password_file = ~/.vault_pass" >> /etc/ansible/ansible.cfg
-sed -i "s/name:/name: $1/" $PATH
-sed -i "s/pass:/pass: $2/" $PATH
-sed -i "s/userid:/userid: $userid/" $PATH
-sed -i "s/groupid:/groupid: $grpid/" $PATH
-sed -i "s/group:/group: $1/" $PATH
-sed -i "/htpwd:/c\   htpwd: $htpwd" $PATH
-sed -i "s/mail:/mail: $3/" $PATH
-sed -i "s/domain:/domain: $4/" $PATH
-sed -i "s/ident:/ident: $5/" $PATH
-sed -i "s/sesame:/sesame: $6/" $PATH
-sed -i "s/login:/login: $7/" $PATH
-sed -i "s/api:/api: $8/" $PATH
-sed -i "s/client:/client: $9/" $PATH
-sed -i "s/account:/account: $10/" $PATH
+sed -i "s/name:/name: $1/" $ACCOUNT
+sed -i "s/pass:/pass: $2/" $ACCOUNT
+sed -i "s/userid:/userid: $userid/" $ACCOUNT
+sed -i "s/groupid:/groupid: $grpid/" $ACCOUNT
+sed -i "s/group:/group: $1/" $ACCOUNT
+sed -i "/htpwd:/c\   htpwd: $htpwd" $ACCOUNT
+sed -i "s/mail:/mail: $3/" $ACCOUNT
+sed -i "s/domain:/domain: $4/" $ACCOUNT
+sed -i "s/ident:/ident: $5/" $ACCOUNT
+sed -i "s/sesame:/sesame: $6/" $ACCOUNT
+sed -i "s/login:/login: $7/" $ACCOUNT
+sed -i "s/api:/api: $8/" $ACCOUNT
+sed -i "s/client:/client: $9/" $ACCOUNT
+sed -i "s/secret:/secret: $10/" $ACCOUNT
+sed -i "s/account:/account: $11/" $ACCOUNT
 }
 
 function uninstall() {
@@ -118,7 +119,7 @@ case $ACTION in
     uninstall $1
   ;;
   configure)
-    configure $1 $2 $3 $4 $5 $6
+    configure $1 $2 $3 $4 $5 $6 $7 $8 $9 $10 $11
   ;;
   *) 
   echo "Action indéfinie"
