@@ -153,9 +153,9 @@ $(document).ready(function () {
     });
 
     // on va créer un compte utilisateur
-    $(".validation-modal").click(function () {
+    $("#validation").click(function () {
         if ($("#validation").html() === "Valider") {
-             $('#seedbox').modal('hide');
+             //$('#seedbox').modal('hide');
              if ($("#utilisateur").val() !== "") {
                 console.log('l\'utilisateur n est pas vide');
                 var utilisateur = $("#utilisateur").val();
@@ -202,7 +202,7 @@ $(document).ready(function () {
                 // et on dit qu'on attend du json
                 dataType: "json"
             }).done(function (data) {
-                console.log(data);
+                
                 // On est dans le done
                 // on a maintenant un tableau json qui est déjà "lu" par javascript
                 // dans la variable data
@@ -213,14 +213,25 @@ $(document).ready(function () {
                     /**
                      * Ici il faut faire les actions de réussite
                      */
+                     $('#seedbox').modal('hide');
+                      toastr.success('Installation lancée');
                 } else {
                     /**
                      * A priori un truc s'est mal passé
                      *
                      */
-                    data.detail.forEach(function (item) {
-                        console.log(item);
+   
+                    $.each(data.detail, function(key, value) {
+                        console.log("key " + key  + " = " + value);
+                        if(value === false)
+                        {
+                            $("#" + key).addClass("error");                            
+                        }
                     });
+                    toastr.warning('Manque informations');
+                    console.log("terminé");
+                     
+
 
                 }
             }).fail(function () {
