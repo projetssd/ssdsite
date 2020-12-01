@@ -64,7 +64,7 @@ class utilisateur
             'passcloud'   => true,
             'idoauth'     => true,
             'clientoauth' => true,
-            'mailoauh'    => true
+            'mailoauth'    => true
         );
         // on boucle sur tous les arguments
         // si tu veux en rendre certains optionnels, il suffit de les supprimer du tableau
@@ -88,10 +88,10 @@ class utilisateur
             $commande = 'sudo ' . __DIR__ . '/../../scripts/manage_service.sh "' . $this->utilisateur . '" ';
             foreach ($tab_params as $key => $item)
             {
-                $commande .= '"' . $key . '" ';
+                $commande .= '"' . $$key . '" ';
             }
             shell_exec($commande . ' configure');
-            $tab_retour = array("verif" => true);
+            $tab_retour = array("verif" => true, "commande" => $commande);
         } else
         {
             // on est dans le cas où on ne doit rien faire

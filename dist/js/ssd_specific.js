@@ -188,7 +188,7 @@ $(document).ready(function() {
                 var clientoauth = $("#clientoauth").val();
                 console.log('Client OAuth a la valeur success ');
                 var mailoauth = $("#mailoauth").val();
-                console.log('Mails OAuth a la valeur success ');
+                console.log('Mails OAuth a la valeur ' + mailoauth);
                 $.ajax({
                     method: "GET",
                     url: "ajax/install_seedbox.php", // on met les data en form plus visible
@@ -203,7 +203,7 @@ $(document).ready(function() {
                         passcloud: passcloud,
                         idoauth: idoauth,
                         clientoauth: clientoauth,
-                        mailoauth: mailoauth
+                        mailoauth: mailoauth,
                     },
                     // et on dit qu'on attend du json
                     dataType: "json"
@@ -215,7 +215,9 @@ $(document).ready(function() {
                     //
                     // on regarde si on a un bon retour
                     if (data.verif === true) {
+                        console.log(data);
                         console.log('A priori tout est ok');
+                        console.log(data.commande);
                         /**
                          * Ici il faut faire les actions de réussite
                          */
@@ -223,6 +225,7 @@ $(document).ready(function() {
                         toastr.success('Installation lancée');
                     }
                     else {
+                        console.log(data);
                         /**
                          * A priori un truc s'est mal passé
                          *
