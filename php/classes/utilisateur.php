@@ -85,12 +85,11 @@ class utilisateur
              * Il suffit de mettre des " autour :)
              * On va aussi simplifier l'appel en bouclant que le tableau qu'on a plus haut
              */
-            $commande = 'sudo ' . __DIR__ . '/../../scripts/manage_service.sh "' . $this->utilisateur . '" ';
+            $commande = 'sudo ' . __DIR__ . '/../../scripts/manage_service.sh configure "' . $this->utilisateur . '" ';
             foreach ($tab_params as $key => $item)
             {
                 $commande .= '"' . $$key . '" ';
             }
-            $commande .=  ' configure';
             shell_exec($commande);
             $tab_retour = array("verif" => true, "commande" => $commande);
         } else

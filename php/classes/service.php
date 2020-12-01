@@ -80,17 +80,16 @@ class service
         //
         $this->display_name      = trim($my_service); // on supprimer les espaces avant/après
         $this->command_install   =
-            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . ' install';
+            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh install ' . $this->display_name . ' ';
         $this->command_uninstall =
-            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . ' uninstall';
+            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh uninstall ' . $this->display_name . ' ';
         $this->command_restart   =
-            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . ' restart';
+            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh restart ' . $this->display_name . ' ';
         $this->command_stop      =
-            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . ' stop';
+            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh stop ' . $this->display_name . ' ';
         $this->command_start     =
-            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . ' start';
-       // $this->command_configure =
-       //     'sudo ' . __DIR__ . '/../../scripts/user.sh configure';
+            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh start ' . $this->display_name . ' ';
+
         //
         // on va chercher l'ip du docker
         //
@@ -146,8 +145,6 @@ class service
         if ($my_service != 'all')
         {
             // on va remplir les valeurs par défaut
-            //$this->running    = $this->check();
-            //$this->installed  = $this->is_installed();
 
             $this->public_url = false;
             if ($this->is_installed())
