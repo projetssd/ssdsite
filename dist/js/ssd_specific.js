@@ -184,11 +184,45 @@ $(document).ready(function () {
                 console.log('l\'utilisateur est VIDE !');
             }
             $.ajax({
-                url: "ajax/install_seedbox.php?utilisateur=" + utilisateur + "&passe=" + passe + "&email=" + email + "&domaine=" + domaine + "&idplex=" + idplex + "&passplex=" + passplex + "&idcloud=" + idcloud + "&passcloud=" + passcloud + "&idoauth=" + idoauth + "&clientoauth=" + clientoauth + "&mailoauth=" + mailoauth
+                method: "GET",
+                url: "ajax/install_seedbox.php",                // on met les data en form plus visible
+                data: {
+                    utilisateur: utilisateur,
+                    passe: passe,
+                    email: email,
+                    domaine: domaine,
+                    idplex: idplex,
+                    passplex: passplex,
+                    idcloud: idcloud,
+                    passcloud: passcloud,
+                    idoauth: idoauth,
+                    clientoauth: clientoauth,
+                    mailoauth: mailoauth
+                },
+                // et on dit qu'on attend du json
+                dataType: "json"
             }).done(function (data) {
-                // On est dans le done, tout est ok
-                // la requête est passée
-                console.log("result " + data);
+                console.log(data);
+                // On est dans le done
+                // on a maintenant un tableau json qui est déjà "lu" par javascript
+                // dans la variable data
+                //
+                // on regarde si on a un bon retour
+                if (data.verif === true) {
+                    console.log('A priori tout est ok');
+                    /**
+                     * Ici il faut faire les actions de réussite
+                     */
+                } else {
+                    /**
+                     * A priori un truc s'est mal passé
+                     *
+                     */
+                    data.detail.forEach(function (item) {
+                        console.log(item);
+                    });
+
+                }
             }).fail(function () {
                 console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
             });
