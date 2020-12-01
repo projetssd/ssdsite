@@ -90,7 +90,8 @@ class utilisateur
             {
                 $commande .= '"' . $$key . '" ';
             }
-            shell_exec($commande . ' configure');
+            $commade .=  ' configure';
+            shell_exec($commande);
             $tab_retour = array("verif" => true, "commande" => $commande);
         } else
         {
