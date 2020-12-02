@@ -495,4 +495,17 @@ $(document).ready(function() {
     // on met à blanc les valeurs
     $("#subdomain").val('');
     $("#myCheck").prop("checked", false);
+    // on va supprimer les vieux fichiers de logs
+    $.ajax({
+        url: "ajax/delete_old_logs.php",
+    }).done(function(data) {
+        if(data == 'ok')
+        {
+            console.log('Vieux logs effacés');
+        }
+
+    }).fail(function() {
+        console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+
+    });
 });
