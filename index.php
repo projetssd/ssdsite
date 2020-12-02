@@ -2,6 +2,7 @@
 
 require 'includes/header.php';
 
+
 // espace disque
 $df = disk_free_space('/');
 $dt = disk_total_space('/');

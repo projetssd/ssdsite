@@ -10,8 +10,11 @@ class log
     {
         $date        = date('d/m/Y H:i:s');
         $datefichier = date('Ymd');
-        error_log("PHP : " . $date . " - " . $type . " - " . $message . PHP_EOL, 3, __DIR__ . '/../../logs/ssdsite-' .
+        if(!error_log("PHP : " . $date . " - " . $type . " - " . $message . PHP_EOL, 3, __DIR__ . '/../../logs/ssdsite-' .
                                                                                     $datefichier .
-                                                                                    '.log');
+                                                                                    '.log'))
+        {
+            die("erreur d'écriture de fichier");
+        }
     }
 }

@@ -1,6 +1,8 @@
 <?php
 
-require_once '../php/classes/service.php';
+require_once __DIR__ . '/../includes/header.php';
+
+
 $service = new service($_GET['service']);
 $subdomain = $_GET['subdomain'];
 // on lance la fonction install qui va rendre la main presque tout de suite

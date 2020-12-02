@@ -3,11 +3,11 @@
 # Gestion des services SSD
 ########################################
 
-function log()
+function writelog()
 {
   DIRNAME=$(dirname $0)
-  DATE=$(date +"%d/%m/%y %T")
-  DATELOG=$(date +"%y%m%d")
+  DATE=$(date +"%d/%m/%Y %T")
+  DATELOG=$(date +"%Y%m%d")
   if [ $# -eq 1 ]
   then
     MESSAGE=$1
@@ -16,7 +16,7 @@ function log()
     MESSAGE=$1
     TYPE=$2
   fi
-  echo "SHELL : ${DATE} - ${TYPE} - ${MESSAGE} \n" >> ${DIRNAME}/../logs/ssdsite-${DATELOG}.log
+  echo "SHELL : ${DATE} - ${TYPE} - ${MESSAGE}" >> ${DIRNAME}/../logs/ssdsite-${DATELOG}.log
 
 }
 
@@ -66,8 +66,8 @@ function uninstall() {
 }
 
 function install() {
-    DIRNAME=$(dirname $0)
-    LOGFILE=${DIRNAME}/logtail/log
+    
+    LOGFILE=${DIRNAME}/../logtail/log
     rm -f $LOGFILE
 
     source /opt/seedbox-compose/includes/variables.sh
@@ -124,9 +124,11 @@ EOF
     
 }
 
-log("Lancement du script","DEBUG")
+DIRNAME=$(dirname $0)
+
+writelog "Lancement du script" "DEBUG"
 ACTION=$1
-log("Action = ${ACTION}","DEBUG")
+writelog "Action = ${ACTION}" "DEBUG"
 case $ACTION in
   install) 
     install $2 $3
@@ -138,7 +140,7 @@ case $ACTION in
     configure  $2 $3 $4 $5 $6 $7 $8 $9 ${10} ${11} ${12}
   ;;
   *)
-  log("ACTION INDEFINIE",'DEBUG')
+  writelog "ACTION INDEFINIE" 'DEBUG' 
   echo "Action indéfinie"
   ;;
 esac
