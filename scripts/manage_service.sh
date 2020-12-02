@@ -137,6 +137,8 @@ case $ACTION in
     uninstall $2
   ;;
   configure) 
+    writelog "On entre dans configure" "DEBUG"
+
     configure  $2 $3 $4 $5 $6 $7 $8 $9 ${10} ${11} ${12}
   ;;
   *)

@@ -27,7 +27,7 @@ $applis = $service->get_all($tableau_appli, false);
 
 // javascripts  utilisés
 $js = array(
-    'jquery.min.js',
+    'https://code.jquery.com/jquery-3.5.1.min.js',
     'bootstrap.bundle.min.js',
     'adminlte.min.js',
     'toastr.min.js',
