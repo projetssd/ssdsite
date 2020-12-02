@@ -140,78 +140,78 @@
 
                     <div class="form-group mx-sm-3 mb-2">
                         <label for="utilisateur">Nom d utilisateur</label>
-                        <input type="text" class="form-control" id="utilisateur" placeholder="Enter..." required>
+                        <input type="text" class="form-control" id="utilisateur" name="utilisateur" placeholder="Enter...">
                     </div>
                     <div class="form-group mx-sm-3 mb-2">
                         <label for="passe">Passe</label>
-                        <input type="password" class="form-control" id="passe" placeholder="Enter..." required>
+                        <input type="password" class="form-control" id="passe" name="passe" placeholder="Enter...">
                     </div>
 
                     <div class="form-group mx-sm-3 mb-2">
                         <label for="email">Email</label>
-                        <input type="text" type="email" required class="form-control" id="email" placeholder="Enter...">
+                        <input type="text" class="form-control" name="email" id="email" placeholder="Enter...">
                     </div>
 
                     <div class="form-group mx-sm-3 mb-2">
                         <label for="domaine">Domaine</label>
-                        <input type="text" class="form-control" id="domaine" placeholder="Enter...">
+                        <input type="text" class="form-control" id="domaine" name="domaine" placeholder="Enter...">
                     </div>
                     <div class="modal-body">
                         <!-- Checkbox -->
                         <div class="checkbox">
-                            <input type="checkbox" id="plex" class="plex_install"> Utilisateurs Plex
+                            <input type="checkbox" id="plex" name="plex" class="plex_install"> Utilisateurs Plex
                         </div>
                         <!-- Checkbox -->
                         <div id="formBlockPlex" style="display:none">
 
                             <label for="idplex">Nom d'utilisateur Plex</label>
-                            <input type="text" class="form-control" id="idplex" 
+                            <input type="text" class="form-control" id="idplex"  name="idplex"
                                    placeholder="Enter ..."></input>
 
 
                             <label for="passplex">Mot de passe Plex</label>
-                            <input type="password" class="form-control" id="passplex" 
+                            <input type="password" class="form-control" id="passplex"  name="passplex"
                                    placeholder="Enter ..."></input>
 
                         </div>
                         <!-- Checkbox -->
                         <div class="checkbox">
-                            <input type="checkbox" id="cloud" class="cloudflare_install"> Cloudflare
+                            <input type="checkbox" id="cloud" name="cloud" class="cloudflare_install"> Cloudflare
                         </div>
                         <!-- Checkbox -->
                         <div id="formBlockCloudflare" style="display:none">
                         <div>
 
                              <label for="idcloud">Mail Cloudflare</label>
-                            <input type="text" class="form-control" id="idcloud" 
+                            <input type="text" class="form-control" id="idcloud"  name="idcloud"
                                    placeholder="Enter ..."></input>
                         </div>
                         <div>
   
                             <label for="passcloud">Mot de passe Cloudflare</label>
-                            <input type="text" class="form-control" id="passcloud" 
+                            <input type="password" class="form-control" id="passcloud" name="passcloud"
                                    placeholder="Enter ..."></input>
                         </div>
                         </div>
                         <!-- Checkbox -->
                         <div class="checkbox">
-                            <input type="checkbox" id="oauth" class="oauth_install"> Google OAuth 2.0
+                            <input type="checkbox" id="oauth" name="oauth" class="oauth_install"> Google OAuth 2.0
                         </div>
                         <!-- Checkbox -->
                         <div id="formBlockOauth" style="display:none">
                         <div>
                             <label for="idoauth">Client OAuth 2.0</label>
-                            <input type="text" class="form-control" id="idoauth" 
+                            <input type="text" class="form-control" id="idoauth" name="idoauth"
                                    placeholder="Enter ..."></input>
                         </div>
                         <div>
                             <label for="clientoauth">Secret OAuth 2.0</label>
-                            <input type="text" class="form-control" id="clientoauth" 
+                            <input type="text" class="form-control" id="clientoauth" name="clientoauth"
                                    placeholder="Enter ..."></input>
                         </div>
                         <label for="mailoauth">Mail(s) OAuth 2.0 Autorisé(s)</label>
                         
-                        <input type="text" class="form-control" id="mailoauth" 
+                        <input type="text" class="form-control" id="mailoauth" name="mailoauth"
                                placeholder="Enter ..."></input>
                                </div>
                     </div>

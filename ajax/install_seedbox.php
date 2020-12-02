@@ -1,17 +1,17 @@
 <?php
 require_once __DIR__ . '/../includes/header.php';
 
-$utilisateur = $_GET['utilisateur'];
-$passe       = $_GET['passe'];
-$email       = $_GET['email'];
-$domaine     = $_GET['domaine'];
-$idplex      = $_GET['idplex'];
-$passplex    = $_GET['passplex'];
-$idcloud     = $_GET['idcloud'];
-$passcloud   = $_GET['passcloud'];
-$idoauth     = $_GET['idoauth'];
-$clientoauth = $_GET['clientoauth'];
-$mailoauth   = $_GET['mailoauth'];
+$utilisateur = addslashes($_GET['utilisateur']);
+$passe       = addslashes($_GET['passe']);
+$email       = addslashes($_GET['email']);
+$domaine     = addslashes($_GET['domaine']);
+$idplex      = addslashes($_GET['idplex']);
+$passplex    = addslashes($_GET['passplex']);
+$idcloud     = addslashes($_GET['idcloud']);
+$passcloud   = addslashes($_GET['passcloud']);
+$idoauth     = addslashes($_GET['idoauth']);
+$clientoauth = addslashes($_GET['clientoauth']);
+$mailoauth   = addslashes($_GET['mailoauth']);
 
 
 $user = new utilisateur($utilisateur);
