@@ -67,7 +67,7 @@ class utilisateur
             'passcloud'   => true,
             'idoauth'     => true,
             'clientoauth' => true,
-            'mailoauth'    => true
+            'mailoauth'   => true
         );
         // on boucle sur tous les arguments
         // si tu veux en rendre certains optionnels, il suffit de les supprimer du tableau

@@ -25,7 +25,23 @@ touch /opt/seedbox/rclone
 }
 
 function configure() {
+
   ACCOUNT=/opt/seedbox/variables/account.yml
+
+  # recuperation token plex
+  curl -qu "$5":"$6" 'https://plex.tv/users/sign_in.xml' \
+      -X POST -H 'X-Plex-Device-Name: PlexMediaServer' \
+      -H 'X-Plex-Provides: server' \
+      -H 'X-Plex-Version: 0.9' \
+      -H 'X-Plex-Platform-Version: 0.9' \
+      -H 'X-Plex-Platform: xcid' \
+      -H 'X-Plex-Product: Plex Media Server'\
+      -H 'X-Plex-Device: Linux'\
+      -H 'X-Plex-Client-Identifier: XXXX' --compressed >/tmp/plex_sign_in
+  token=$(sed -n 's/.*<authentication-token>\(.*\)<\/authentication-token>.*/\1/p' /tmp/plex_sign_in)
+
+  #openssl OAuth
+  openssl=$(openssl rand -hex 16)
 
   # creation utilisateur
   useradd -m $1 -s /bin/bash
@@ -43,21 +59,25 @@ function configure() {
   cp /opt/seedbox-compose/includes/config/account.yml $ACCOUNT
   echo $2 > ~/.vault_pass
   echo "vault_password_file = ~/.vault_pass" >> /etc/ansible/ansible.cfg
-  sed -i "s/name:/name: $1/" $ACCOUNT
-  sed -i "s/pass:/pass: $2/" $ACCOUNT
-  sed -i "s/userid:/userid: $userid/" $ACCOUNT
-  sed -i "s/groupid:/groupid: $grpid/" $ACCOUNT
-  sed -i "s/group:/group: $1/" $ACCOUNT
-  sed -i "/htpwd:/c\   htpwd: $htpwd" $ACCOUNT
-  sed -i "s/mail:/mail: $3/" $ACCOUNT
-  sed -i "s/domain:/domain: $4/" $ACCOUNT
-  sed -i "s/ident:/ident: $5/" $ACCOUNT
-  sed -i "s/sesame:/sesame: $6/" $ACCOUNT
-  sed -i "s/login:/login: $7/" $ACCOUNT
-  sed -i "s/api:/api: $8/" $ACCOUNT
-  sed -i "s/client:/client: $9/" $ACCOUNT
-  sed -i "s/secret:/secret: $10/" $ACCOUNT
-  sed -i "s/account:/account: $11/" $ACCOUNT
+
+  #incrementation des variables dans account.yml
+  sed -i "s/name:/name: $1/
+          s/pass:/pass: $2/
+          s/userid:/userid: $userid/
+          s/groupid:/groupid: $grpid/
+          s/group:/group: $1/
+          s/mail:/mail: $3/
+          s/domain:/domain: $4/
+          s/ident:/ident: $5/
+          s/sesame:/sesame: $6/
+          s/token:/token: $token/
+          s/login:/login: $7/
+          s/api:/api: $8/
+          s/client:/client: $9/
+          s/secret:/secret: ${10}/
+          s/account:/account: ${11}/
+          s/openssl:/openssl: $openssl/
+          /htpwd:/c\   htpwd: $htpwd" $ACCOUNT
 }
 
 function uninstall() {
@@ -141,7 +161,7 @@ case $ACTION in
     uninstall $2
   ;;
   configure)
-    configure  $2 $3 $4 $5 $6 $7 $8 ${9} ${10} ${11}
+    configure  $2 $3 $4 $5 $6 $7 $8 $9 ${10} ${11} ${12}
   ;;
   credential)
     credential $2

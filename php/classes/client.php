@@ -27,7 +27,6 @@ class client
         $log = new log;
         $log->writelog("-----------------",'DEBUG');
         $log->writelog("credential " . $this->client,'DEBUG');
-        /**
 
         $commande = 'sudo ' . __DIR__ . '/../../scripts/manage_service.sh credential "' . $this->client . '" ';
         $log->writelog("Lancé","DEBUG");
