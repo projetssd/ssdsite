@@ -164,46 +164,54 @@ $(document).ready(function() {
                     required: true
                 },
                 idplex: {
-                    required: true,
-                    depends: function(element) {
-                        return $("#plex").is(":checked");
+                    required: {
+                        depends: function(element) {
+                            return $("#plex").is(":checked");
+                        }
                     }
+
                 },
                 passplex: {
-                    required: true,
-                    depends: function(element) {
-                        return $("#plex").is(":checked");
-                    }
+                    required: {
+                        depends: function(element) {
+                            return $("#plex").is(":checked");
+                        }
+                    },
                 },
                 idcloud: {
-                    required: true,
-                    depends: function(element) {
-                        return $("#cloud").is(":checked");
-                    }
+                    required: {
+                        depends: function(element) {
+                            return $("#plex").is(":checked");
+                        }
+                    },
                 },
                 passcloud: {
-                    required: true,
-                    depends: function(element) {
-                        return $("#cloud").is(":checked");
-                    }
+                    required: {
+                        depends: function(element) {
+                            return $("#plex").is(":checked");
+                        }
+                    },
                 },
                 idoauth: {
-                    required: true,
-                    depends: function(element) {
-                        return $("#oauth").is(":checked");
-                    }
+                    required: {
+                        depends: function(element) {
+                            return $("#plex").is(":checked");
+                        }
+                    },
                 },
                 clientoauth: {
-                    required: true,
-                    depends: function(element) {
-                        return $("#oauth").is(":checked");
-                    }
+                    required:{
+                        depends: function(element) {
+                            return $("#plex").is(":checked");
+                        }
+                    },
                 },
                 mailoauth: {
-                    required: true,
-                    depends: function(element) {
-                        return $("#oauth").is(":checked");
-                    }
+                    required: {
+                        depends: function(element) {
+                            return $("#plex").is(":checked");
+                        }
+                    },
                 },
 
             },
