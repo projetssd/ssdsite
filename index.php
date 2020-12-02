@@ -33,7 +33,8 @@ $js = array(
     'toastr.min.js',
     'sweetalert2.min.js',
     'ssd_specific.js',
-    'https://cdn.jsdelivr.net/npm/jquery-validation@1.19.2/dist/jquery.validate.js'
+    'https://cdn.jsdelivr.net/npm/jquery-validation@1.19.2/dist/jquery.validate.js',
+    'validate_user_install.js'
     );
     
 // css utilisés

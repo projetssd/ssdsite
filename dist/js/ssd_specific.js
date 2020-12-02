@@ -92,7 +92,7 @@ $(document).ready(function() {
             $("#formBlockCloudflare").hide();
         }
     });
-     $(".oauth_install").click(function() {
+    $(".oauth_install").click(function() {
         if ($('#oauth').is(':checked')) {
             $("#formBlockOauth").show();
         }
@@ -138,7 +138,16 @@ $(document).ready(function() {
     });
 
     // on va créer un compte utilisateur
+    
     $("#validation").click(function() {
+        $("#formUserConfigure").validate();
+        $("#utilisateur").rules("add", {required:true});
+        $("#passe").rules("add", {required:true});
+        $("#email").rules("add", {
+            required:true,
+            email: true
+        });
+        alert( "Valid: " + $("#formUserConfigure").valid() );
         if ($("#validation").html() === "Valider") {
             //$('#seedbox').modal('hide');
             if ($("#utilisateur").val() !== "") {
