@@ -106,6 +106,10 @@ $(document).ready(function() {
         $('#seedbox').modal('show');
     });
 
+    $(".rclone-modal").click(function() {
+        $('#rclone').modal('show');
+    });
+
     $(".affichage-modal").click(function() {
         let appli = $(this).attr("data-appli");
         if ($("#status-" + appli).html() === "Installer") {
@@ -160,54 +164,46 @@ $(document).ready(function() {
                     required: true
                 },
                 idplex: {
-                    required: {
-                        depends: function(element) {
-                            return $("#plex").is(":checked");
-                        }
+                    required: true,
+                    depends: function(element) {
+                        return $("#plex").is(":checked");
                     }
-
                 },
                 passplex: {
-                    required: {
-                        depends: function(element) {
-                            return $("#plex").is(":checked");
-                        }
-                    },
+                    required: true,
+                    depends: function(element) {
+                        return $("#plex").is(":checked");
+                    }
                 },
                 idcloud: {
-                    required: {
-                        depends: function(element) {
-                            return $("#plex").is(":checked");
-                        }
-                    },
+                    required: true,
+                    depends: function(element) {
+                        return $("#cloud").is(":checked");
+                    }
                 },
                 passcloud: {
-                    required: {
-                        depends: function(element) {
-                            return $("#plex").is(":checked");
-                        }
-                    },
+                    required: true,
+                    depends: function(element) {
+                        return $("#cloud").is(":checked");
+                    }
                 },
                 idoauth: {
-                    required: {
-                        depends: function(element) {
-                            return $("#plex").is(":checked");
-                        }
-                    },
+                    required: true,
+                    depends: function(element) {
+                        return $("#oauth").is(":checked");
+                    }
                 },
                 clientoauth: {
-                    required:{
-                        depends: function(element) {
-                            return $("#plex").is(":checked");
-                        }
-                    },
+                    required: true,
+                    depends: function(element) {
+                        return $("#oauth").is(":checked");
+                    }
                 },
                 mailoauth: {
-                    required: {
-                        depends: function(element) {
-                            return $("#plex").is(":checked");
-                        }
-                    },
+                    required: true,
+                    depends: function(element) {
+                        return $("#oauth").is(":checked");
+                    }
                 },
 
             },
@@ -302,6 +298,30 @@ $(document).ready(function() {
                 }
             }
         });
+    });
+
+    // on va intercepter le click sur le bouton rclone
+    $("#rclone_install_appli").click(function() {
+            if ($("#client").val() !== "") {
+                console.log('client n est pas vide');
+                var client = $("#client").val();
+                console.log('client a la valeur ' + client);
+                var secret = $("#secret").val();
+                console.log('secret a la valeur ' + secret);
+            }
+            else {
+                console.log('client est VIDE !');
+            }
+            $.ajax({
+                url: "ajax/install_rclone.php?client=" + client + "&secret=" + secret
+            }).done(function(data) {
+                // On est dans le done, tout est ok
+                // la requête est passée
+                // console.log("result " + data);
+                $('#rclone').modal('hide');
+            }).fail(function() {
+                console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+            });
     });
 
     // on va intercepter le click sur le bouton status
@@ -507,7 +527,8 @@ $(document).ready(function() {
     $.ajax({
         url: "ajax/delete_old_logs.php",
     }).done(function(data) {
-        if (data == 'ok') {
+        if(data == 'ok')
+        {
             console.log('Vieux logs effacés');
         }
 

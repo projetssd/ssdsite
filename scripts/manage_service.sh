@@ -20,6 +20,10 @@ function writelog()
 
 }
 
+function credential() {
+touch /opt/seedbox/rclone
+}
+
 function configure() {
   ACCOUNT=/opt/seedbox/variables/account.yml
 
@@ -136,10 +140,11 @@ case $ACTION in
   uninstall)
     uninstall $2
   ;;
-  configure) 
-    writelog "On entre dans configure" "DEBUG"
-
-    configure  $2 $3 $4 $5 $6 $7 $8 $9 ${10} ${11} ${12}
+  configure)
+    configure  $2 $3 $4 $5 $6 $7 $8 ${9} ${10} ${11}
+  ;;
+  credential)
+    credential $2
   ;;
   *)
   writelog "ACTION INDEFINIE" 'DEBUG' 
