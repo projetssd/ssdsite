@@ -32,7 +32,8 @@ $js = array(
     'adminlte.min.js',
     'toastr.min.js',
     'sweetalert2.min.js',
-    'ssd_specific.js'
+    'ssd_specific.js',
+    'https://cdn.jsdelivr.net/npm/jquery-validation@1.19.2/dist/jquery.validate.js'
     );
     
 // css utilisés

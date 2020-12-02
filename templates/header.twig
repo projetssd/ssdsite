@@ -8,275 +8,274 @@
     <title>SSD | Blank Page</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700">
-   {% if ASSET_CSS is empty %}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700">
+    {% if ASSET_CSS is empty %}
         {% for css in CSS %}
             {% if css starts with 'http' %}
                 <link rel="stylesheet" href="{{ css }}">
             {% else %}
                 <link rel="stylesheet" href="dist/css/{{ css }}">
             {% endif %}
-       
+
         {% endfor %}
     {% else %}
         {{ ASSET_CSS|raw }}
     {% endif %}
 
 
-
-
 <body class="hold-transition sidebar-mini sidebar-collapse">
 
 
-    <!-- Site wrapper -->
-    <div class="wrapper">
-        <!-- Navbar -->
-        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-            <!-- START top navbar links -->
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-                </li>
-                <li class="nav-item d-none d-sm-inline-block">
-                    <a href="index.php" class="nav-link">Accueil</a>
-                </li>
-                <li class="nav-item d-none d-sm-inline-block">
-                    <a href="test-index.php" class="nav-link">Test-index</a>
-                </li>
-                <li class="nav-item d-none d-sm-inline-block">
-                    <a href="blankpage.html" class="nav-link">Blankpage</a>
-                </li>
-                <li class="nav-item d-none d-sm-inline-block">
-                    <a href="installation.html" class="nav-link">Installation</a>
-                </li>
-                <li class="nav-item d-none d-sm-inline-block">
-                    <a href="#" class="nav-link">Discord</a>
-                </li>
-            </ul>
-            <!-- END top navbar left links -->
-            <!-- START top navbar right links -->
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <button type="button" class="btn btn-info float-right" data-toggle="modal" data-target="#modalYT1">Logs
-                        SSD</button>
-                </li>
-                <!-- END top navbar right links -->
-            </ul>
-        </nav>
-        <!--Start content modal 2-->
-        <div class="modal fade" id="modalYT1" style="display: none;" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Logs du serveur</h4>
+<!-- Site wrapper -->
+<div class="wrapper">
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+        <!-- START top navbar links -->
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+            </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="index.php" class="nav-link">Accueil</a>
+            </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="test-index.php" class="nav-link">Test-index</a>
+            </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="blankpage.html" class="nav-link">Blankpage</a>
+            </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="installation.html" class="nav-link">Installation</a>
+            </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="#" class="nav-link">Discord</a>
+            </li>
+        </ul>
+        <!-- END top navbar left links -->
+        <!-- START top navbar right links -->
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <button type="button" class="btn btn-info float-right" data-toggle="modal" data-target="#modalYT1">Logs
+                    SSD
+                </button>
+            </li>
+            <!-- END top navbar right links -->
+        </ul>
+    </nav>
+    <!--Start content modal 2-->
+    <div class="modal fade" id="modalYT1" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Logs du serveur</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="embed-responsive embed-responsive-16by9 z-depth-1-half">
+                        <iframe class="embed-responsive-item" src="logtail/" allowfullscreen></iframe>
+                    </div>
+                </div>
+                <div class="modal-footer float-right">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--End content modal 2-->
+
+    <!-- Modal: modalPoll -->
+    <div class="modal fade right" id="modalPoll" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true" data-backdrop="false">
+        <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
+            <div class="modal-content">
+                <!--Header-->
+                <div class="modal-header">
+                    <p class="heading lead">Installation de l'application <span id="nomappliencours"></span>
+                    </p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="white-text">×</span>
+                    </button>
+                </div>
+                <!--Body-->
+                <div class="modal-body post">
+                    <!-- Checkbox -->
+                    <div class="checkbox">
+                        <input type="checkbox" id="myCheck" class="check_install"> Sous Domaines Personalisés
+                    </div>
+                    <!-- Checkbox -->
+                    <div>
+                        <p></p>
+                        <p id="text" style="display:none">Nom du sous domaine</p>
+                        <input type="text" id="subdomain" class="form-control" style="display:none"
+                               placeholder="Enter ..."></input>
+                    </div>
+                </div>
+                <!--Footer-->
+                <div class="modal-footer justify-content-center">
+                    <button type="submit" id="validation_install_appli" class="btn-success bouton-install" data-appli=""
+                            data-subdomain="">Installer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal: modalPoll -->
+
+    <!-- Modal: seedbox -->
+    <div class="modal fade right" id="seedbox" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true" data-backdrop="false">
+        <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
+            <div class="modal-content">
+                <!--Header-->
+                <div class="modal-header">
+                    <p class="heading lead">Information Utilisateur
+                    </p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="white-text">×</span>
+                    </button>
+                </div>
+                <!--Body-->
+                <div class="modal-body post">
+
+                    <div class="form-group mx-sm-3 mb-2">
+                        <label for="utilisateur">Nom d utilisateur</label>
+                        <input type="text" class="form-control" id="utilisateur" placeholder="Enter...">
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                        <label for="passe">Passe</label>
+                        <input type="password" class="form-control" id="passe" placeholder="Enter...">
+                    </div>
+
+                    <div class="form-group mx-sm-3 mb-2">
+                        <label for="email">Email</label>
+                        <input type="text" class="form-control" id="email" placeholder="Enter...">
+                    </div>
+
+                    <div class="form-group mx-sm-3 mb-2">
+                        <label for="domaine">Domaine</label>
+                        <input type="text" class="form-control" id="domaine" placeholder="Enter...">
                     </div>
                     <div class="modal-body">
-                        <div class="embed-responsive embed-responsive-16by9 z-depth-1-half">
-                            <iframe class="embed-responsive-item" src="logtail/" allowfullscreen></iframe>
+                        <!-- Checkbox -->
+                        <div class="checkbox">
+                            <input type="checkbox" id="plex" class="plex_install"> Utilisateurs Plex
                         </div>
-                    </div>
-                    <div class="modal-footer float-right">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--End content modal 2-->
+                        <!-- Checkbox -->
+                        <div id="formBlockPlex" style="display:none">
 
-        <!-- Modal: modalPoll -->
-        <div class="modal fade right" id="modalPoll" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-          aria-hidden="true" data-backdrop="false">
-          <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
-            <div class="modal-content">
-              <!--Header-->
-              <div class="modal-header">
-                <p class="heading lead">Installation de l'application <span id="nomappliencours"></span>
-                </p>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true" class="white-text">×</span>
-                </button>
-              </div>
-              <!--Body-->
-              <div class="modal-body post">
-                <!-- Checkbox -->
-                <div class="checkbox">
-                    <input type="checkbox" id="myCheck" class="check_install">  Sous Domaines Personalisés
-                </div>
-                <!-- Checkbox -->
-                <div>
-                   <p></p>
-                   <p id="text" style="display:none">Nom du sous domaine</p>
-                   <input type="text" id="subdomain" class="form-control" style="display:none" placeholder="Enter ..."></input>
-                </div>
-              </div>
-              <!--Footer-->
-              <div class="modal-footer justify-content-center">
-                 <button type="submit" id="validation_install_appli" class="btn-success bouton-install" data-appli="" data-subdomain="">Installer</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Modal: modalPoll -->
-
-        <!-- Modal: seedbox -->
-        <div class="modal fade right" id="seedbox" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-          aria-hidden="true" data-backdrop="false">
-          <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
-            <div class="modal-content">
-              <!--Header-->
-              <div class="modal-header">
-                <p class="heading lead">Information Utilisateur
-                </p>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true" class="white-text">×</span>
-                </button>
-              </div>
-              <!--Body-->
-              <div class="modal-body post">
-                    <div class="form-group mb-2>
-                      <label class="sr-only"></label>
-                      <input type="text" class="form-control-plaintext" value="Nom d utilisateur">
-                    </div>
-                    <div class="form-group mx-sm-3 mb-2">
-                      <label for="utilisateur" class="sr-only"></label>
-                      <input type="text" class="form-control" id="utilisateur" placeholder="Enter...">
-                    </div>
-                    <div class="form-group mb-2">
-                      <label class="sr-only"></label>
-                      <input type="text" class="form-control-plaintext" value="Passe">
-                    </div>
-                    <div class="form-group mx-sm-3 mb-2">
-                      <label for="passe" class="sr-only"></label>
-                      <input type="password" class="form-control" id="passe" placeholder="Enter...">
-                    </div>
-                    <div class="form-group mb-2>
-                      <label class="sr-only"></label>
-                      <input type="text" class="form-control-plaintext" value="Email">
-                    </div>
-                    <div class="form-group mx-sm-3 mb-2">
-                      <label for="email" class="sr-only"></label>
-                      <input type="text" class="form-control" id="email" placeholder="Enter...">
-                    </div>
-                    <div class="form-group mb-2>
-                      <label class="sr-only"></label>
-                      <input type="text" class="form-control-plaintext" value="Domaine">
-                    </div>
-                    <div class="form-group mx-sm-3 mb-2">
-                      <label for="domaine" class="sr-only"></label>
-                      <input type="text" class="form-control" id="domaine" placeholder="Enter...">
-                    </div>
-                    <div class="modal-body">
-                    <!-- Checkbox -->
-                    <div class="checkbox">
-                      <input type="checkbox" id="plex" class="plex_install">  Utilisateurs Plex
-                    </div>
-                    <!-- Checkbox -->
-                    <div>
-                    <p></p>
-                    <p id="user_text" style="display:none">Nom d'utilisateur Plex</p>
-                      <input type="text" class="form-control" id="idplex" style="display:none" placeholder="Enter ..."></input>
-                    </div>
-                    <div>
-                    <p></p>
-                       <p id="pass_text" style="display:none">Mot de passe Plex</p>
-                       <input type="password" class="form-control" id="passplex" style="display:none" placeholder="Enter ..."></input>
-                    </div>
-                    <p></p>
-                    <!-- Checkbox -->
-                    <div class="checkbox">
-                      <input type="checkbox" id="cloud" class="cloudflare_install">  Cloudflare
-                    </div>
-                    <!-- Checkbox -->
-                    <div>
-                    <p></p>
-                    <p id="idcloud_text" style="display:none">Mail Cloudflare</p>
-                      <input type="text" class="form-control" id="idcloud" style="display:none" placeholder="Enter ..."></input>
-                    </div>
-                    <div>
-                    <p></p>
-                       <p id="passcloud_text" style="display:none">Mot de passe Cloudflare</p>
-                       <input type="text" class="form-control" id="passcloud" style="display:none" placeholder="Enter ..."></input>
-                    </div>
-                    <p></p>
-                    <!-- Checkbox -->
-                    <div class="checkbox">
-                      <input type="checkbox" id="oauth" class="oauth_install">  Google OAuth 2.0
-                    </div>
-                    <!-- Checkbox -->
-                    <div>
-                    <p></p>
-                    <p id="idoauth_text" style="display:none">Client OAuth 2.0</p>
-                      <input type="text" class="form-control" id="idoauth" style="display:none" placeholder="Enter ..."></input>
-                    </div>
-                    <div>
-                    <p></p>
-                       <p id="clientoauth_text" style="display:none">Secret OAuth 2.0</p>
-                       <input type="text" class="form-control" id="clientoauth" style="display:none" placeholder="Enter ..."></input>
-                    </div>
-                    <p></p>
-                       <p id="mailoauth_text" style="display:none">Mail(s) OAuth 2.0 Autorisé(s)</p>
-                       <input type="text" class="form-control" id="mailoauth" style="display:none" placeholder="Enter ..."></input>
-                    </div>
-              </div>
-              <!--Footer-->
-                  <div class="modal-footer justify-content-center">
-                    <button id="validation" class="btn-success">Valider</button>
-                  </div>
-            
-            </div>
-          </div>
-        </div>
-        <!-- Modal: seedbox -->
+                            <label for="idplex">Nom d'utilisateur Plex</label>
+                            <input type="text" class="form-control" id="idplex" 
+                                   placeholder="Enter ..."></input>
 
 
-        <!-- Main Sidebar Container -->
-        <aside class="main-sidebar sidebar-dark-primary elevation-4">
-            <!-- Brand Logo -->
-            <a href="index.php" class="brand-link">
-                <img src="dist/img/AdminLTELogo.png" alt="SSD Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-                <span class="brand-text font-weight-light">Script Seedbox Docker</span>
-            </a>
-
-            <!-- Sidebar -->
-            <div class="sidebar">
-                <!-- Sidebar Menu -->
-                <nav class="mt-2">
-                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                        <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
-                        <li class="nav-item">
-                            <a href="index.php" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p>
-                                    Accueil
-                                </p>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-                <!-- /.sidebar-menu -->
-            </div>
-            <!-- /.sidebar -->
-        </aside>
-
-        <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
-            <section class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-3">
-                        <div class="col-sm-6">
-                            <h1>
-                                {{ TITRE }}
-                            </h1>
-                        </div>
-
-                        <div class="col-sm-6">
-                            <ol class="breadcrumb float-sm-right">
-                                <button type="button" class="btn btn-default install-modal">Informations Utilisateur</button>                            
-                           </ol>
+                            <label for="passplex">Mot de passe Plex</label>
+                            <input type="password" class="form-control" id="passplex" 
+                                   placeholder="Enter ..."></input>
 
                         </div>
+                        <!-- Checkbox -->
+                        <div class="checkbox">
+                            <input type="checkbox" id="cloud" class="cloudflare_install"> Cloudflare
+                        </div>
+                        <!-- Checkbox -->
+                        <div id="formBlockCloudflare" style="display:none">
+                        <div>
+
+                             <label for="idcloud">Mail Cloudflare</label>
+                            <input type="text" class="form-control" id="idcloud" 
+                                   placeholder="Enter ..."></input>
+                        </div>
+                        <div>
+  
+                            <label for="passcloud">Mot de passe Cloudflare</label>
+                            <input type="text" class="form-control" id="passcloud" 
+                                   placeholder="Enter ..."></input>
+                        </div>
+                        </div>
+                        <!-- Checkbox -->
+                        <div class="checkbox">
+                            <input type="checkbox" id="oauth" class="oauth_install"> Google OAuth 2.0
+                        </div>
+                        <!-- Checkbox -->
+                        <div id="formBlockOauth" style="display:none">
+                        <div>
+                            <label for="idoauth">Client OAuth 2.0</label>
+                            <input type="text" class="form-control" id="idoauth" 
+                                   placeholder="Enter ..."></input>
+                        </div>
+                        <div>
+                            <label for="clientoauth">Secret OAuth 2.0</label>
+                            <input type="text" class="form-control" id="clientoauth" 
+                                   placeholder="Enter ..."></input>
+                        </div>
+                        <label for="mailoauth">Mail(s) OAuth 2.0 Autorisé(s)</label>
+                        
+                        <input type="text" class="form-control" id="mailoauth" 
+                               placeholder="Enter ..."></input>
+                               </div>
                     </div>
                 </div>
-            </section>
+                <!--Footer-->
+                <div class="modal-footer justify-content-center">
+                    <button id="validation" class="btn btn-success">Valider</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Modal: seedbox -->
+
+
+    <!-- Main Sidebar Container -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        <!-- Brand Logo -->
+        <a href="index.php" class="brand-link">
+            <img src="dist/img/AdminLTELogo.png" alt="SSD Logo" class="brand-image img-circle elevation-3"
+                 style="opacity: .8">
+            <span class="brand-text font-weight-light">Script Seedbox Docker</span>
+        </a>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- Sidebar Menu -->
+            <nav class="mt-2">
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                    data-accordion="false">
+                    <!-- Add icons to the links using the .nav-icon class
+           with font-awesome or any other icon font library -->
+                    <li class="nav-item">
+                        <a href="index.php" class="nav-link">
+                            <i class="nav-icon fas fa-th"></i>
+                            <p>
+                                Accueil
+                            </p>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <!-- /.sidebar-menu -->
+        </div>
+        <!-- /.sidebar -->
+    </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-3">
+                    <div class="col-sm-6">
+                        <h1>
+                            {{ TITRE }}
+                        </h1>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <button type="button" class="btn btn-default install-modal">Informations Utilisateur
+                            </button>
+                        </ol>
+
+                    </div>
+                </div>
+            </div>
+        </section>

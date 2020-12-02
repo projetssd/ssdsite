@@ -77,54 +77,30 @@ $(document).ready(function() {
 
     $(".plex_install").click(function() {
         if ($('#plex').is(':checked')) {
-            $("#user_text").show();
-            $("#idplex").show();
-            $("#pass_text").show();
-            $("#passplex").show();
+            $("#formBlockPlex").show();
         }
         else {
-            $("#user_text").hide();
-            $("#idplex").hide();
-            $("#pass_text").hide();
-            $("#passplex").hide();
+            $("#formBlockPlex").hide();
         }
     });
 
     $(".cloudflare_install").click(function() {
         if ($('#cloud').is(':checked')) {
-            $("#idcloud_text").show();
-            $("#idcloud").show();
-            $("#passcloud_text").show();
-            $("#passcloud").show();
+            $("#formBlockCloudflare").show();
         }
         else {
-            $("#idcloud_text").hide();
-            $("#idcloud").hide();
-            $("#passcloud_text").hide();
-            $("#passcloud").hide();
+            $("#formBlockCloudflare").hide();
         }
     });
-
-    $(".oauth_install").click(function() {
+     $(".oauth_install").click(function() {
         if ($('#oauth').is(':checked')) {
-            $("#idoauth_text").show();
-            $("#idoauth").show();
-            $("#clientoauth_text").show();
-            $("#clientoauth").show();
-            $("#mailoauth_text").show();
-            $("#mailoauth").show();
-
+            $("#formBlockOauth").show();
         }
         else {
-            $("#idoauth_text").hide();
-            $("#idoauth").hide();
-            $("#clientoauth_text").hide();
-            $("#clientoauth").hide();
-            $("#clientoauth").hide();
-            $("#mailoauth_text").hide();
-            $("#mailoauth").hide();
+            $("#formBlockOauth").hide();
         }
     });
+
 
     $(".install-modal").click(function() {
         $('#seedbox').modal('show');
