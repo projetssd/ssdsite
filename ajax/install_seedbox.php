@@ -1,5 +1,5 @@
 <?php
-require_once "../php/classes/utilisateur.php";
+require_once __DIR__ . '/../includes/header.php';
 
 $utilisateur = $_GET['utilisateur'];
 $passe       = $_GET['passe'];

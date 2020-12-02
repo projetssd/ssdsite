@@ -141,13 +141,19 @@ $(document).ready(function() {
     
     $("#validation").click(function() {
         $("#formUserConfigure").validate();
-        $("#utilisateur").rules("add", {required:true});
-        $("#passe").rules("add", {required:true});
-        $("#email").rules("add", {
-            required:true,
-            email: true
+       
+        
+        
+        /**$("#idplex").rules("add", {
+            required: {
+            depends: function(element) {
+                return $('#plex').is(":checked");
+            }
+        }
+            
+            
         });
-        alert( "Valid: " + $("#formUserConfigure").valid() );
+            */
         if ($("#validation").html() === "Valider") {
             //$('#seedbox').modal('hide');
             if ($("#utilisateur").val() !== "") {

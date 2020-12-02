@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../includes/header.php';
 $df = disk_free_space('/');
 $dt = disk_total_space('/');
 $du = $dt - $df;
