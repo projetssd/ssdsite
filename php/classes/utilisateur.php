@@ -46,6 +46,9 @@ class utilisateur
      */
     function configure($passe, $email, $domaine, $idplex, $passplex, $idcloud, $passcloud, $idoauth, $clientoauth, $mailoauth)
     {
+        $log = new log;
+        $log->writelog("-----------------",'DEBUG');
+        $log->writelog("Configure " . $this->utilisateur,'DEBUG');
         /**
          * Alors là, on attaque une BASE de tout ce qui est langage serveur
          * ON NE PEUT PAS FAIRE CONFIANCE A CE QUE NOUS DONNE L'UTILUSATEUR :)
@@ -90,12 +93,17 @@ class utilisateur
             {
                 $commande .= '"' . $$key . '" ';
             }
+            $log->writelog("Lancé","DEBUG");
+            $log->writelog("Commande : " . $commande,"DEBUG");
             shell_exec($commande);
             $tab_retour = array("verif" => true, "commande" => $commande);
         } else
         {
+            $log->writelog("Non lancé, manque parametre","DEBUG");
+
             // on est dans le cas où on ne doit rien faire
             $tab_retour = array("verif" => false, "detail" => $tab_params);
+            $log->writelog(print_r($tab_retour,true),"DEBUG");
         }
         // on va maintenant générer un affichage
         // ce sera un tableau json qui sera interprété par le ajax

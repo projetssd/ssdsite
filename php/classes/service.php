@@ -343,7 +343,10 @@ class service
         on ne stocke donc aucune info
         les infos seront lues dans le défilement des logs */
         $this->command_install .= " " . $subdomain;
-        echo "commande " . $this->command_install;
+        $log = new log;
+        $log->writelog("-----------------",'DEBUG');
+        $log->writelog("Installation " . $this->display_name,'DEBUG');
+        $log->writelog("Commande " . $this->command_install,'DEBUG');
         shell_exec($this->command_install);
 
         return true;
@@ -356,6 +359,10 @@ class service
      */
     public function uninstall()
     {
+        $log = new log;
+        $log->writelog("-----------------",'DEBUG');
+        $log->writelog("Désinstall " . $this->display_name,'DEBUG');
+        $log->writelog("Commande " . $this->command_uninstall,'DEBUG');
         shell_exec($this->command_uninstall);
 
         return true;
@@ -368,14 +375,20 @@ class service
      */
     public function restart()
     {
+        $log = new log;
+        $log->writelog("-----------------",'DEBUG');
+        $log->writelog("Restart " . $this->display_name,'DEBUG');
+
         if ($this->check())
         {
             // le service tourne, on va redémarrer
             shell_exec($this->command_restart);
+            $log->writelog("Commande " . $this->command_restart,'DEBUG');
         } else
         {
             // le service ne tourne pas, on le démarre
             shell_exec($this->command_start);
+            $log->writelog("Commande " . $this->command_start,'DEBUG');
         }
 
         return true;
@@ -388,6 +401,10 @@ class service
      */
     public function stop()
     {
+        $log = new log;
+        $log->writelog("-----------------",'DEBUG');
+        $log->writelog("Stop " . $this->display_name,'DEBUG');
+        $log->writelog("Commande " . $this->command_stop,'DEBUG');
         shell_exec($this->command_stop);
 
         return true;
