@@ -341,9 +341,7 @@ $(document).ready(function() {
                 $("#status-" + appli).html("Erreur ajax");
             });
         }
-        else {
-            console.log('Erreur sur le texte du bouton, impossible de continuer');
-        }
+        
 
     });
 
