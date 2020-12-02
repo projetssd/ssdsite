@@ -3,6 +3,20 @@
 # Gestion des services SSD
 ########################################
 
+function log()
+{
+  DATE=$(date +"%d/%m/%y %T")
+  if [ $# -eq 1 ]
+  then
+    MESSAGE=$1
+    TYPE='INFO'
+  else
+    MESSAGE=$1
+    TYPE=$2
+  fi
+  echo "${DATE} - ${TYPE} - ${MESSAGE} \n" >> test
+
+}
 
 function configure() {
 ACCOUNT=/opt/seedbox/variables/account.yml
@@ -50,7 +64,8 @@ ansible-vault encrypt /opt/seedbox/variables/account.yml > /dev/null 2>&1
 }
 
 function install() {
-    LOGFILE=/var/www/lastharo/logtail/log
+    DIRNAME=$(dirname $0)
+    LOGFILE=${DIRNAME}/logtail/log
     rm -f $LOGFILE
 
     source /opt/seedbox-compose/includes/variables.sh

@@ -10,6 +10,7 @@ class log
     {
         $date = date('d/m/Y H:i:s');
         $datefichier = date('Ymd');
-        error_log($date . " - " . $type . " - " . $message,3,__DIR__ . '/../../logs/ssdsite-' . $datefichier . '.log');
+        error_log($date . " - " . $type . " - " . $message . PHP_EOL,3,__DIR__ . '/../../logs/ssdsite-' . $datefichier .
+                                                                    '.log');
     }
 }
