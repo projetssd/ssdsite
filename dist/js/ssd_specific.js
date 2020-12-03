@@ -107,7 +107,7 @@ $(document).ready(function() {
     });
 
     $(".rclone-modal").click(function() {
-        $('#rclone').modal('show');
+        $('#rclone_token').modal('show');
     });
 
     $(".affichage-modal").click(function() {
@@ -277,6 +277,7 @@ $(document).ready(function() {
                              * Ici il faut faire les actions de réussite
                              */
                             $('#seedbox').modal('hide');
+                            $('#rclone').modal('show');
                             toastr.success('Installation lancée');
                         }
                         else {
@@ -327,6 +328,34 @@ $(document).ready(function() {
                 // la requête est passée
                 // console.log("result " + data);
                 $('#rclone').modal('hide');
+                $('#rclone_token').modal('show');
+                window.open('https://accounts.google.com/o/oauth2/auth?client_id=' + client + '&redirect_uri=urn:ietf:wg:oauth:2.0:oob&scope=https://www.googleapis.com/auth/drive&response_type=code', '_blank');
+            }).fail(function() {
+                console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+            });
+    });
+
+    // on va intercepter le click sur le bouton sur le modal rclone
+    $("#rclone_token_valid").click(function() {
+            if ($("#token").val() !== "") {
+                console.log('token n est pas vide');
+                var token = $("#token").val();
+                console.log('token a la valeur ' + token);
+                var drive = $('input[type=radio][name=drive]:checked').attr('value');
+                console.log('drive a la valeur ' + drive);
+                var drivename = $("#drivename").val();
+                console.log('drivename a la valeur ' + drivename);
+            }
+            else {
+                console.log('TOKEN est VIDE !');
+            }
+            $.ajax({
+                url: "ajax/install_token.php?token=" + token + "&drive=" + drive + "&drivename=" + drivename
+            }).done(function(data) {
+                // On est dans le done, tout est ok
+                // la requête est passée
+               $('#rclone_token').modal('hide');
+                console.log("result " + data);
             }).fail(function() {
                 console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
             });

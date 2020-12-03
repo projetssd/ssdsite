@@ -267,6 +267,60 @@
     <!-- Modal: rclone -->
 
 
+    <!-- Modal: token -->
+    <div class="modal fade right" id="rclone_token" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true" data-backdrop="false">
+        <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
+            <div class="modal-content">
+                <!--Header-->
+
+                <div class="modal-header">
+                    <p class="heading lead">Installation Rclone
+                    </p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="white-text">×</span>
+                    </button>
+                </div>
+                <!--Body-->
+                <div class="modal-body">
+                    <!-- Radio -->
+                    <div class="form-check-inline mb-4">
+                            <input class="form-check-input" name="drive" type="radio" id="gdrive" value="gdrive" checked>
+                            <label class="form-check-label" for="gdrive">gdrive</label>
+                    </div>
+
+                    <div class="form-check-inline mb-4">
+                        <input class="form-check-input" name="drive" type="radio" id="sharedrive" value="sharedrive">
+                        <label class="form-check-label" for="sharedrive">Sharedrive</label>
+                    </div>
+                    <!-- Radio -->
+
+                    <!--Basic textarea-->
+
+                    <div>
+                    <p></p>
+                    <p id="text">Nom du Gdrive - Share Drive</p>
+                    <input type="text" id="drivename" class="form-control"
+                           placeholder="Enter ..."></input>
+                    </div>
+
+                    <div>
+                    <p></p>
+                    <p id="text">Coller le token
+                    <input type="text" id="token" class="form-control"
+                           placeholder="Enter ..."></input>
+                    </div>
+
+                </div>
+                <!--Footer-->
+                <div class="modal-footer justify-content-center">
+                      <button type="submit" id="rclone_token_valid" class="btn btn-success"
+                            >Valider</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal: token -->
 
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
