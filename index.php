@@ -34,8 +34,9 @@ $js = array(
     'sweetalert2.min.js',
     'ssd_specific.js',
     'https://cdn.jsdelivr.net/npm/jquery-validation@1.19.2/dist/jquery.validate.js',
-    'https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/localization/messages_fr.min.js'
-    );
+    'https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/localization/messages_fr.min.js',
+    'changetheme.js'
+);
     
 // css utilisés
 $css = array(
