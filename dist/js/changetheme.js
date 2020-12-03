@@ -6,25 +6,29 @@ $(".changetheme").click(function () {
     console.log("Theme choisi " + theme);
     switch (theme) {
         case "adminlte":
-            $('link[href="dist/js/dashboard.min.css"]').remove();
-            $('link[href="dist/js/darkly.min.css"]').remove();
-            $('link[href="dist/js/material.min.css"]').remove();
+            $('link[href="dist/css/dashboard.min.css"]').prop('disabled', true);
+            $('link[href="dist/css/darkly.min.css"]').prop('disabled', true);
+            $('link[href="dist/css/material.min.css"]').prop('disabled', true);
+            $("#content-global").css("background","#f4f6f9");
             break;
         case "darkly":
-            $('link[href="dist/js/dashboard.min.css"]').remove();
-            $('link[href="dist/js/material.min.css"]').remove();
-            $('link[href="dist/js/adminlte.min.css"]').remove();
+            $('link[href="dist/css/dashboard.min.css"]').prop('disabled', true);
+            $('link[href="dist/css/material.min.css"]').prop('disabled', true);
+            //$('link[href="dist/js/adminlte.min.css"]').remove();
+            $("#content-global").css("background","#000000");
             break;
         case "material":
-            $('link[href="dist/js/dashboard.min.css"]').remove();
-            $('link[href="dist/js/darkly.min.css"]').remove();
-            $('link[href="dist/js/adminlte.min.css"]').remove();
+            $('link[href="dist/css/dashboard.min.css"]').prop('disabled', true);
+            $('link[href="dist/css/darkly.min.css"]').prop('disabled', true);
+           // $('link[href="dist/js/adminlte.min.css"]').remove();
+           $("#content-global").css("background","#f4f6f9");
             break;
         case "dashboard":
-            $('link[href="dist/js/darkly.min.css"]').remove();
-            $('link[href="dist/js/material.min.css"]').remove();
-            $('link[href="dist/js/adminlte.min.css"]').remove();
+            $('link[href="dist/css/darkly.min.css"]').prop('disabled', true);
+            $('link[href="dist/css/material.min.css"]').prop('disabled', true);
+            //$('link[href="dist/css/adminlte.min.css"]').remove();
+            $("#content-global").css("background","#f4f6f9");
             break;
     }
-    $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', 'dist/js' + theme + '.min.css'));
+    $('head').append($('<link rel="stylesheet" type="text/css" />').attr('href', 'dist/css/' + theme + '.min.css'));
 });
