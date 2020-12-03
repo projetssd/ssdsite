@@ -21,27 +21,27 @@ function writelog()
 }
 
 function credential() {
-mkdir -p /opt/seedbox/rclone
-echo $1 > /opt/seedbox/rclone/client
-echo $2 > /opt/seedbox/rclone/secret
+  mkdir -p /opt/seedbox/rclone
+  echo $1 > /opt/seedbox/rclone/client
+  echo $2 > /opt/seedbox/rclone/secret
 }
 
 function createtoken() {
-logfile=/opt/seedbox/rclone/log
+  logfile=/opt/seedbox/rclone/log
 
-client=$(cat /opt/seedbox/rclone/client)
-secret=$(cat /opt/seedbox/rclone/secret)
-curl --request POST --data "code=$1&client_id=$client&client_secret=$secret&redirect_uri=urn:ietf:wg:oauth:2.0:oob&grant_type=authorization_code" https://accounts.google.com/o/oauth2/token | sudo tee $logfile 2>/dev/null >/dev/null &
+  client=$(cat /opt/seedbox/rclone/client)
+  secret=$(cat /opt/seedbox/rclone/secret)
+  curl --request POST --data "code=$1&client_id=$client&client_secret=$secret&redirect_uri=urn:ietf:wg:oauth:2.0:oob&grant_type=authorization_code" https://accounts.google.com/o/oauth2/token | sudo tee $logfile 2>/dev/null >/dev/null &
 
-sleep 2
-accesstoken=$(cat $logfile | grep access_token | awk '{print $2}')
-refreshtoken=$(cat $logfile | grep refresh_token | awk '{print $2}')
-rcdate=$(date +'%Y-%m-%d')
-rctime=$(date +"%H:%M:%S" --date="$givenDate 60 minutes")
-rczone=$(date +"%:z")
-final=$(echo "${rcdate}T${rctime}${rczone}")
-ramdom=$(head /dev/urandom | tr -dc A-Za-z | head -c 8 > /opt/seedbox/rclone/chaine)
-chaine=$(cat /opt/seedbox/rclone/chaine)
+  sleep 2
+  accesstoken=$(cat $logfile | grep access_token | awk '{print $2}')
+  refreshtoken=$(cat $logfile | grep refresh_token | awk '{print $2}')
+  rcdate=$(date +'%Y-%m-%d')
+  rctime=$(date +"%H:%M:%S" --date="$givenDate 60 minutes")
+  rczone=$(date +"%:z")
+  final=$(echo "${rcdate}T${rctime}${rczone}")
+  ramdom=$(head /dev/urandom | tr -dc A-Za-z | head -c 8 > /opt/seedbox/rclone/chaine)
+  chaine=$(cat /opt/seedbox/rclone/chaine)
 
 if [[ "$2" == "sharedrive" ]]; then 
   curl --request POST \
