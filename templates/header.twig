@@ -154,17 +154,17 @@
                 <div class="modal-body post">
 
 
-                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <ul class="nav nav-tabs" id="tab-instsall-navigation" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#tab-utilisateur"
+                            <a class="nav-link active" id="link-home-tab" data-toggle="tab" href="#tab-utilisateur"
                                role="tab-utilisateur" aria-controls="home" aria-selected="true">Utilisateur</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#tab-rclone" role="tab"
+                            <a class="nav-link disabled" id="link-rclone-tab" data-toggle="tab" href="#tab-rclone" role="tab"
                                aria-controls="tab-rclone" aria-selected="false">Rclone</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab-gdrive" role="tab"
+                            <a class="nav-link disabled" id="link-gdrive-tab" data-toggle="tab" href="#tab-gdrive" role="tab"
                                aria-controls="tab-gdrive" aria-selected="false">Gdrive</a>
                         </li>
                     </ul>
@@ -181,7 +181,9 @@
 
                 </div>
                 <div class="modal-footer justify-content-center">
-                    <button id="validation" class="btn btn-success">Valider</button>
+                    <button id="retour-validation" data-step="1" class="btn btn-success" style="display:none;">Précédent</button>
+                    &nbsp;
+                    <button id="install-validation" data-step="1" class="btn btn-success">Valider</button>
                 </div>
             </div>
         </div>
