@@ -53,7 +53,23 @@
         </ul>
         <!-- END top navbar left links -->
         <!-- START top navbar right links -->
+
+
         <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    Theme
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="changetheme dropdown-item" data-theme="adminlte">Classique</a>
+                    <!--<a class="changetheme dropdown-item" data-theme="knightone">Knightone</a>
+                    <a class="changetheme dropdown-item" data-theme="circular">Circular</a>-->
+                    <a class="changetheme dropdown-item" data-theme="material">Material</a>
+                    <a class="changetheme dropdown-item" data-theme="darkly">Dark</a>
+                </div>
+            </li>
+
             <li class="nav-item">
                 <button type="button" class="btn btn-info float-right" data-toggle="modal" data-target="#modalYT1">Logs
                     SSD
@@ -348,6 +364,7 @@
                         </a>
                     </li>
                 </ul>
+
             </nav>
             <!-- /.sidebar-menu -->
         </div>
@@ -355,7 +372,7 @@
     </aside>
 
     <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
+    <div class="content-wrapper" id="content-global">
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <div class="container-fluid">
