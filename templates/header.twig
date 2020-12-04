@@ -53,30 +53,23 @@
         </ul>
         <!-- END top navbar left links -->
         <!-- START top navbar right links -->
-        
+
 
         <ul class="navbar-nav ml-auto">
-           <li class="nav-item">
-                <button type="button"  data-theme="adminlte" class="changetheme btn btn-secondary float-right">
-                    Classique
-                </button>
-            </li> 
-            <li class="nav-item">
-                <button type="button"  data-theme="dashboard" class="changetheme btn btn-secondary float-right">
-                    Dashboard
-                </button>
-            </li> 
-            <li class="nav-item">
-                <button type="button"  data-theme="material" class="changetheme btn btn-secondary float-right">
-                    Material
-                </button>
-            </li> 
-            <li class="nav-item">
-                <button type="button"  data-theme="darkly" class="changetheme btn btn-secondary float-right">
-                    Dark
-                </button>
-            </li> 
-            <li>&nbsp;</li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    Theme
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="changetheme dropdown-item" data-theme="adminlte">Classique</a>
+                    <a class="changetheme dropdown-item" data-theme="knightone">Knightone</a>
+                    <a class="changetheme dropdown-item" data-theme="circular">Circular</a>
+                    <a class="changetheme dropdown-item" data-theme="material">Material</a>
+                    <a class="changetheme dropdown-item" data-theme="darkly">Dark</a>
+                </div>
+            </li>
+
             <li class="nav-item">
                 <button type="button" class="btn btn-info float-right" data-toggle="modal" data-target="#modalYT1">Logs
                     SSD
