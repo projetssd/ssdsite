@@ -104,7 +104,7 @@
         <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
             <div class="modal-content">
                 <!--Header-->
-                
+
                 <div class="modal-header">
                     <p class="heading lead">Installation de l'application <span id="nomappliencours"></span>
                     </p>
@@ -129,7 +129,8 @@
                 <!--Footer-->
                 <div class="modal-footer justify-content-center">
                     <button type="submit" id="validation_install_appli" class="btn-success bouton-install" data-appli=""
-                            data-subdomain="">Installer</button>
+                            data-subdomain="">Installer
+                    </button>
                 </div>
             </div>
         </div>
@@ -139,256 +140,130 @@
     <!-- Modal: seedbox -->
     <div class="modal fade right" id="seedbox" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true" data-backdrop="false">
-        <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
+        <div class="modal-dialog modal-full-height modal-lg" role="document">
             <div class="modal-content">
-                <!--Header-->
-                <form id="formUserConfigure" action="javascript:void(0);">
+                
                 <div class="modal-header">
-                    <p class="heading lead">Information Utilisateur
+                    <p class="heading lead">Installation seedbox
                     </p>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true" class="white-text">×</span>
                     </button>
                 </div>
-                <!--Body-->
+
                 <div class="modal-body post">
 
-                    <div class="form-group mx-sm-3 mb-2">
-                        <label for="utilisateur">Nom d utilisateur</label>
-                        <input type="text" class="form-control" id="utilisateur" name="utilisateur" placeholder="Enter...">
+
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#tab-utilisateur"
+                               role="tab-utilisateur" aria-controls="home" aria-selected="true">Utilisateur</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#tab-rclone" role="tab"
+                               aria-controls="tab-rclone" aria-selected="false">Rclone</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tab-gdrive" role="tab"
+                               aria-controls="tab-gdrive" aria-selected="false">Gdrive</a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="tab-utilisateur" role="tabpanel"
+                             aria-labelledby="home-tab">{% include "blocks/modal_install_etape1.twig" %}</div>
+                        <div class="tab-pane fade" id="tab-rclone" role="tabpanel"
+                             aria-labelledby="profile-tab">{% include "blocks/modal_install_etape2.twig" %}</div>
+                        <div class="tab-pane fade" id="tab-gdrive" role="tabpanel"
+                             aria-labelledby="contact-tab">{% include "blocks/modal_install_etape3.twig" %}</div>
                     </div>
-                    <div class="form-group mx-sm-3 mb-2">
-                        <label for="passe">Passe</label>
-                        <input type="password" class="form-control" id="passe" name="passe" placeholder="Enter...">
-                    </div>
-
-                    <div class="form-group mx-sm-3 mb-2">
-                        <label for="email">Email</label>
-                        <input type="text" class="form-control" name="email" id="email" placeholder="Enter...">
-                    </div>
-
-                    <div class="form-group mx-sm-3 mb-2">
-                        <label for="domaine">Domaine</label>
-                        <input type="text" class="form-control" id="domaine" name="domaine" placeholder="Enter...">
-                    </div>
-                    <div class="modal-body">
-                        <!-- Checkbox -->
-                        <div class="checkbox">
-                            <input type="checkbox" id="plex" name="plex" class="plex_install"> Utilisateurs Plex
-                        </div>
-                        <!-- Checkbox -->
-                        <div id="formBlockPlex" style="display:none">
-
-                            <label for="idplex">Nom d'utilisateur Plex</label>
-                            <input type="text" class="form-control" id="idplex"  name="idplex"
-                                   placeholder="Enter ..."></input>
 
 
-                            <label for="passplex">Mot de passe Plex</label>
-                            <input type="password" class="form-control" id="passplex"  name="passplex"
-                                   placeholder="Enter ..."></input>
-
-                        </div>
-                        <!-- Checkbox -->
-                        <div class="checkbox">
-                            <input type="checkbox" id="cloud" name="cloud" class="cloudflare_install"> Cloudflare
-                        </div>
-                        <!-- Checkbox -->
-                        <div id="formBlockCloudflare" style="display:none">
-                        <div>
-
-                             <label for="idcloud">Mail Cloudflare</label>
-                            <input type="text" class="form-control" id="idcloud"  name="idcloud"
-                                   placeholder="Enter ..."></input>
-                        </div>
-                        <div>
-  
-                            <label for="passcloud">Mot de passe Cloudflare</label>
-                            <input type="password" class="form-control" id="passcloud" name="passcloud"
-                                   placeholder="Enter ..."></input>
-                        </div>
-                        </div>
-                        <!-- Checkbox -->
-                        <div class="checkbox">
-                            <input type="checkbox" id="oauth" name="oauth" class="oauth_install"> Google OAuth 2.0
-                        </div>
-                        <!-- Checkbox -->
-                        <div id="formBlockOauth" style="display:none">
-                        <div>
-                            <label for="idoauth">Client OAuth 2.0</label>
-                            <input type="text" class="form-control" id="idoauth" name="idoauth"
-                                   placeholder="Enter ..."></input>
-                        </div>
-                        <div>
-                            <label for="clientoauth">Secret OAuth 2.0</label>
-                            <input type="text" class="form-control" id="clientoauth" name="clientoauth"
-                                   placeholder="Enter ..."></input>
-                        </div>
-                        <label for="mailoauth">Mail(s) OAuth 2.0 Autorisé(s)</label>
-                        
-                        <input type="text" class="form-control" id="mailoauth" name="mailoauth"
-                               placeholder="Enter ..."></input>
-                               </div>
-                    </div>
                 </div>
-                <!--Footer-->
                 <div class="modal-footer justify-content-center">
                     <button id="validation" class="btn btn-success">Valider</button>
                 </div>
-                </form>
             </div>
         </div>
     </div>
-    <!-- Modal: seedbox -->
+        <!-- Modal: seedbox -->
 
-    <!-- Modal: rclone -->
-    <div class="modal fade right" id="rclone" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-         aria-hidden="true" data-backdrop="false">
-        <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
-            <div class="modal-content">
-                <!--Header-->
-                
-                <div class="modal-header">
-                    <p class="heading lead">Installation rclone
-                    </p>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true" class="white-text">×</span>
-                    </button>
-                </div>
-                <!--Body-->
-                <div class="modal-body post">
-                    <div>
-                        <p></p>
-                        <p id="text">Id Client</p>
-                        <input type="text" id="client" class="form-control"
-                               placeholder="Enter ..."></input>
-                    </div>
+        <!-- Modal: rclone -->
+        <div class="modal fade right" id="rclone" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true" data-backdrop="false">
+            <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
+                <div class="modal-content">
 
-                    <div>
-                        <p></p>
-                        <p id="text">Id Secret</p>
-                        <input type="text" id="secret" class="form-control"
-                               placeholder="Enter ..."></input>
-                    </div>
-
-                </div>
-                <!--Footer-->
-                <div class="modal-footer justify-content-center">
-                    <button type="submit" id="rclone_install_appli" class="btn btn-success""
-                            >Installer</button>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- Modal: rclone -->
+        <!-- Modal: rclone -->
 
 
-    <!-- Modal: token -->
-    <div class="modal fade right" id="rclone_token" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true" data-backdrop="false">
-        <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
-            <div class="modal-content">
-                <!--Header-->
+        <!-- Modal: token -->
+        <div class="modal fade right" id="rclone_token" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true" data-backdrop="false">
+            <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
+                <div class="modal-content">
+                    <!--Header-->
 
-                <div class="modal-header">
-                    <p class="heading lead">Installation Rclone
-                    </p>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true" class="white-text">×</span>
-                    </button>
-                </div>
-                <!--Body-->
-                <div class="modal-body">
-                    <!-- Radio -->
-                    <div class="form-check-inline mb-4">
-                            <input class="form-check-input" name="drive" type="radio" id="gdrive" value="gdrive" checked>
-                            <label class="form-check-label" for="gdrive">gdrive</label>
-                    </div>
 
-                    <div class="form-check-inline mb-4">
-                        <input class="form-check-input" name="drive" type="radio" id="sharedrive" value="sharedrive">
-                        <label class="form-check-label" for="sharedrive">Sharedrive</label>
-                    </div>
-                    <!-- Radio -->
-
-                    <!--Basic textarea-->
-
-                    <div>
-                    <p></p>
-                    <p id="text">Nom du Gdrive - Share Drive</p>
-                    <input type="text" id="drivename" class="form-control"
-                           placeholder="Enter ..."></input>
-                    </div>
-
-                    <div>
-                    <p></p>
-                    <p id="text">Coller le token
-                    <input type="text" id="token" class="form-control"
-                           placeholder="Enter ..."></input>
-                    </div>
-
-                </div>
-                <!--Footer-->
-                <div class="modal-footer justify-content-center">
-                      <button type="submit" id="rclone_token_valid" class="btn btn-success"
-                            >Valider</button>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- Modal: token -->
+        <!-- Modal: token -->
 
-    <!-- Main Sidebar Container -->
-    <aside class="main-sidebar sidebar-dark-primary elevation-4">
-        <!-- Brand Logo -->
-        <a href="index.php" class="brand-link">
-            <img src="dist/img/AdminLTELogo.png" alt="SSD Logo" class="brand-image img-circle elevation-3"
-                 style="opacity: .8">
-            <span class="brand-text font-weight-light">Script Seedbox Docker</span>
-        </a>
+        <!-- Main Sidebar Container -->
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <!-- Brand Logo -->
+            <a href="index.php" class="brand-link">
+                <img src="dist/img/AdminLTELogo.png" alt="SSD Logo" class="brand-image img-circle elevation-3"
+                     style="opacity: .8">
+                <span class="brand-text font-weight-light">Script Seedbox Docker</span>
+            </a>
 
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <!-- Sidebar Menu -->
-            <nav class="mt-2">
-                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
-                    data-accordion="false">
-                    <!-- Add icons to the links using the .nav-icon class
-           with font-awesome or any other icon font library -->
-                    <li class="nav-item">
-                        <a href="index.php" class="nav-link">
-                            <i class="nav-icon fas fa-th"></i>
-                            <p>
-                                Accueil
-                            </p>
-                        </a>
-                    </li>
-                </ul>
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Sidebar Menu -->
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                        data-accordion="false">
+                        <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+                        <li class="nav-item">
+                            <a href="index.php" class="nav-link">
+                                <i class="nav-icon fas fa-th"></i>
+                                <p>
+                                    Accueil
+                                </p>
+                            </a>
+                        </li>
+                    </ul>
 
-            </nav>
-            <!-- /.sidebar-menu -->
-        </div>
-        <!-- /.sidebar -->
-    </aside>
+                </nav>
+                <!-- /.sidebar-menu -->
+            </div>
+            <!-- /.sidebar -->
+        </aside>
 
-    <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper" id="content-global">
-        <!-- Content Header (Page header) -->
-        <section class="content-header">
-            <div class="container-fluid">
-                <div class="row mb-3">
-                    <div class="col-sm-6">
-                        <h1>
-                            {{ TITRE }}
-                        </h1>
-                    </div>
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper" id="content-global">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-3">
+                        <div class="col-sm-6">
+                            <h1>
+                                {{ TITRE }}
+                            </h1>
+                        </div>
 
-                    <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
-                            <button type="button" class="btn btn-default install-modal">Installation Seedbox
-                            </button>
-                        </ol>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <button type="button" class="btn btn-default install-modal">Installation Seedbox
+                                </button>
+                            </ol>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>

@@ -573,4 +573,5 @@ $(document).ready(function() {
         console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
 
     });
+     $('[data-toggle="tooltip"]').tooltip();
 });
