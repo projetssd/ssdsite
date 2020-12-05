@@ -309,7 +309,9 @@ $(document).ready(function() {
         });
     });
 
-    // on va intercepter le click sur le bouton rclone
+    // je vais garder de coté cette fonction et la suivante au cas ou je mettrais un bouton supplementaire
+    // pour creer un rclone.conf en dehors d'une proceduree d install
+    // ainsi que les deux modals correspondant ds header.twig
     $("#rclone_install_appli").click(function() {
             if ($("#client").val() !== "") {
                 console.log('client n est pas vide');

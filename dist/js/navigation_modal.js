@@ -141,8 +141,6 @@ $("#install-validation").click(function() {
                             console.log(data);
                             console.log('A priori tout est ok');
                             console.log(data.commande);
-                            $('#seedbox').modal('hide');
-                            $('#rclone').modal('show');
                             toastr.success('Installation lancée');
                         }
                         else {
@@ -177,6 +175,8 @@ $("#install-validation").click(function() {
                 // on est juste dans la première étape, donc on affiche maintenant le bouton retour
                 $("#retour-validation").show();
             }
+
+
             //alert( "Valid: " + $("#formUserConfigure").valid() );
 
             //
@@ -188,12 +188,63 @@ $("#install-validation").click(function() {
             break;
 
         case "2":
+            if ($("#client").val() !== "") {
+                console.log('client n est pas vide');
+                var client = $("#client").val();
+                console.log('client a la valeur ' + client);
+                var secret = $("#secret").val();
+                console.log('secret a la valeur ' + secret);
+            }
+            else {
+                console.log('client est VIDE !');
+            }
+
+            $.ajax({
+                url: "ajax/install_rclone.php?client=" + client + "&secret=" + secret
+            }).done(function(data) {
+                // On est dans le done, tout est ok
+                // la requête est passée
+                // console.log("result " + data);
+                window.open('https://accounts.google.com/o/oauth2/auth?client_id=' + client + '&redirect_uri=urn:ietf:wg:oauth:2.0:oob&scope=https://www.googleapis.com/auth/drive&response_type=code', '_blank');
+            }).fail(function() {
+                console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+            });
+
             $("#link-gdrive-tab").removeClass("disabled");
             $('#tab-instsall-navigation a[href="#tab-gdrive"]').tab('show');
             $("#install-validation").attr('data-step', 3);
             $("#link-rclone-tab").addClass("disabled");
+
             break;
 
+        case "3":
+
+            if ($("#token").val() !== "") {
+                console.log('token n est pas vide');
+                var token = $("#token").val();
+                console.log('token a la valeur ' + token);
+                var drive = $('input[type=radio][name=drive]:checked').attr('value');
+                console.log('drive a la valeur ' + drive);
+                var drivename = $("#drivename").val();
+                console.log('drivename a la valeur ' + drivename);
+            }
+            else {
+                console.log('TOKEN est VIDE !');
+            }
+            $.ajax({
+                url: "ajax/install_token.php?token=" + token + "&drive=" + drive + "&drivename=" + drivename
+            }).done(function(data) {
+                // On est dans le done, tout est ok
+                // la requête est passée
+               $('#rclone_token').modal('hide');
+                console.log("result " + data);
+            }).fail(function() {
+                console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+            });
+
+            $('#seedbox').modal('hide');
+
+            break;
     }
 });
 
