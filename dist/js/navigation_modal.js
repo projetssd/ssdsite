@@ -214,6 +214,7 @@ $("#install-validation").click(function() {
             $('#tab-instsall-navigation a[href="#tab-gdrive"]').tab('show');
             $("#install-validation").attr('data-step', 3);
             $("#link-rclone-tab").addClass("disabled");
+            $("#install-validation").html("Installation Seedbox");
 
             break;
 
@@ -243,6 +244,15 @@ $("#install-validation").click(function() {
             });
 
             $('#seedbox').modal('hide');
+            $('#modalYT1').modal('show');
+            $.ajax({
+                url: "ajax/install.php"
+            }).done(function(data) {
+                console.log("result " + data);
+                // la requête est passée
+            }).fail(function() {
+                console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+            });
 
             break;
     }
@@ -259,12 +269,16 @@ $("#retour-validation").click(function() {
             $('#tab-instsall-navigation a[href="#tab-utilisateur"]').tab('show');
             $("#link-rclone-tab").addClass("disabled");
             $("#retour-validation").hide();
+            $("#install-validation").html("Etape suivante");
+
             break;
         case "3":
             $("#link-rclone-tab").removeClass("disabled");
             $('#tab-instsall-navigation a[href="#tab-rclone"]').tab('show');
             $("#install-validation").attr('data-step', 2);
             $("#link-gdrive-tab").addClass("disabled");
+            $("#install-validation").html("Etape suivante");
+
             break;
 
     }
