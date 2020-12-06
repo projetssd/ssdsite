@@ -7,14 +7,11 @@ ne s'éxécute que quand la page est totalement chargée
 
 function test_etat() {
     $(".divappli").each(function() {
-
         let appli = $(this).attr('data-appli');
         if ($("#status-" + appli).html() === "Installation...") {
             console.log('Appli en cours d install');
-
         }
         else {
-
             $.ajax({
                 url: "ajax/etat_service.php?service=" + appli,
                 dataType: "json"
@@ -30,7 +27,7 @@ function test_etat() {
                 // on va modifier le bouton en fonction de l'install
                 if (installed) {
                     $("#status-" + appli).html("Désinstaller").removeClass("btn-success").addClass("btn-warning");
-                    $("#div-" + appli).removeClass('div-uninstalled');
+                    $("#div-" + appli).removeClass('div-uninstalled').attr('data-installed','1');
                     $(".start-stop-button-" + appli).show();
                     // l'appli tourne, on va modifier les boutons si besoin
                     if (running) {
@@ -43,11 +40,10 @@ function test_etat() {
 
                     }
                     $("#nomAppli-" + appli).unwrap().wrap('<a href="https://' + public_url + '" target="_blank">');
-
                 }
                 else {
                     $("#status-" + appli).html("Installer").removeClass("btn-warning").addClass("btn-success");
-                    $("#div-" + appli).addClass('div-uninstalled');
+                    $("#div-" + appli).addClass('div-uninstalled').attr('data-installed','0');
                     $(".start-stop-button-" + appli).hide();
                     $("#nomAppli-" + appli).unwrap().wrap('<a>');
                     $("#version-" + appli).html("Application non installée");
@@ -63,7 +59,6 @@ function test_etat() {
 }
 
 $(document).ready(function() {
-
     $(".check_install").click(function() {
         if ($('#myCheck').is(':checked')) {
             $("#text").show();
@@ -369,7 +364,8 @@ $(document).ready(function() {
         console.log("Appli appelée " + appli)
         // on va considérer que le texte du bouton est ok
         // a voir si on refait un appel ajax pour vérifier ?
-        if ($("#validation_install_appli").html() === "Installer") {
+        var is_installed = $("#div-" + appli).attr("data-installed");
+        if (is_installed === "1") {
             if ($("#subdomain").val() !== "") {
                 console.log('Subdomain n est pas vide');
                 var subdomain = $("#subdomain").val();
@@ -409,7 +405,7 @@ $(document).ready(function() {
             });
         }
         else {
-            console.log('Erreur sur le texte du bouton, impossible de continuer');
+            console.log('Tentative d installation d une appli déjà installée');
         }
 
     });
