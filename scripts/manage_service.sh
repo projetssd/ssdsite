@@ -17,7 +17,29 @@ function writelog()
     TYPE=$2
   fi
   echo "SHELL : ${DATE} - ${TYPE} - ${MESSAGE}" >> ${DIRNAME}/../logs/ssdsite-${DATELOG}.log
+}
 
+function log_applicatif()
+{
+  # On va créer une variable LOGFILE_APPLI
+  # de type
+  # DATE-HEURE-ACTION-APPLI.log
+  # ACTION => install, restart, etc...
+  # APPLI => nom de l'appli ou de l'action (install rclone ?)
+  # DATE: YMD (ex : 20201025 pour le 25/10/2020)
+  # HEURE : HMS (ex: 162548 pour 16h25m48s)
+  ####################################################
+  # C'est à la fonction appelante de remplir ce log 
+  ####################################################
+  DIRNAME=$(dirname $0)
+  DATELOG=$(date +"%Y%m%d-%H%M%S")
+  LOGFILE_APPLI="${DIRNAME}/../logs/${DATELOG}-${ACTION}-${1}.log"
+}
+
+function writelog_appli()
+{
+   DATE=$(date +"%d/%m/%Y %T")
+   echo "${DATE} - ${1}" >> ${LOGFILE_APPLI}
 }
 
 function credential() {
@@ -27,6 +49,10 @@ function credential() {
 }
 
 function createtoken() {
+  # on appelle la fonction pour avoir le nom du log à créer
+  log_applicatif
+  # maintenant, on a la variable LOGFILE_APPLI utilisable
+  writelog_appli "Création d'un token" 
   logfile=/opt/seedbox/rclone/log
 
   client=$(cat /opt/seedbox/rclone/client)
@@ -187,6 +213,7 @@ function configure() {
 }
 
 function uninstall() {
+
   ansible-playbook /opt/seedbox-compose/includes/dockerapps/templates/ansible/ansible.yml
   ansible-vault decrypt /opt/seedbox/variables/account.yml > /dev/null 2>&1
   name=$(cat /tmp/name)
@@ -234,9 +261,13 @@ function uninstall() {
 }
 
 function install() {
-    
-  LOGFILE=${DIRNAME}/../logtail/log
-  rm -f $LOGFILE
+  # on appelle la fonction pour avoir le nom du log à créer
+  log_applicatif $1
+  # maintenant, on a la variable LOGFILE_APPLI utilisable
+  writelog_appli "Installation de l'appli ${1}"    
+  
+  LOGFILE=${LOGFILE_APPLI}
+  #rm -f $LOGFILE
 
   source /opt/seedbox-compose/includes/variables.sh
     
