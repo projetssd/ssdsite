@@ -4,6 +4,7 @@
  * Class service
  * Classe permettant la manipulation des services (applis).
  */
+
 class service
 {
     /**
@@ -15,9 +16,10 @@ class service
      */
     public $display_name;
     /**
-     * @var string Nom de lappli
+     * @var string Sous domain de l'application
      */
     public $subdomain;
+
     /**
      * @var string Ligne de commande pour installer
      */
@@ -78,15 +80,16 @@ class service
         //
         $this->display_name      = trim($my_service); // on supprimer les espaces avant/après
         $this->command_install   =
-            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . ' install';
+            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh install ' . $this->display_name . ' ';
         $this->command_uninstall =
-            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . ' uninstall';
+            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh uninstall ' . $this->display_name . ' ';
         $this->command_restart   =
-            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . ' restart';
+            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh restart ' . $this->display_name . ' ';
         $this->command_stop      =
-            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . ' stop';
+            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh stop ' . $this->display_name . ' ';
         $this->command_start     =
-            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ' . $this->display_name . ' start';
+            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh start ' . $this->display_name . ' ';
+
         //
         // on va chercher l'ip du docker
         //
@@ -142,8 +145,6 @@ class service
         if ($my_service != 'all')
         {
             // on va remplir les valeurs par défaut
-            //$this->running    = $this->check();
-            //$this->installed  = $this->is_installed();
 
             $this->public_url = false;
             if ($this->is_installed())
@@ -331,6 +332,8 @@ class service
     /**
      * Installe l'appli de la classe en cours.
      *
+     *
+     * @param $subdomain string Sous domaine de l'application
      * @return bool always true
      */
     public function install($subdomain)
@@ -340,7 +343,10 @@ class service
         on ne stocke donc aucune info
         les infos seront lues dans le défilement des logs */
         $this->command_install .= " " . $subdomain;
-        echo "commande " . $this->command_install;
+        $log = new log;
+        $log->writelog("-----------------",'DEBUG');
+        $log->writelog("Installation " . $this->display_name,'DEBUG');
+        $log->writelog("Commande " . $this->command_install,'DEBUG');
         shell_exec($this->command_install);
 
         return true;
@@ -353,6 +359,10 @@ class service
      */
     public function uninstall()
     {
+        $log = new log;
+        $log->writelog("-----------------",'DEBUG');
+        $log->writelog("Désinstall " . $this->display_name,'DEBUG');
+        $log->writelog("Commande " . $this->command_uninstall,'DEBUG');
         shell_exec($this->command_uninstall);
 
         return true;
@@ -365,14 +375,20 @@ class service
      */
     public function restart()
     {
+        $log = new log;
+        $log->writelog("-----------------",'DEBUG');
+        $log->writelog("Restart " . $this->display_name,'DEBUG');
+
         if ($this->check())
         {
             // le service tourne, on va redémarrer
             shell_exec($this->command_restart);
+            $log->writelog("Commande " . $this->command_restart,'DEBUG');
         } else
         {
             // le service ne tourne pas, on le démarre
             shell_exec($this->command_start);
+            $log->writelog("Commande " . $this->command_start,'DEBUG');
         }
 
         return true;
@@ -385,6 +401,10 @@ class service
      */
     public function stop()
     {
+        $log = new log;
+        $log->writelog("-----------------",'DEBUG');
+        $log->writelog("Stop " . $this->display_name,'DEBUG');
+        $log->writelog("Commande " . $this->command_stop,'DEBUG');
         shell_exec($this->command_stop);
 
         return true;
@@ -461,3 +481,5 @@ class service
                 'uninstalled' => $appli_uninstalled,];
     }
 }
+
+
