@@ -1,5 +1,5 @@
 <?php
-require_once "../php/classes/service.php";
+require_once __DIR__ . '/../includes/header.php';
 
 /* on charge l'objet service correspondant à ce qui est passé
    en url : https://mondomain.com/check_service.php?service=radarr

@@ -8,162 +8,239 @@
     <title>SSD | Blank Page</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700">
-   {% if ASSET_CSS is empty %}
-        {% for css in CSS %}
-            {% if css starts with 'http' %}
-                <link rel="stylesheet" href="{{ css }}">
-            {% else %}
-                <link rel="stylesheet" href="dist/css/{{ css }}">
-            {% endif %}
-       
-        {% endfor %}
-    {% else %}
-        {{ ASSET_CSS|raw }}
-    {% endif %}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700"> {% if ASSET_CSS is empty %} {% for css in CSS %} {% if css starts with 'http' %}
+    <link rel="stylesheet" href="{{ css }}"> {% else %}
+    <link rel="stylesheet" href="dist/css/{{ css }}"> {% endif %} {% endfor %} {% else %} {{ ASSET_CSS|raw }} {% endif %}
 
 
+    <body class="hold-transition sidebar-mini sidebar-collapse">
 
 
-<body class="hold-transition sidebar-mini sidebar-collapse">
+        <!-- Site wrapper -->
+        <div class="wrapper">
+            <!-- Navbar -->
+            <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+                <!-- START top navbar links -->
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                    </li>
+                    <li class="nav-item d-none d-sm-inline-block">
+                        <a href="index.php" class="nav-link">Accueil</a>
+                    </li>
+                    <li class="nav-item d-none d-sm-inline-block">
+                        <a href="test-index.php" class="nav-link">Test-index</a>
+                    </li>
+                    <li class="nav-item d-none d-sm-inline-block">
+                        <a href="blankpage.html" class="nav-link">Blankpage</a>
+                    </li>
+                    <li class="nav-item d-none d-sm-inline-block">
+                        <a href="installation.html" class="nav-link">Installation</a>
+                    </li>
+                    <li class="nav-item d-none d-sm-inline-block">
+                        <a href="#" class="nav-link">Discord</a>
+                    </li>
+                </ul>
+                <!-- END top navbar left links -->
+                <!-- START top navbar right links -->
 
 
-    <!-- Site wrapper -->
-    <div class="wrapper">
-        <!-- Navbar -->
-        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-            <!-- START top navbar links -->
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-                </li>
-                <li class="nav-item d-none d-sm-inline-block">
-                    <a href="index.php" class="nav-link">Accueil</a>
-                </li>
-                <li class="nav-item d-none d-sm-inline-block">
-                    <a href="test-index.php" class="nav-link">Test-index</a>
-                </li>
-                <li class="nav-item d-none d-sm-inline-block">
-                    <a href="blankpage.html" class="nav-link">Blankpage</a>
-                </li>
-                <li class="nav-item d-none d-sm-inline-block">
-                    <a href="installation.html" class="nav-link">Installation</a>
-                </li>
-                <li class="nav-item d-none d-sm-inline-block">
-                    <a href="#" class="nav-link">Discord</a>
-                </li>
-            </ul>
-            <!-- END top navbar left links -->
-            <!-- START top navbar right links -->
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <button type="button" class="btn btn-info float-right" data-toggle="modal" data-target="#modalYT1">Logs
-                        SSD</button>
-                </li>
-                <!-- END top navbar right links -->
-            </ul>
-        </nav>
-        <!--Start content modal 2-->
-        <div class="modal fade" id="modalYT1" style="display: none;" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Logs du serveur</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="embed-responsive embed-responsive-16by9 z-depth-1-half">
-                            <iframe class="embed-responsive-item" src="logtail/" allowfullscreen></iframe>
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Theme
+                </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="changetheme dropdown-item" data-theme="adminlte">Classique</a>
+                            <!--<a class="changetheme dropdown-item" data-theme="knightone">Knightone</a>
+                    <a class="changetheme dropdown-item" data-theme="circular">Circular</a>-->
+                            <a class="changetheme dropdown-item" data-theme="material">Material</a>
+                            <a class="changetheme dropdown-item" data-theme="darkly">Dark</a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <button type="button" class="btn btn-info float-right" data-toggle="modal" data-target="#modalYT1">Logs
+                    SSD
+                </button>
+                    </li>
+                    <!-- END top navbar right links -->
+                </ul>
+            </nav>
+            <!--Start content modal 2-->
+            <div class="modal fade" id="modalYT1" style="display: none;" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Logs du serveur</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="embed-responsive embed-responsive-16by9 z-depth-1-half">
+                                <iframe class="embed-responsive-item" src="logtail/" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                        <div class="modal-footer float-right">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
                         </div>
                     </div>
-                    <div class="modal-footer float-right">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+            <!--End content modal 2-->
+
+            <!-- Modal: modalPoll -->
+            <div class="modal fade right" id="modalPoll" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
+                <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
+                    <div class="modal-content">
+                        <!--Header-->
+
+                        <div class="modal-header">
+                            <p class="heading lead">Installation de l'application <span id="nomappliencours"></span>
+                            </p>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="white-text">×</span>
+                    </button>
+                        </div>
+                        <!--Body-->
+                        <div class="modal-body post">
+                            <!-- Checkbox -->
+                            <div class="checkbox">
+                                <input type="checkbox" id="myCheck" class="check_install"> Sous Domaines Personalisés
+                            </div>
+                            <!-- Checkbox -->
+                            <div>
+                                <p></p>
+                                <p id="text" style="display:none">Nom du sous domaine</p>
+                                <input type="text" id="subdomain" class="form-control" style="display:none" placeholder="Enter ..."></input>
+                            </div>
+                        </div>
+                        <!--Footer-->
+                        <div class="modal-footer justify-content-center">
+                            <button type="submit" id="validation_install_appli" class="btn-success bouton-install" data-appli="" data-subdomain="">Installer
+                    </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!--End content modal 2-->
+            <!-- Modal: modalPoll -->
 
-        <!-- Modal: modalPoll -->
-        <div class="modal fade right" id="modalPoll" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-          aria-hidden="true" data-backdrop="false">
-          <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
-            <div class="modal-content">
-              <!--Header-->
-              <div class="modal-header">
-                <p class="heading lead">Installation de l'application <span id="nomappliencours"></span>
-                </p>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true" class="white-text">×</span>
-                </button>
-              </div>
-              <!--Body-->
-              <div class="modal-body post">
-                <!-- Checkbox -->
-                <div class="checkbox">
-                    <input type="checkbox" id="myCheck" class="check_install">  Sous Domaines Personalisés
+            <!-- Modal: seedbox -->
+            <div class="modal fade right" id="seedbox" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
+                <div class="modal-dialog modal-full-height modal-lg" role="document">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <p class="heading lead">Installation seedbox
+                            </p>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="white-text">×</span>
+                    </button>
+                        </div>
+
+                        <div class="modal-body post">
+
+
+                            <ul class="nav nav-tabs" id="tab-instsall-navigation" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="link-home-tab" data-toggle="tab" href="#tab-utilisateur" role="tab-utilisateur" aria-controls="home" aria-selected="true">Utilisateur</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link disabled" id="link-rclone-tab" data-toggle="tab" href="#tab-rclone" role="tab" aria-controls="tab-rclone" aria-selected="false">Rclone</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link disabled" id="link-gdrive-tab" data-toggle="tab" href="#tab-gdrive" role="tab" aria-controls="tab-gdrive" aria-selected="false">Gdrive</a>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane fade show active" id="tab-utilisateur" role="tabpanel" aria-labelledby="home-tab">{% include "blocks/modal_install_etape1.twig" %}</div>
+                                <div class="tab-pane fade" id="tab-rclone" role="tabpanel" aria-labelledby="profile-tab">{% include "blocks/modal_install_etape2.twig" %}</div>
+                                <div class="tab-pane fade" id="tab-gdrive" role="tabpanel" aria-labelledby="contact-tab">{% include "blocks/modal_install_etape3.twig" %}</div>
+                            </div>
+
+
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button id="retour-validation" data-step="1" class="btn btn-success" style="display:none;">Précédent</button> &nbsp;
+                            <button id="install-validation" data-step="1" class="btn btn-success">Valider</button>
+                        </div>
+                    </div>
                 </div>
-                <!-- Checkbox -->
-                <div>
-                   <p></p>
-                   <p id="text" style="display:none">Nom du sous domaine</p>
-                   <input type="text" id="subdomain" class="form-control" style="display:none" placeholder="Enter ..."></input>
-                </div>
-              </div>
-              <!--Footer-->
-              <div class="modal-footer justify-content-center">
-                 <button type="submit" id="validation_install_appli" class="btn-success bouton-install" data-appli="" data-subdomain="">Installer</button>
-              </div>
             </div>
-          </div>
-        </div>
-        <!-- Modal: modalPoll -->
+            <!-- Modal: seedbox -->
 
-        <!-- Main Sidebar Container -->
-        <aside class="main-sidebar sidebar-dark-primary elevation-4">
-            <!-- Brand Logo -->
-            <a href="index.php" class="brand-link">
-                <img src="dist/img/AdminLTELogo.png" alt="SSD Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+            <!-- Modal: rclone -->
+            <div class="modal fade right" id="rclone" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
+                <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
+                    <div class="modal-content">
+
+                    </div>
+                </div>
+            </div>
+            <!-- Modal: rclone -->
+
+
+            <!-- Modal: token -->
+            <div class="modal fade right" id="rclone_token" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
+                <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
+                    <div class="modal-content">
+                        <!--Header-->
+
+
+                    </div>
+                </div>
+            </div>
+            <!-- Modal: token -->
+
+            <!-- Main Sidebar Container -->
+            <aside class="main-sidebar sidebar-dark-primary elevation-4">
+                <!-- Brand Logo -->
+                <a href="index.php" class="brand-link">
+                <img src="dist/img/AdminLTELogo.png" alt="SSD Logo" class="brand-image img-circle elevation-3"
+                     style="opacity: .8">
                 <span class="brand-text font-weight-light">Script Seedbox Docker</span>
             </a>
 
-            <!-- Sidebar -->
-            <div class="sidebar">
-                <!-- Sidebar Menu -->
-                <nav class="mt-2">
-                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                        <!-- Add icons to the links using the .nav-icon class
+                <!-- Sidebar -->
+                <div class="sidebar">
+                    <!-- Sidebar Menu -->
+                    <nav class="mt-2">
+                        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                            <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-                        <li class="nav-item">
-                            <a href="index.php" class="nav-link">
+                            <li class="nav-item">
+                                <a href="index.php" class="nav-link">
                                 <i class="nav-icon fas fa-th"></i>
                                 <p>
                                     Accueil
                                 </p>
                             </a>
-                        </li>
-                    </ul>
-                </nav>
-                <!-- /.sidebar-menu -->
-            </div>
-            <!-- /.sidebar -->
-        </aside>
+                            </li>
+                        </ul>
 
-        <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
-            <section class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1>
-                                {{ TITRE }}
-                            </h1>
-                        </div>
-                        <div class="col-sm-6">
-                            <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item active"><a href="index.php">Accueil</a></li>
-                            </ol>
+                    </nav>
+                    <!-- /.sidebar-menu -->
+                </div>
+                <!-- /.sidebar -->
+            </aside>
+
+            <!-- Content Wrapper. Contains page content -->
+            <div class="content-wrapper" id="content-global">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <div class="container-fluid">
+                        <div class="row mb-3">
+                            <div class="col-sm-6">
+                                <h1>
+                                    {{ TITRE }}
+                                </h1>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <ol class="breadcrumb float-sm-right">
+                                    <button type="button" class="btn btn-default install-modal">Installation Seedbox
+                                </button>
+                                </ol>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>

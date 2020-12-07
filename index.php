@@ -2,6 +2,7 @@
 
 require 'includes/header.php';
 
+
 // espace disque
 $df = disk_free_space('/');
 $dt = disk_total_space('/');
@@ -26,13 +27,17 @@ $applis = $service->get_all($tableau_appli, false);
 
 // javascripts  utilisés
 $js = array(
-    'jquery.min.js',
+    'https://code.jquery.com/jquery-3.5.1.min.js',
     'bootstrap.bundle.min.js',
     'adminlte.min.js',
     'toastr.min.js',
     'sweetalert2.min.js',
-    'ssd_specific.js'
-    );
+    'ssd_specific.js',
+    'https://cdn.jsdelivr.net/npm/jquery-validation@1.19.2/dist/jquery.validate.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/localization/messages_fr.min.js',
+    'changetheme.js',
+    'navigation_modal.js'
+);
     
 // css utilisés
 $css = array(

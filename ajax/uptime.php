@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../includes/header.php';
 $locale = 'fr_FR.UTF-8';
 setlocale(LC_ALL, $locale);
 putenv('LC_ALL='.$locale);
