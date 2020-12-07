@@ -41,7 +41,7 @@ class log
                     $tabexplode = explode('-',$temp[0]);
                     $date = new DateTime($tabexplode[0] . " " . $tabexplode[1]);
                     $dateformat =  $date->format('d/m/Y');
-                    $heureformat = $date->format("h:i:s");
+                    $heureformat = $date->format("H:i:s");
                     $retour[] = array(
                         "nomfichier" => $val,
                         "date" => $dateformat,
