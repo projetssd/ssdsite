@@ -36,7 +36,8 @@ $js = array(
     'https://cdn.jsdelivr.net/npm/jquery-validation@1.19.2/dist/jquery.validate.js',
     'https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/localization/messages_fr.min.js',
     'changetheme.js',
-    'navigation_modal.js'
+    'navigation_modal.js',
+    'get_logs.js'
 );
     
 // css utilisés

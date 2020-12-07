@@ -5,6 +5,12 @@
 
 function writelog()
 {
+  #######################################
+  # Fonction uniquement pour des logs
+  # de debug
+  # ces logs ne seront pas visibles par
+  # l'utilisateur 
+  #######################################
   DIRNAME=$(dirname $0)
   DATE=$(date +"%d/%m/%Y %T")
   DATELOG=$(date +"%Y%m%d")
@@ -17,7 +23,29 @@ function writelog()
     TYPE=$2
   fi
   echo "SHELL : ${DATE} - ${TYPE} - ${MESSAGE}" >> ${DIRNAME}/../logs/ssdsite-${DATELOG}.log
+}
 
+function log_applicatif()
+{
+  # On va créer une variable LOGFILE_APPLI
+  # de type
+  # DATE-HEURE-ACTION-APPLI.log
+  # ACTION => install, restart, etc...
+  # APPLI => nom de l'appli ou de l'action (install rclone ?)
+  # DATE: YMD (ex : 20201025 pour le 25/10/2020)
+  # HEURE : HMS (ex: 162548 pour 16h25m48s)
+  ####################################################
+  # C'est à la fonction appelante de remplir ce log 
+  ####################################################
+  DIRNAME=$(dirname $0)
+  DATELOG=$(date +"%Y%m%d-%H%M%S")
+  LOGFILE_APPLI="${DIRNAME}/../logs/${DATELOG}-${ACTION}-${1}.log"
+}
+
+function writelog_appli()
+{
+   DATE=$(date +"%d/%m/%Y %T")
+   echo "${DATE} - ${1}" >> ${LOGFILE_APPLI}
 }
 
 function credential() {
@@ -27,6 +55,10 @@ function credential() {
 }
 
 function createtoken() {
+  # on appelle la fonction pour avoir le nom du log à créer
+  log_applicatif CreateToken
+  # maintenant, on a la variable LOGFILE_APPLI utilisable
+  writelog_appli "Création d'un token" 
   logfile=/opt/seedbox/rclone/log
 
   client=$(cat /opt/seedbox/rclone/client)
@@ -44,6 +76,7 @@ function createtoken() {
   chaine=$(cat /opt/seedbox/rclone/chaine)
 
 if [[ "$2" == "sharedrive" ]]; then 
+writelog_appli "Création d'un shared drive" 
   curl --request POST \
     "https://www.googleapis.com/drive/v3/teamdrives?requestId='$chaine" \
     --header "Authorization: Bearer ${accesstoken}" \
@@ -62,6 +95,7 @@ if [[ "$2" == "sharedrive" ]]; then
   teamid=$(cat /opt/seedbox/rclone/pgclone.teamid)
 
   ## Creation rclone.conf
+  writelog_appli "Création rclone.conf" 
   echo "" >> /opt/seedbox/rclone/rclone.conf
   echo "[$name]" >> /opt/seedbox/rclone/rclone.conf
   echo "client_id = $client" >> /opt/seedbox/rclone/rclone.conf
@@ -93,10 +127,11 @@ if [[ "$2" == "sharedrive" ]]; then
   echo "password2 = $ENC_SALT" >> /opt/seedbox/rclone/rclone.conf
 
 else
-
+   writelog_appli "Pas de shared drive" 
   ###récupération des variables
 
   ## Creation rclone.conf
+   writelog_appli "Création rclone.conf" 
   echo "" >> /opt/seedbox/rclone/rclone.conf
   echo "[$3]" >> /opt/seedbox/rclone/rclone.conf
   echo "client_id = $client" >> /opt/seedbox/rclone/rclone.conf
@@ -128,12 +163,13 @@ else
   echo "password2 = $ENC_SALT" >> /opt/seedbox/rclone/rclone.conf
 
 fi
+ writelog_appli "Terminé" 
 }
 
 function configure() {
-
+  log_applicatif ConfigureSeedbox
   ACCOUNT=/opt/seedbox/variables/account.yml
-
+  writelog_appli "recuperation token plex" 
   # recuperation token plex
   curl -qu "$5":"$6" 'https://plex.tv/users/sign_in.xml' \
       -X POST -H 'X-Plex-Device-Name: PlexMediaServer' \
@@ -150,6 +186,7 @@ function configure() {
   openssl=$(openssl rand -hex 16)
 
   # creation utilisateur
+  writelog_appli "Création utilisateur" 
   useradd -m $1 -s /bin/bash
   usermod -aG docker $1
   passwd $2
@@ -162,6 +199,7 @@ function configure() {
   htpwd=$(cat /tmp/.htpasswd)
 
   # Mise en place du fichier account.yml
+   writelog_appli "Mise en place du fichier account.yml" 
   cp /opt/seedbox-compose/includes/config/account.yml $ACCOUNT
   echo $2 > ~/.vault_pass
   echo "vault_password_file = ~/.vault_pass" >> /etc/ansible/ansible.cfg
@@ -187,7 +225,8 @@ function configure() {
 }
 
 function uninstall() {
-  ansible-playbook /opt/seedbox-compose/includes/dockerapps/templates/ansible/ansible.yml
+  log_applicatif $1
+  ansible-playbook /opt/seedbox-compose/includes/dockerapps/templates/ansible/ansible.yml >> ${LOGFILE_APPLI}
   ansible-vault decrypt /opt/seedbox/variables/account.yml > /dev/null 2>&1
   name=$(cat /tmp/name)
 
@@ -234,9 +273,13 @@ function uninstall() {
 }
 
 function install() {
-    
-  LOGFILE=${DIRNAME}/../logtail/log
-  rm -f $LOGFILE
+  # on appelle la fonction pour avoir le nom du log à créer
+  log_applicatif $1
+  # maintenant, on a la variable LOGFILE_APPLI utilisable
+  writelog_appli "Installation de l'appli ${1}"    
+  
+  LOGFILE=${LOGFILE_APPLI}
+  #rm -f $LOGFILE
 
   source /opt/seedbox-compose/includes/variables.sh
     
