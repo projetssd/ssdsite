@@ -196,7 +196,7 @@ $(document).ready(function() {
         let appli = $(this).attr("data-appli");
         console.log("Appli appelée " + appli)
         // on va considérer que le texte du bouton est ok
-        // a voir si on refait un appel ajax pour vérifier ?
+        // a voir si on refait un appel ajax pour vérifier 
         if ($("#div-" + appli).attr("data-installed") === "0") {
             if ($("#subdomain").val() !== "") {
                 console.log('Subdomain n est pas vide');
