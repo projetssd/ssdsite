@@ -5,6 +5,12 @@
     </div>
     <!-- /.card-header -->
     <div class="card-body" id="log_activites">
+        {% for i in 0..5 %}
+        <div id="div_log_{{ i }}" style="display:none;">
+            <strong><a href="#" id="detail_log_{{ i }}" class="link_detail_log"></a></a></strong>
+            <p class="text-muted" id="date_log_{{ i }}"></p><hr />
+        </div>
+        {% endfor %}
        
     </div>
     <!-- /.card-body -->

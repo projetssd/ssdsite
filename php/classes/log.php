@@ -19,9 +19,12 @@ class log
     }
     
     
-    public function get_logs()
+    public function get_logs($max_files = 5)
     {
-        if(!$tabfichiers = scandir(__DIR__ . '/../../logs'))
+        $current_file = 0;
+        // on prend les fichiers par ordre alpha inverse
+        // ce qui permet d'avoir les plus anciens en premier
+        if(!$tabfichiers = scandir(__DIR__ . '/../../logs',SCANDIR_SORT_DESCENDING))
         {
             return array();
         }
@@ -45,7 +48,13 @@ class log
                         "heure" => $heureformat,
                         "action" => $tabexplode[2],
                         "appli" => $tabexplode[3]
-                        );
+                    );
+                    $current_file ++;
+                    if($current_file >= $max_files)
+                    {
+                        // on s'arrête là
+                        return $retour;
+                    }
                 }
 
             }
@@ -54,5 +63,16 @@ class log
         }
         return $retour;
         
+    }
+    
+    public function detail_log($logfile)
+    {
+        $retour = '';
+        $tab = file(__DIR__ . '/../../logs/' . $logfile);
+        foreach($tab as $val)
+        {
+            $retour .= $val . "<br />";
+        }
+        return $retour;
     }
 }
