@@ -1,22 +1,18 @@
 <!-- Dernieres activites -->
-                            <div class="card card-primary">
-                                <div class="card-header">
-                                    <h3 class="card-title">Dernières activités</h3>
-                                </div>
-                                <!-- /.card-header -->
-                                <div class="card-body" id="log_activites">
-                                    <strong>Restart Plex</strong>
-                                    <p class="text-muted">
-                                        Le 02/11/2020 à 13h21, status OK
-                                    </p>
-                                    <hr>
-                                    <strong>Installation Sonarr</strong>
-                                    <p class="text-muted">Le 02/11/2020 à 13h56, status OK</p>
-                                    <hr>
-                                    <strong>Backup auto</strong>
-                                    <p class="text-muted"> Le 02/11/2020 à 13h21, status OK</p>
-                                </div>
-                                <!-- /.card-body -->
-                            </div>
-                            <!-- /.card -->
-                        </div>
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Dernières activités</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body" id="log_activites">
+        {% for i in 0..5 %}
+        <div id="div_log_{{ i }}" style="display:none;">
+            <strong><a href="#" id="detail_log_{{ i }}" class="link_detail_log"></a></a></strong>
+            <p class="text-muted" id="date_log_{{ i }}"></p><hr />
+        </div>
+        {% endfor %}
+       
+    </div>
+    <!-- /.card-body -->
+</div>
+<!-- /.card -->
