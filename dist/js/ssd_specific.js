@@ -231,6 +231,7 @@ $(document).ready(function() {
                 $("#div-" + appli).attr("data-installed", 1).removeClass('div-uninstalled');
                 // on rafraichit les applis
                 test_etat();
+                 refresh_logs();
             }).fail(function() {
                 console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
                 $("#status-" + appli).html("Erreur ajax");
@@ -262,6 +263,7 @@ $(document).ready(function() {
                 $("#reset-" + appli).html("Redémarrer");
                 texte_alerte = 'Démarrage';
             }
+             refresh_logs();
         }).fail(function() {
             console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
             $("#status-" + appli).html("Erreur ajax");
@@ -289,11 +291,13 @@ $(document).ready(function() {
         }).done(function() {
             toastr.success("Arrêt de " + appli + " en cours");
             $(".start-stop-button-" + appli).show();
+             refresh_logs();
         }).fail(function() {
             console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
             $(".start-stop-button-" + appli).show();
             $("#status-" + appli).html("Erreur ajax");
         });
+       
     });
 
     // gestion de la zone de recherche
@@ -403,5 +407,4 @@ $(document).ready(function() {
         console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
 
     });
-     $('[data-toggle="tooltip"]').tooltip();
 });
