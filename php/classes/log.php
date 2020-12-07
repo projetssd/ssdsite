@@ -36,10 +36,13 @@ class log
                 {
                     $temp = explode('.',$val);
                     $tabexplode = explode('-',$temp[0]);
+                    $date = new DateTime($tabexplode[0] . " " . $tabexplode[1]);
+                    $dateformat =  $date->format('d/m/Y');
+                    $heureformat = $date->format("h:i:s");
                     $retour[] = array(
                         "nomfichier" => $val,
-                        "date" =>$tabexplode[0],
-                        "heure" => $tabexplode[1],
+                        "date" => $dateformat,
+                        "heure" => $heureformat,
                         "action" => $tabexplode[2],
                         "appli" => $tabexplode[3]
                         );
