@@ -71,7 +71,7 @@ class log
         $tab = file(__DIR__ . '/../../logs/' . $logfile);
         foreach($tab as $val)
         {
-            $retour .= $val . "<br />";
+            $retour .= $val;
         }
         return $retour;
     }
