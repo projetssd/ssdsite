@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700"> {% if ASSET_CSS is empty %} {% for css in CSS %} {% if css starts with 'http' %}
     <link rel="stylesheet" href="{{ css }}"> {% else %}
     <link rel="stylesheet" href="dist/css/{{ css }}"> {% endif %} {% endfor %} {% else %} {{ ASSET_CSS|raw }} {% endif %}
-
+    {{ DEBUGBARJS|raw }}
 
     <body class="hold-transition sidebar-mini sidebar-collapse">
 

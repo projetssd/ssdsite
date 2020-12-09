@@ -15,6 +15,15 @@ if(file_exists(__DIR__ . '/../DEV'))
     $prod = false;
 }
 
+$mode_debug = false;
+if (isset($_GET['debug'])) {
+    $mode_debug = $_GET['debug'];
+}
+if(file_exists(__DIR__ . '/../DEBUG'))
+{
+    $mode_debug = true;
+}
+
 
 // initialisation de twig (morteur de template)
 require __DIR__ . '/../vendor/autoload.php';
@@ -25,6 +34,19 @@ if ($prod) {
     $twig = new \Twig\Environment($loader, ['debug' => true,]);
     $twig->addExtension(new \Twig\Extension\DebugExtension());
 }
+
+$debugbar_js = '';
+$debugbarrender = '';
+if($mode_debug)
+{
+    $debugbar = new DebugBar\StandardDebugBar();
+    
+   
+    //$debugbar = new StandardDebugBar();
+    $debugbarRenderer = $debugbar->getJavascriptRenderer();
+    $debugbar_js = $debugbarRenderer->renderHead();
+}
+
 
 
 
