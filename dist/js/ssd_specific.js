@@ -212,9 +212,9 @@ $(document).ready(function() {
             // on lance un ajax qui va installer tout ça
             // là je ferme le modal, jusque là ca va et le modal "modalYT1" se lance
             $('#modalPoll').modal('hide');
-            toastr.success("Installation commencée");
+            toastr.success("Installation de " + appli + " commencée");
             console.log('Subdomain a ENCORE la valeur ' + subdomain);
-            $(".overlay").show();
+            //$(".overlay").show();
             $.ajax({
                 url: "ajax/install_service.php?service=" + appli + "&subdomain=" + subdomain
             }).done(function(data) {
@@ -233,10 +233,10 @@ $(document).ready(function() {
                 // on rafraichit les applis
                 test_etat();
                  refresh_logs();
-                 $(".overlay").hide();
-                  toastr.success("Installation terminée");
+                 //$(".overlay").hide();
+                  toastr.success("Installation de " + appli + " terminée");
             }).fail(function() {
-                $(".overlay").hide();
+                //$(".overlay").hide();
                 console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
                 toastr.warning("Erreur sur ajax");
                 $("#status-" + appli).html("Erreur ajax");
