@@ -59,33 +59,11 @@
                         </div>
                     </li>
 
-                    <li class="nav-item">
-                        <button type="button" class="btn btn-info float-right" data-toggle="modal" data-target="#modalYT1">Logs
-                    SSD
-                </button>
-                    </li>
+
                     <!-- END top navbar right links -->
                 </ul>
             </nav>
-            <!--Start content modal 2-->
-            <div class="modal fade" id="modalYT1" style="display: none;" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Logs du serveur</h4>
-                        </div>
-                        <div class="modal-body">
-                            <div class="embed-responsive embed-responsive-16by9 z-depth-1-half">
-                                <iframe class="embed-responsive-item" src="logtail/" allowfullscreen></iframe>
-                            </div>
-                        </div>
-                        <div class="modal-footer float-right">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--End content modal 2-->
+
 
             <!-- Modal: modalPoll -->
             <div class="modal fade right" id="modalPoll" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
@@ -160,7 +138,7 @@
                         </div>
                         <div class="modal-footer justify-content-center">
                             <button id="retour-validation" data-step="1" class="btn btn-success" style="display:none;">Précédent</button> &nbsp;
-                            <button id="install-validation" data-step="1" class="btn btn-success">Valider</button>
+                            <button id="install-validation" data-step="1" class="btn btn-success">Etape suivante</button>
                         </div>
                     </div>
                 </div>
@@ -184,7 +162,7 @@
                         <div class="modal-header">
                             <h4 class="modal-title">Logs du serveur</h4>
                         </div>
-                        <div class="modal-body" id="detail_log">
+                        <div class="modal-body" id="detail_log" style="white-space:pre-wrap; font-family: monospace;">
                             
                         </div>
                         <div class="modal-footer float-right">
