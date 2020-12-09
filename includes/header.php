@@ -40,11 +40,14 @@ $debugbarrender = '';
 if($mode_debug)
 {
     $debugbar = new DebugBar\StandardDebugBar();
+    //$debugbar->addCollector(new DebugBar\DataCollector\ExceptionsCollector());
     
    
     //$debugbar = new StandardDebugBar();
     $debugbarRenderer = $debugbar->getJavascriptRenderer();
     $debugbar_js = $debugbarRenderer->renderHead();
+    
+
 }
 
 

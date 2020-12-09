@@ -22,6 +22,7 @@ $applis = $service->get_all($tableau_appli, false);
 if($mode_debug)
 {
     $debugbar['messages']->addMessage("On a chargé les éléments " . print_r($applis,true));
+    $debugbar['messages']->addMessage($applis);
 }
 
 
