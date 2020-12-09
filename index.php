@@ -1,17 +1,11 @@
 <?php
 
 require 'includes/header.php';
+if($mode_debug)
+{
+    $debugbar['time']->startMeasure('monindex', 'Chargement index');
+}
 
-
-// espace disque
-$df = disk_free_space('/');
-$dt = disk_total_space('/');
-$du = $dt - $df;
-$dt = ceil($dt/1024/1024/1024);
-$free_disk = ceil($du/1024/1024/1024);
-
-// ip
-$ip = $_SERVER['REMOTE_ADDR'];
 
 $tableau_appli = [
     'rutorrent',
@@ -22,8 +16,15 @@ $tableau_appli = [
     'lidarr',
     'sensorr',
     'emby'];
+    
 $service = new service('all');
 $applis = $service->get_all($tableau_appli, false);
+if($mode_debug)
+{
+    $debugbar['messages']->addMessage("On a chargé les éléments " . print_r($applis,true));
+    $debugbar['messages']->addMessage($applis);
+}
+
 
 // javascripts  utilisés
 $js = array(
@@ -65,6 +66,18 @@ if ($prod) {
     $asset_js = $assets->js();
 }
 
+if($mode_debug)
+{
+    $debugbar['time']->stopMeasure('monindex');
+}
+
+/**
+ * PLUS DE DEBUG BAR APRES CA !!
+ */
+if($mode_debug)
+{
+    $debugbarrender = $debugbarRenderer->render();
+}
 
 
 
@@ -80,5 +93,7 @@ echo $template->render(['IP' => $ip,
 'CSS' => $css,
 'PROD' => $prod,
 'ASSET_CSS' => $asset_css,
-'ASSET_JS' => $asset_js
+'ASSET_JS' => $asset_js,
+'DEBUGBARJS' => $debugbar_js,
+'DEBUGBARRENDER' => $debugbarrender
 ]);

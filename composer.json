@@ -1,7 +1,7 @@
 {
   "require": {
     "twig/twig": "^3.0",
-    "stolz/assets": "^0.2.0"
+    "stolz/assets": "^0.2.0",
+    "maximebf/debugbar": "^1.16"
   }
 }
-
