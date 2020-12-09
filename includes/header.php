@@ -6,16 +6,13 @@
  * automatiquement
  */
 
-
-
-
-$prod = false;
-if (isset($_GET['prod'])) {
-    $prod = $_GET['prod'];
+$prod = true;
+if (isset($_GET['dev'])) {
+    $prod = $_GET['dev'];
 }
-if(file_exists(__DIR__ . '/../PROD'))
+if(file_exists(__DIR__ . '/../DEV'))
 {
-    $prod = true;
+    $prod = false;
 }
 
 
