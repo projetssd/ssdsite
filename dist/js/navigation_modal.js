@@ -18,6 +18,9 @@ $("#formUserConfigure").validate({
         passe: {
             required: true
         },
+         passe2: {
+          equalTo: "#passe"
+        },
         email: {
             required: true,
             email: true

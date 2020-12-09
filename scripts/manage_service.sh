@@ -55,14 +55,11 @@ function credential() {
 }
 
 function createtoken() {
-<<<<<<< HEAD
-=======
   # on appelle la fonction pour avoir le nom du log à créer
   log_applicatif CreateToken
   # maintenant, on a la variable LOGFILE_APPLI utilisable
   writelog_appli "Création d'un token" 
   logfile=/opt/seedbox/rclone/log
->>>>>>> steph_modifs_diverses
 
   logfile=/opt/seedbox/rclone/log
   curl https://rclone.org/install.sh | sudo bash
@@ -392,7 +389,7 @@ function seedbox() {
   cat <<EOF >/etc/ansible/inventories/local
   [local]
   127.0.0.1 ansible_connection=local
-  EOF
+EOF
 
   ### Reference: https://docs.ansible.com/ansible/2.4/intro_configuration.html
 
@@ -403,7 +400,7 @@ function seedbox() {
   deprecation_warnings=False
   inventory = /etc/ansible/inventories/local
   interpreter_python=/usr/bin/python
-  EOF
+EOF
 
   ## Copy pip to /usr/bin
   cp /usr/local/bin/pip /usr/bin/pip
@@ -420,6 +417,8 @@ function seedbox() {
   filebot
   sauve
   ansible-vault encrypt /opt/seedbox/variables/account.yml >/dev/null 2>&1
+
+  fi
 }
 
 
