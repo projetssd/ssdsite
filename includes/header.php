@@ -43,6 +43,13 @@ if($mode_debug)
     //$debugbar->addCollector(new DebugBar\DataCollector\ExceptionsCollector());
     
    
+    
+    $data = array('foo' => 'bar','toto' => 'tata',"titi" => array('steph' => "toito","oiuoi" => "oiuoiu"));
+    $data2 = $data;
+    $debugbar->addCollector(new DebugBar\DataCollector\ConfigCollector($data));
+    //$debugbar->addCollector(new DebugBar\DataCollector\ConfigCollector($data2));
+    
+   
     //$debugbar = new StandardDebugBar();
     $debugbarRenderer = $debugbar->getJavascriptRenderer();
     $debugbar_js = $debugbarRenderer->renderHead();
