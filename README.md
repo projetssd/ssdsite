@@ -1,5 +1,8 @@
 # ssdsite
 
+## Disclaimer
+Projet en cours de développement, fortement instable !
+
 ## Comment coder à plusieurs ?
 
 ### Créer un environnement de dev  
