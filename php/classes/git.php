@@ -50,6 +50,7 @@ class git
             }
         }
         return array("MAJAFAIRE" => $majafaire,
-            "MESSAGE" => $message);
+            "MESSAGE" => $message,
+            "BRANCH" => $this->branch);
     }
 }
