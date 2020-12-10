@@ -17,6 +17,8 @@ if($return_code != 0)
                 "message" => $return_lines));
 }
 
+
+
 $path_to_delete = array(
     __DIR__ . '/../cache',
     __DIR__ . '/../dist/js/min',
@@ -24,12 +26,7 @@ $path_to_delete = array(
     );
 foreach($path_to_delete as $path)
 {
-    $files = glob($path . '/*'); // get all file names
-foreach($files as $file){ // iterate files
-  if(is_file($file)) {
-    unlink($file); // delete file
-  }
-}
+    shell_exec('rm -rf ' . $path . '/*');
 }
 
 echo json_encode(array("status" => 1));
