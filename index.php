@@ -38,7 +38,8 @@ $js = array(
     'https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/localization/messages_fr.min.js',
     'changetheme.js',
     'navigation_modal.js',
-    'get_logs.js'
+    'get_logs.js',
+    'test_git.js'
 );
     
 // css utilisés
