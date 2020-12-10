@@ -18,17 +18,17 @@ class git
     
     private function get_branch()
     {
-        $this->branch = shell_exec('git rev-parse --abbrev-ref HEAD');
+        $this->branch = trim(shell_exec('git rev-parse --abbrev-ref HEAD'));
     }
     
     private function get_current_hash()
     {
-        $this->current_hash = shell_exec('git rev-parse HEAD');
+        $this->current_hash = trim(shell_exec('git rev-parse HEAD'));
     }
     
     private function get_distant_hash()
     {
-        $this->distant_hash = shell_exec('git rev-parse main@{upstream}');
+        $this->distant_hash = trim(shell_exec('git rev-parse main@{upstream}'));
     }
     
     public function test_update()
