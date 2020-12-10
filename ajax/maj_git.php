@@ -1,13 +1,15 @@
 <?php
 require_once __DIR__ . '/../includes/header.php';
 
-exec(__DIR__.'/../scripts/maj_appli.sh', $output, $retval);
+chdir(__DIR__ . '/../');
 
-if($retval == 0)
+exec('/usr/bin/git pull',$return_lines,$return_code);
+if($return_code != 0)
 {
-    echo "ok";
+    return json_encode(array("status" => 0,
+                "message" => $return_lines));
 }
-else
-{
-    echo "bad";
-}
+array_map( 'unlink', array_filter((array) glob(__DIR__ . '/../cache/*') ) );
+array_map( 'unlink', array_filter((array) glob(__DIR__ . '/../dist/js/min/*') ) );
+array_map( 'unlink', array_filter((array) glob(__DIR__ . '/../dist/css/min/*') ) );
+return json_encode(array("status" => 1));

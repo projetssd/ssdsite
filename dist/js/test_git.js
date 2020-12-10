@@ -31,15 +31,18 @@ $(document).ready(function() {
         toastr.warning("Mise à jour de l'application en cours, merci de patienter");
         $(".overlay").show();
          $.ajax({
-                url: "ajax/maj_git.php"
+                url: "ajax/maj_git.php",
+                 dataType: "json"
             }).done(function(data) {
-                if(data == 'ok')
+                console.log(data);
+                if(data.status == '1')
                 {
-                    toastr.sucess("Mise à jour terminée");
+                    toastr.success("Mise à jour terminée");
                 }
                 else
                 {
                     toastr.error("Une erreur est survenue pendant la mise à jour");
+                    console.log(data.message);
                 }
                  $(".overlay").hide();
             }).fail(function() {

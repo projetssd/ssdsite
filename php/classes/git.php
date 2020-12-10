@@ -29,6 +29,18 @@ class git
     
     private function get_distant_hash()
     {
+        global $debugbar;
+        global $mode_debug;
+        
+        $commande = 'cd ' . __DIR__ . '/../../ && git fetch';
+        $fetch = exec($commande,$rettab,$retvalue);
+        if($mode_debug)
+        {
+           $debugbar['messages']->addMessage('fetch :');
+           $debugbar['messages']->addMessage($commande);
+            $debugbar['messages']->addMessage($rettab);
+            $debugbar['messages']->addMessage($retvalue);
+        }
         $this->distant_hash = trim(shell_exec('git rev-parse main@{upstream}'));
     }
     
@@ -51,6 +63,8 @@ class git
         }
         return array("MAJAFAIRE" => $majafaire,
             "MESSAGE" => $message,
-            "BRANCH" => $this->branch);
+            "BRANCH" => $this->branch,
+            "CURRENT_HASH" => $this->current_hash,
+            "DISTANT_HASH" => $this->distant_hash);
     }
 }
