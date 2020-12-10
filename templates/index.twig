@@ -1,22 +1,64 @@
-{% include 'header.twig' %}
+<!DOCTYPE html>
+<html>
 
- <!-- Main content -->
-            <section class="content">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-md-3">
-                            {% block main_content %}
-                            {% include 'blocks/block_server.twig' %}
-                            {% include 'blocks/last_activities.twig' %}
-                        </div>
-                        <div class="col-md-9">
-                            {% include 'blocks/applis.twig' %}
-                            {% endblock %}
-                        </div>
+<head>
+    {% include 'header.twig' %}
+</head>
+
+<body class="hold-transition sidebar-mini sidebar-collapse">
+
+    {% include 'haut_page.twig' %}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper" id="content-global">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-3">
+                    <div class="col-sm-6">
+                        <h1>
+                            {{ TITRE }}
+                        </h1>
                     </div>
-                    <!-- /.row -->
-         
+
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <button type="button" class="btn btn-default install-modal">Installation Seedbox
+                                </button>
+                        </ol>
+                    </div>
                 </div>
-                 
-            </section>
- {% include 'footer.twig' %}
+            </div>
+        </section>
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-3">
+                        {% block main_content %} 
+                        {% include 'blocks/block_server.twig' %} 
+                        {% include 'blocks/last_activities.twig' %}
+                    </div>
+                    <div class="col-md-9">
+                        {% include 'blocks/applis.twig' %} {% endblock %}
+                    </div>
+                </div>
+                <!-- /.row -->
+
+            </div>
+
+        </section>
+        <footer class="main-footer">
+            <div class="float-right d-none d-sm-block">
+                <b>Version</b> 1.0.0
+            </div>
+            <strong>Copyright &copy; 2020 <a href="http://scriptseedboxdocker.com">SSD</a>.</strong> All rights reserved.
+        </footer>
+
+    </div>
+
+<!-- Main content -->
+
+
+</body>
+{% include 'footer.twig' %}
+
+</html>
