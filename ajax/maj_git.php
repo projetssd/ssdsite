@@ -10,6 +10,13 @@ if($return_code != 0)
                 "message" => $return_lines));
 }
 
+exec('/usr/bin/composer install',$return_lines,$return_code);
+if($return_code != 0)
+{
+    echo json_encode(array("status" => 0,
+                "message" => $return_lines));
+}
+
 $path_to_delete = array(
     __DIR__ . '/../cache',
     __DIR__ . '/../dist/js/min',
