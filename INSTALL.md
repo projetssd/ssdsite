@@ -1,17 +1,5 @@
 # Installation
 
-## Cloner le repo
-```
-git clone git@github.com:Merrick28/ssdsite.git /var/www/ssdsite
-```
-ou bien
-```
-git clone https://github.com/Merrick28/ssdsite.git /var/www/ssdsite
-```
-
-Si vous changez le chemin, pensez à modifier les étapes suivantes
-
-
 ## Installer les dépendances
 
 ```
@@ -19,10 +7,17 @@ apt install nginx php-fpm php-mysql php-curl php-dom composer
 ```
 Ca va sortir en erreur, c'est normal. Nginx essaie de démarrer sur le port 80 alors qu'il y a déjà traefik dessus.
 
+## Cloner le repo en tant que www-data
+```
+su - www-data -s /bin/bash -c "git clone https://github.com/projetssd/ssdsite.git /var/www/ssdsite"
+```
+
+Si vous changez le chemin, pensez à modifier les étapes suivantes
+
 ## Récupérer les dépendances
 Depuis le répertoire du projet, lancer la commande
 ```
-composer install
+su - www-data -s /bin/bash -c "cd /var/www/ssdsite && composer install"
 ``` 
 ## modifier la conf nginx
 
