@@ -26,6 +26,9 @@ $path_to_delete = array(
     );
 foreach($path_to_delete as $path)
 {
+    //echo $path . "<br>";
+    $commande = 'rm -rf ' . $path . '/*';
+    //echo $commande ."<br>";
     shell_exec('rm -rf ' . $path . '/*');
 }
 

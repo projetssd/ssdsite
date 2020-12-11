@@ -55,7 +55,7 @@ class service
     /**
      * @var integer Port utilisé par l'appli
      */
-    public $port;
+    public $port = 0;
     /**
      * @var string Adresse ip du container
      */
@@ -106,40 +106,16 @@ class service
         }
 
         // ici on va surcharger ce qui n'est pas générique
-        switch ($my_service)
+        require __DIR__ . '/detail_appli.php';
+        $this->port = $tableau_appli[$my_service]['port'];
+        if($this->port == 0)
         {
-            case 'radarr':
-                $this->port = 7878;
-                break;
-            case 'sonarr':
-                $this->port = 8989;
-                break;
-            case 'rutorrent':
-                $this->port = 8080;
-                break;
-            case 'lidarr':
-                $this->port = 8686;
-                break;
-            case 'medusa':
-                $this->port = 8081;
-                break;
-            case 'jackett':
-                $this->port = 9117;
-                break;
-            case 'sensorr':
-                $this->port = 443;
-                break;
-            case 'emby':
-                $this->port = 8096;
-                break;
-            case 'all':
-                // cas particulier pour charger toutes les cases possibles
-                // ne sert qu'à construire un tableau qu'on utilisera plus tard
-                // je mets juste ce case pour ne pas bloquer
-                break;
-            default:
-                die('Service non disponible');
+            $log = new log;
+            $log->writelog("Appli " . $my_service . " non connue ?");
+            // port non connu, on met un port par défaut
+            $this->port = 80;
         }
+
         $this->url = "http://" . $this->host . ":" . $this->port;
 
         if ($my_service != 'all')
@@ -287,6 +263,7 @@ class service
             case 'radarr':
             case 'sonarr':
             case 'lidarr':
+            case 'bazarr':
                 $html = $this->get_html($this->url . '/initialize.js');
 
                 $html = explode('=', $html);
@@ -320,6 +297,36 @@ class service
                 $json    = json_decode($html, true);
                 $version = $json['app_version'];
                 break;
+            case 'autoscan':
+                $version = shell_exec("docker exec autoscan autoscan --version");
+                break;
+            case 'medusa':
+            case "calibre":
+            case "calibreweb":  
+            case "db-nextcloud": 
+            case "nextcloud": 
+            case "tautulli":
+                $result  = shell_exec("docker inspect -f '{{.Config.Labels.build_version}}' " . $this->display_name);
+                $temp    = explode('-', $result);
+                $version = $temp[1];
+                break;
+             case "traefik":
+                $version  = shell_exec('docker inspect -f \'{{ index .Config.Labels "org.opencontainers.image.version" }}\' traefik');
+                break;
+            case "ubooquity":
+                $temp  = shell_exec("docker inspect -f '{{.Config.Env}}' ubooquity");
+                $tab_env = explode(" ",$temp);
+                foreach($tab_env as $detail_env)
+                {
+                    
+                    if(strpos($detail_env,"APP_VERSION") !== false)
+                    {
+                        $temp_version = explode("=",$detail_env);
+                        $version = $temp_version[1];
+                    }
+                }
+                break;
+            
         }
 
         if (empty($version))
@@ -491,12 +498,16 @@ class service
         $listfiles = scandir('/opt/seedbox/status/');
         foreach($listfiles as $file)
         {
-            $tmp = new service($file);
-            if($this->is_installed())
+            if(substr($file,0,1) !== '.')
             {
-                $retour[] = $tmp;
+                $tmp = new service($file);
+                if($tmp->is_installed())
+                {
+                    $retour[] = $file;
+                }
+                unset($tmp);
             }
-            unset($tmp);
+
         }
         return $retour;
     }

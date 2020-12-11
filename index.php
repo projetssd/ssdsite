@@ -19,6 +19,7 @@ $tableau_appli = [
     
 $service = new service('all');
 $tab_installed = $service->get_installed_appli();
+
 $applis = $service->get_all($tab_installed);
 if($mode_debug)
 {
