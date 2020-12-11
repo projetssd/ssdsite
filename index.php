@@ -1,6 +1,7 @@
 <?php
 
 require 'includes/header.php';
+
 if($mode_debug)
 {
     $debugbar['time']->startMeasure('monindex', 'Chargement index');
