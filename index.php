@@ -1,32 +1,30 @@
 <?php
 
 require 'includes/header.php';
-
+/*
 if($mode_debug)
 {
     $debugbar['time']->startMeasure('monindex', 'Chargement index');
-}
+}*/
 
 
-$tableau_appli = [
-    'rutorrent',
-    'radarr',
-    'sonarr',
-    'medusa',
-    'jackett',
-    'lidarr',
-    'sensorr',
-    'emby'];
-    
 $service = new service('all');
+
+$debugbar['time']->startMeasure('applis', 'Chargement applis installées');
 $tab_installed = $service->get_installed_appli();
+$debugbar['time']->stopMeasure('applis');
+
+$tab_uninstalled = $service->get_uninstalled_applis($tab_installed);
+
+
 
 $applis = $service->get_all($tab_installed);
+/*
 if($mode_debug)
 {
     $debugbar['messages']->addMessage("On a chargé les éléments " . print_r($applis,true));
     $debugbar['messages']->addMessage($applis);
-}
+}*/
 
 
 // javascripts  utilisés
@@ -70,10 +68,10 @@ if ($prod) {
     $asset_js = $assets->js();
 }
 
-if($mode_debug)
+/*if($mode_debug)
 {
     $debugbar['time']->stopMeasure('monindex');
-}
+}*/
 
 /**
  * PLUS DE DEBUG BAR APRES CA !!
@@ -87,7 +85,7 @@ if($mode_debug)
 
 // maintenant qu'on a toutes les variables, on appelle le bon template, en mettant les variables dedans
 $template = $twig->load('index.twig');
-echo $template->render(['IP' => $ip,
+echo $template->render(['IP' =>  $_SERVER['REMOTE_ADDR'],
 'TITRE' => 'Gestion du serveur SSD',
 'FREE_DISK' => $free_disk,
 'UPTIME'=> $uptime,
@@ -99,5 +97,6 @@ echo $template->render(['IP' => $ip,
 'ASSET_CSS' => $asset_css,
 'ASSET_JS' => $asset_js,
 'DEBUGBARJS' => $debugbar_js,
-'DEBUGBARRENDER' => $debugbarrender
+'DEBUGBARRENDER' => $debugbarrender,
+'UNINSTALLED' => $tab_uninstalled
 ]);
