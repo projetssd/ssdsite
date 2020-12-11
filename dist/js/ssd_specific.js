@@ -33,10 +33,12 @@ function test_etat() {
                     if (running) {
                         $("#texte-bouton-restart-" + appli).html("Redémarrer");
                         $("#version-" + appli).html(version);
+                        $("#i_bouton_status_" + appli).removeClass("fa-play-circle").addClass("fa-redo-alt");
                     }
                     else {
                         $("#texte-bouton-restart-" + appli).html("Démarrer");
                         $("#version-" + appli).html("Service non démarré");
+                        $("#i_bouton_status_" + appli).addClass("fa-play-circle").removeClass("fa-redo-alt");
 
                     }
                     $("#nomAppli-" + appli).unwrap().wrap('<a href="https://' + public_url + '" target="_blank">');

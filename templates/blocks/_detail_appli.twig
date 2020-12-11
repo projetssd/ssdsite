@@ -10,14 +10,16 @@
         </div>
         <div class="card-footer" id="toto">
             <a class="link-black start-stop-button-{{ MYAPPLI.display_name }} text-sm mr-2 bouton-start" data-appli="{{ MYAPPLI.display_name }}" id="reset-{{ MYAPPLI.display_name }}" style="{% if not MYAPPLI.installed %}display: none;{% endif %}cursor: pointer;">
-                <i class="fas fa-share mr-1"></i>
+                
+                <i id="i_bouton_status_{{ MYAPPLI.display_name }}" class="fas {% if MYAPPLI.running %}fa-redo-alt{% else %}fa-play-circle{% endif %}"></i>
+               
         
                     <span id="texte-bouton-restart-{{ MYAPPLI.display_name }}">
                         {% if MYAPPLI.running %}Redémarrer{% else %}Démarrer{% endif %}
                     </span>
             </a>
             <a class="link-black start-stop-button-{{ MYAPPLI.display_name }} text-sm mr-2 bouton-stop" data-appli="{{ MYAPPLI.display_name }}" id="stop-{{ MYAPPLI.display_name }}" style="cursor: pointer;">
-                <i class="fas fa-share mr-1"></i>stop
+                <i class="fas fa-stop-circle"></i> stop
             </a>
             <span class="float-right">
                 <!-- Notes j'ai deporté la classe bouton-install dans le button modal et remplacé par une classe affichage-modal que j'ai declaré dasn le fichier js, j'ai mis le modal dans header.wig -->
