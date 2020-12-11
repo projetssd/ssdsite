@@ -326,6 +326,9 @@ class service
                     }
                 }
                 break;
+            case "plex":
+                $version  = shell_exec('docker exec plex /usr/lib/plexmediaserver/Plex\ Media\ Server --version');
+                break;
             
         }
 
