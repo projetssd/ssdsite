@@ -512,7 +512,6 @@ class service
                       $retour[] = $file;
                  }
             }
-
         }
         return $retour;
     }

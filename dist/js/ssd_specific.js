@@ -27,7 +27,7 @@ function test_etat() {
                 // on va modifier le bouton en fonction de l'install
                 if (installed) {
                     $("#status-" + appli).html("Désinstaller").removeClass("btn-success").addClass("btn-warning");
-                    $("#div-" + appli).removeClass('div-uninstalled').attr('data-installed','1');
+                    $("#div-" + appli).removeClass('div-uninstalled').attr('data-installed', '1');
                     $(".start-stop-button-" + appli).show();
                     // l'appli tourne, on va modifier les boutons si besoin
                     if (running) {
@@ -46,7 +46,7 @@ function test_etat() {
                 }
                 else {
                     $("#status-" + appli).html("Installer").removeClass("btn-warning").addClass("btn-success");
-                    $("#div-" + appli).addClass('div-uninstalled').attr('data-installed','0');
+                    $("#div-" + appli).addClass('div-uninstalled').attr('data-installed', '0');
                     $(".start-stop-button-" + appli).hide();
                     $("#nomAppli-" + appli).unwrap().wrap('<a>');
                     $("#version-" + appli).html("Application non installée");
@@ -98,10 +98,10 @@ $(document).ready(function() {
             $("#formBlockOauth").hide();
         }
     });
-    
+
     $("#affiche-install-appli").click(function() {
         console.log('affiche install');
-       $('#modal_install_applis').modal('show'); 
+        $('#modal_install_applis').modal('show');
     });
 
     $(".install-modal").click(function() {
@@ -112,13 +112,22 @@ $(document).ready(function() {
         $('#rclone_token').modal('show');
     });
 
-    $(".affichage-modal").click(function() {
+    $(".install_appli_etape_1").click(function(event) {
+        console.log("Install appli");
+        event.preventDefault();
         let appli = $(this).attr("data-appli");
-        if ($("#div-" + appli).attr('data-installed') === '0') {
-            $("#nomappliencours").html(appli);
-            $("#validation_install_appli").attr('data-appli', appli);
-            $('#modalPoll').modal('show');
-        }
+
+        $("#nomappliencours").html(appli);
+        $("#validation_install_appli").attr('data-appli', appli);
+        $("#subdomain").val(appli);
+        $('#modal_install_applis').modal('hide');
+        $('#modalPoll').modal('show');
+
+
+        /**
+         * NOTES MERRICK
+         * A GARDER POUR LA SUITE, POUR DESINSTALL
+         * 
         else if ($("#div-" + appli).attr('data-installed') === "1") {
             $("#status-" + appli).html("Désinstallation...");
             $.ajax({
@@ -140,7 +149,7 @@ $(document).ready(function() {
         }
         else {
             console.log('Erreur sur le texte du bouton, impossible de continuer');
-        }
+        }*/
     });
 
 
@@ -148,54 +157,54 @@ $(document).ready(function() {
     // pour creer un rclone.conf en dehors d'une proceduree d install
     // ainsi que les deux modals correspondant ds header.twig
     $("#rclone_install_appli").click(function() {
-            if ($("#client").val() !== "") {
-                console.log('client n est pas vide');
-                var client = $("#client").val();
-                console.log('client a la valeur ' + client);
-                var secret = $("#secret").val();
-                console.log('secret a la valeur ' + secret);
-            }
-            else {
-                console.log('client est VIDE !');
-            }
-            $.ajax({
-                url: "ajax/install_rclone.php?client=" + client + "&secret=" + secret
-            }).done(function(data) {
-                // On est dans le done, tout est ok
-                // la requête est passée
-                // console.log("result " + data);
-                $('#rclone').modal('hide');
-                $('#rclone_token').modal('show');
-                window.open('https://accounts.google.com/o/oauth2/auth?client_id=' + client + '&redirect_uri=urn:ietf:wg:oauth:2.0:oob&scope=https://www.googleapis.com/auth/drive&response_type=code', '_blank');
-            }).fail(function() {
-                console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
-            });
+        if ($("#client").val() !== "") {
+            console.log('client n est pas vide');
+            var client = $("#client").val();
+            console.log('client a la valeur ' + client);
+            var secret = $("#secret").val();
+            console.log('secret a la valeur ' + secret);
+        }
+        else {
+            console.log('client est VIDE !');
+        }
+        $.ajax({
+            url: "ajax/install_rclone.php?client=" + client + "&secret=" + secret
+        }).done(function(data) {
+            // On est dans le done, tout est ok
+            // la requête est passée
+            // console.log("result " + data);
+            $('#rclone').modal('hide');
+            $('#rclone_token').modal('show');
+            window.open('https://accounts.google.com/o/oauth2/auth?client_id=' + client + '&redirect_uri=urn:ietf:wg:oauth:2.0:oob&scope=https://www.googleapis.com/auth/drive&response_type=code', '_blank');
+        }).fail(function() {
+            console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+        });
     });
 
     // on va intercepter le click sur le bouton sur le modal rclone
     $("#rclone_token_valid").click(function() {
-            if ($("#token").val() !== "") {
-                console.log('token n est pas vide');
-                var token = $("#token").val();
-                console.log('token a la valeur ' + token);
-                var drive = $('input[type=radio][name=drive]:checked').attr('value');
-                console.log('drive a la valeur ' + drive);
-                var drivename = $("#drivename").val();
-                console.log('drivename a la valeur ' + drivename);
-            }
-            else {
-                console.log('TOKEN est VIDE !');
-            }
-            $.ajax({
-                url: "ajax/install_token.php?token=" + token + "&drive=" + drive + "&drivename=" + drivename
-            }).done(function(data) {
-                // On est dans le done, tout est ok
-                // la requête est passée
-               $('#rclone_token').modal('hide');
-                console.log("result " + data);
-            }).fail(function() {
-                console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
-            });
+        if ($("#token").val() !== "") {
+            console.log('token n est pas vide');
+            var token = $("#token").val();
+            console.log('token a la valeur ' + token);
+            var drive = $('input[type=radio][name=drive]:checked').attr('value');
+            console.log('drive a la valeur ' + drive);
+            var drivename = $("#drivename").val();
+            console.log('drivename a la valeur ' + drivename);
+        }
+        else {
+            console.log('TOKEN est VIDE !');
+        }
+        $.ajax({
+            url: "ajax/install_token.php?token=" + token + "&drive=" + drive + "&drivename=" + drivename
+        }).done(function(data) {
+            // On est dans le done, tout est ok
+            // la requête est passée
+            $('#rclone_token').modal('hide');
+            console.log("result " + data);
+        }).fail(function() {
+            console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+        });
     });
 
     // on va intercepter le click sur le bouton status
@@ -204,54 +213,52 @@ $(document).ready(function() {
         console.log("Appli appelée " + appli)
         // on va considérer que le texte du bouton est ok
         // a voir si on refait un appel ajax pour vérifier 
-        if ($("#div-" + appli).attr("data-installed") === "0") {
-            if ($("#subdomain").val() !== "") {
-                console.log('Subdomain n est pas vide');
-                var subdomain = $("#subdomain").val();
-                console.log('Subdomain a la valeur ' + subdomain);
-                $("#validation_install_appli").attr('data-subdomain', subdomain);
-            }
-            else {
-                console.log('Subdomain est VIDE !');
-            }
-            // on change le texte du bouton
-            $("#status-" + appli).html("Installation...");
-            // on lance un ajax qui va installer tout ça
-            // là je ferme le modal, jusque là ca va et le modal "modalYT1" se lance
-            $('#modalPoll').modal('hide');
-            toastr.success("Installation de " + appli + " commencée");
-            console.log('Subdomain a ENCORE la valeur ' + subdomain);
-            //$(".overlay").show();
-            $.ajax({
-                url: "ajax/install_service.php?service=" + appli + "&subdomain=" + subdomain
-            }).done(function(data) {
-                // On est dans le done, tout est ok
-                // la requête est passée
-                console.log("result " + data);
-                // on change le texte du bouton 
-                $("#status-" + appli).html("Désinstaller").removeClass("btn-success").addClass("btn-warning");
-                // on afficher les boutons start/stop
-                $(".start-stop-button-" + appli).show();
-                // on affiche les logs
-                // il suffit d'afficher la dic modalYT1 qui contient déjà un iframe de défilement des logs
-
-                // on met à jour les infos de la div
-                $("#div-" + appli).attr("data-installed", 1).removeClass('div-uninstalled');
-                // on rafraichit les applis
-                test_etat();
-                 refresh_logs();
-                 //$(".overlay").hide();
-                  toastr.success("Installation de " + appli + " terminée");
-            }).fail(function() {
-                //$(".overlay").hide();
-                console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
-                toastr.warning("Erreur sur ajax");
-                $("#status-" + appli).html("Erreur ajax");
-            });
+        if ($("#subdomain").val() !== "") {
+            console.log('Subdomain n est pas vide');
+            var subdomain = $("#subdomain").val();
+            console.log('Subdomain a la valeur ' + subdomain);
+            $("#validation_install_appli").attr('data-subdomain', subdomain);
         }
         else {
-            console.log('Tentative d installation d une appli déjà installée');
+            console.log('Subdomain est VIDE !');
         }
+        // on change le texte du bouton
+        $("#status-" + appli).html("Installation...");
+        // on lance un ajax qui va installer tout ça
+        // là je ferme le modal, jusque là ca va et le modal "modalYT1" se lance
+        $('#modalPoll').modal('hide');
+        toastr.success("Installation de " + appli + " commencée");
+        console.log('Subdomain a ENCORE la valeur ' + subdomain);
+        //$(".overlay").show();
+        $.ajax({
+            url: "ajax/install_service.php?service=" + appli + "&subdomain=" + subdomain
+        }).done(function(data) {
+            // On est dans le done, tout est ok
+            // la requête est passée
+            console.log("result " + data);
+            // on change le texte du bouton 
+            $("#status-" + appli).html("Désinstaller").removeClass("btn-success").addClass("btn-warning");
+            // on afficher les boutons start/stop
+            $(".start-stop-button-" + appli).show();
+            // on affiche les logs
+            // il suffit d'afficher la dic modalYT1 qui contient déjà un iframe de défilement des logs
+
+            // on met à jour les infos de la div
+            $("#div-" + appli).attr("data-installed", 1).removeClass('div-uninstalled');
+            // on rafraichit les applis
+            test_etat();
+            refresh_logs();
+            //$(".overlay").hide();
+            toastr.success("Installation de " + appli + " terminée");
+            window.location.reload();
+
+        }).fail(function() {
+            //$(".overlay").hide();
+            console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+            toastr.warning("Erreur sur ajax");
+            $("#status-" + appli).html("Erreur ajax");
+        });
+
 
     });
 
@@ -275,7 +282,7 @@ $(document).ready(function() {
                 $("#reset-" + appli).html("Redémarrer");
                 texte_alerte = 'Démarrage';
             }
-             refresh_logs();
+            refresh_logs();
         }).fail(function() {
             console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
             $("#status-" + appli).html("Erreur ajax");
@@ -303,13 +310,13 @@ $(document).ready(function() {
         }).done(function() {
             toastr.success("Arrêt de " + appli + " en cours");
             $(".start-stop-button-" + appli).show();
-             refresh_logs();
+            refresh_logs();
         }).fail(function() {
             console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
             $(".start-stop-button-" + appli).show();
             $("#status-" + appli).html("Erreur ajax");
         });
-       
+
     });
 
     // gestion de la zone de recherche
@@ -410,8 +417,7 @@ $(document).ready(function() {
     $.ajax({
         url: "ajax/delete_old_logs.php",
     }).done(function(data) {
-        if(data == 'ok')
-        {
+        if (data == 'ok') {
             console.log('Vieux logs effacés');
         }
 
@@ -419,6 +425,6 @@ $(document).ready(function() {
         console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
 
     });
-    
+
 
 });
