@@ -10,9 +10,7 @@ if($mode_debug)
 
 $service = new service('all');
 
-$debugbar['time']->startMeasure('applis', 'Chargement applis installées');
 $tab_installed = $service->get_installed_appli();
-$debugbar['time']->stopMeasure('applis');
 
 $tab_uninstalled = $service->get_uninstalled_applis($tab_installed);
 
