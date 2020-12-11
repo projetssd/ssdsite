@@ -480,6 +480,26 @@ class service
         return ['installed'   => $appli_installed,
                 'uninstalled' => $appli_uninstalled,];
     }
+
+    /**
+     * Retourne un tableau des applis installées
+     * @return array Liste des applis installées
+     */
+    function get_installed_appli()
+    {
+        $retour = array();
+        $listfiles = scandir('/opt/seedbox/status/');
+        foreach($listfiles as $file)
+        {
+            $tmp = new service($file);
+            if($this->is_installed())
+            {
+                $retour[] = $tmp;
+            }
+            unset($tmp);
+        }
+        return $retour;
+    }
 }
 
 
