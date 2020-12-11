@@ -503,15 +503,44 @@ class service
         {
             if(substr($file,0,1) !== '.')
             {
-                $tmp = new service($file);
-                if($tmp->is_installed())
-                {
-                    $retour[] = $file;
-                }
-                unset($tmp);
+                 $filename = '/opt/seedbox/status/' . $file;
+                 $handle     = fopen($filename, 'r');
+                 $contents = fread($handle, filesize($filename));
+                 
+                 if($contents == 2)
+                 {
+                      $retour[] = $file;
+                 }
             }
 
         }
+        return $retour;
+    }
+    
+    public function get_uninstalled_applis($applis_installed)
+    {
+        global $mode_debug;
+        global $debugbar;
+        
+        $retour = array();
+        require __DIR__ . '/detail_appli.php';
+        
+        $all_applis = array();
+        foreach($tableau_appli as $key => $val)
+        {
+            if($key != 'all')
+            {
+                $all_applis[] = $key;
+            }
+        }
+
+        
+        $retour = array();
+        foreach(array_diff($all_applis,$applis_installed) as $val)
+        {
+            $retour[] = $val;
+        }
+
         return $retour;
     }
 }

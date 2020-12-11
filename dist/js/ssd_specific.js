@@ -98,7 +98,11 @@ $(document).ready(function() {
             $("#formBlockOauth").hide();
         }
     });
-
+    
+    $("#affiche-install-appli").click(function() {
+        console.log('affiche install');
+       $('#modal_install_applis').modal('show'); 
+    });
 
     $(".install-modal").click(function() {
         $('#seedbox').modal('show');
@@ -415,4 +419,6 @@ $(document).ready(function() {
         console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
 
     });
+    
+
 });

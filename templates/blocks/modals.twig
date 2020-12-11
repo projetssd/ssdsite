@@ -106,6 +106,33 @@
 
     </div>
     <!-- Modal: logs -->
+    
+        <!-- Modal: applis à installer -->
+    <div class="modal fade right" id="modal_install_applis" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Installer une application</h4>
+                </div>
+                <div class="modal-body" id="detail_log">
+                Cliquez sur une appli pour l'installer : <br />
+                <div class="row">
+                
+                {% for APPLI in UNINSTALLED %}
+                {% include 'blocks/_appli_a_installer.twig' %}
+                {% endfor %}
+                
+                </div>
+                </div>
+                <div class="modal-footer float-right">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <!-- Modal: logs -->
 
 
     <!-- Modal: token -->
