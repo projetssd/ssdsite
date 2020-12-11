@@ -237,18 +237,6 @@ $(document).ready(function() {
             // la requête est passée
             console.log("result " + data);
             // on change le texte du bouton 
-            $("#status-" + appli).html("Désinstaller").removeClass("btn-success").addClass("btn-warning");
-            // on afficher les boutons start/stop
-            $(".start-stop-button-" + appli).show();
-            // on affiche les logs
-            // il suffit d'afficher la dic modalYT1 qui contient déjà un iframe de défilement des logs
-
-            // on met à jour les infos de la div
-            $("#div-" + appli).attr("data-installed", 1).removeClass('div-uninstalled');
-            // on rafraichit les applis
-            test_etat();
-            refresh_logs();
-            //$(".overlay").hide();
             toastr.success("Installation de " + appli + " terminée");
             window.location.reload();
 
