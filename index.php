@@ -1,6 +1,7 @@
 <?php
 
 require 'includes/header.php';
+
 if($mode_debug)
 {
     $debugbar['time']->startMeasure('monindex', 'Chargement index');
@@ -18,7 +19,9 @@ $tableau_appli = [
     'emby'];
     
 $service = new service('all');
-$applis = $service->get_all($tableau_appli, false);
+$tab_installed = $service->get_installed_appli();
+
+$applis = $service->get_all($tab_installed);
 if($mode_debug)
 {
     $debugbar['messages']->addMessage("On a chargé les éléments " . print_r($applis,true));
