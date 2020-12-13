@@ -10,15 +10,27 @@ if($return_code != 0)
                 "message" => $return_lines));
 }
 
+$log = new log;
+foreach($return_lines as $line)
+{
+    $log->writelogappli($line,"gui","update");
+}
+
 exec('/usr/bin/composer install',$return_lines,$return_code);
 if($return_code != 0)
 {
+    $log->writelogappli("Erreur sur la mise à jour !","gui","update");   
     echo json_encode(array("status" => 0,
                 "message" => $return_lines));
+    die('');
+             
+}
+else{
+    $log->writelogappli("Mise à jour terminée","gui","update");   
 }
 
 
-
+$log->writelogappli("Suppression des caches","gui","update"); 
 $path_to_delete = array(
     __DIR__ . '/../cache',
     __DIR__ . '/../dist/js/min',
@@ -29,7 +41,7 @@ foreach($path_to_delete as $path)
     //echo $path . "<br>";
     $commande = 'rm -rf ' . $path . '/*';
     //echo $commande ."<br>";
-    shell_exec('rm -rf ' . $path . '/*');
+    $log->writelogappli(shell_exec('rm -rf ' . $path . '/*'),"gui","update");
 }
 
 echo json_encode(array("status" => 1));

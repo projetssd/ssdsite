@@ -6,16 +6,27 @@
  */
 class log
 {
+    private $datelog;
+    public function __construct()
+    {
+        $this->datelog = date('Ymd-His');
+    }
     public function writelog($message, $type='INFO', $display = false)
     {
         $date        = date('d/m/Y H:i:s');
         $datefichier = date('Ymd');
-        if(!error_log("PHP : " . $date . " - " . $type . " - " . $message . PHP_EOL, 3, __DIR__ . '/../../logs/ssdsite-' .
+        if(!error_log("PHP : " . $date . "-" . $type . "-" . $message . PHP_EOL, 3, __DIR__ . '/../../logs/ssdsite-' .
                                                                                     $datefichier .
                                                                                     '.log'))
         {
             die("erreur d'écriture de fichier");
         }
+    }
+    
+    public function writelogappli($message,$appli,$type)
+    {
+        $fichier = __DIR__ . '/../../logs/' . $this->datelog . ' - ' . $type . '-' . $appli . '.log';
+        error_log($message. PHP_EOL,3,$fichier);
     }
     
     
