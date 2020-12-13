@@ -42,7 +42,15 @@ function test_etat() {
                         $("#i_bouton_status_" + appli).addClass("fa-play-circle").removeClass("fa-redo-alt");
                         $("#stop-" + appli).hide();
                     }
-                    $("#nomAppli-" + appli).unwrap().wrap('<a href="https://' + public_url + '" target="_blank">');
+                    if(public_url !== false)
+                    {
+                        $("#nomAppli-" + appli).unwrap().wrap('<a href="https://' + public_url + '" target="_blank">');
+                    }
+                    else
+                    {
+                        $("#nomAppli-" + appli).unwrap().wrap('<a>');
+                    }
+
                 }
                 else {
                     $("#status-" + appli).html("Installer").removeClass("btn-warning").addClass("btn-success");
