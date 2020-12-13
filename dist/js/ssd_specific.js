@@ -154,7 +154,6 @@ $(document).ready(function() {
     });
 
     $(".install_appli_etape_1").click(function(event) {
-        console.log("Install appli");
         event.preventDefault();
         let appli = $(this).attr("data-appli");
 
