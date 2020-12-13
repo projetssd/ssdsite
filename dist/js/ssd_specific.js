@@ -42,7 +42,13 @@ function test_etat() {
                         $("#i_bouton_status_" + appli).addClass("fa-play-circle").removeClass("fa-redo-alt");
                         $("#stop-" + appli).hide();
                     }
-                    $("#nomAppli-" + appli).unwrap().wrap('<a href="https://' + public_url + '" target="_blank">');
+                    if (public_url !== false) {
+                        $("#nomAppli-" + appli).unwrap().wrap('<a href="https://' + public_url + '" target="_blank">');
+                    }
+                    else {
+                        $("#nomAppli-" + appli).unwrap().wrap('<a>');
+                    }
+
                 }
                 else {
                     $("#status-" + appli).html("Installer").removeClass("btn-warning").addClass("btn-success");
@@ -112,6 +118,41 @@ $(document).ready(function() {
         $('#rclone_token').modal('show');
     });
 
+    // affichage du pop up de confirmation de désinstall
+    $(".uninstall").click(function() {
+        var appli = $(this).attr('data-appli');
+        $("#confirm-uninstall").attr('data-appli', appli);
+        $("#modal-confirm-uninstall").modal('show');
+        $(".appli-uninstall").html(appli);
+
+    });
+
+    // confirmation de la désinstall
+    $("#confirm-uninstall").click(function() {
+        $("#modal-confirm-uninstall").modal('hide');
+        var appli = $(this).attr('data-appli');
+        toastr.warning("Désinstallation de " + appli + " en cours...")
+
+        $.ajax({
+            url: "ajax/uninstall_service.php?service=" + appli
+        }).done(function() {
+            // On est dans le done, tout est ok
+            // la requête est passée
+            $("#status-" + appli).html("Installer").removeClass("btn-warning").addClass("btn-success");
+            // on cache les boutons start/stop
+            $(".start-stop-button-" + appli).hide();
+            // on affiche le toaster
+            toastr.success("Désinstallation de " + appli + " terminée");
+            // on ajoute la transparence
+            $("#div-" + appli).addClass('div-uninstalled').attr('data-installed', '0');
+            window.location.reload();
+        }).fail(function() {
+            console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+            $("#status-" + appli).html("Erreur ajax");
+        });
+
+    });
+
     $(".install_appli_etape_1").click(function(event) {
         console.log("Install appli");
         event.preventDefault();
@@ -124,32 +165,6 @@ $(document).ready(function() {
         $('#modalPoll').modal('show');
 
 
-        /**
-         * NOTES MERRICK
-         * A GARDER POUR LA SUITE, POUR DESINSTALL
-         * 
-        else if ($("#div-" + appli).attr('data-installed') === "1") {
-            $("#status-" + appli).html("Désinstallation...");
-            $.ajax({
-                url: "ajax/uninstall_service.php?service=" + appli
-            }).done(function() {
-                // On est dans le done, tout est ok
-                // la requête est passée
-                $("#status-" + appli).html("Installer").removeClass("btn-warning").addClass("btn-success");
-                // on cache les boutons start/stop
-                $(".start-stop-button-" + appli).hide();
-                // on affiche le toaster
-                toastr.success("Désinstallation de " + appli + " en cours");
-                // on ajoute la transparence
-                $("#div-" + appli).addClass('div-uninstalled').attr('data-installed','0');
-            }).fail(function() {
-                console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
-                $("#status-" + appli).html("Erreur ajax");
-            });
-        }
-        else {
-            console.log('Erreur sur le texte du bouton, impossible de continuer');
-        }*/
     });
 
 
