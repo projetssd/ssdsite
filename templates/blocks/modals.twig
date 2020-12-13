@@ -1,148 +1,168 @@
-    <!-- Modal: modalPoll -->
-    <div class="modal fade right" id="modalPoll" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
-        <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
-            <div class="modal-content">
-                <!--Header-->
+<!-- Modal: modalPoll -->
+<div class="modal fade right" id="modalPoll" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
+    <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
+        <div class="modal-content">
+            <!--Header-->
 
-                <div class="modal-header">
-                    <p class="heading lead">Installation de l'application <span id="nomappliencours"></span>
-                    </p>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <div class="modal-header">
+                <p class="heading lead">Installation de l'application <span id="nomappliencours"></span>
+                </p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true" class="white-text">×</span>
                     </button>
+            </div>
+            <!--Body-->
+            <div class="modal-body post">
+                <!-- Checkbox -->
+                <div class="checkbox">
+                    <input type="checkbox" id="myCheck" class="check_install"> Sous Domaines Personalisés
                 </div>
-                <!--Body-->
-                <div class="modal-body post">
-                    <!-- Checkbox -->
-                    <div class="checkbox">
-                        <input type="checkbox" id="myCheck" class="check_install"> Sous Domaines Personalisés
-                    </div>
-                    <!-- Checkbox -->
-                    <div>
-                        <p></p>
-                        <p id="text" style="display:none">Nom du sous domaine</p>
-                        <input type="text" id="subdomain" class="form-control" style="display:none" placeholder="Enter ..."></input>
-                    </div>
+                <!-- Checkbox -->
+                <div>
+                    <p></p>
+                    <p id="text" style="display:none">Nom du sous domaine</p>
+                    <input type="text" id="subdomain" class="form-control" style="display:none" placeholder="Enter ..."></input>
                 </div>
-                <!--Footer-->
-                <div class="modal-footer justify-content-center">
-                    <button type="submit" id="validation_install_appli" class="btn btn-success bouton-install" data-appli="" data-subdomain="">Installer</button>
-                </div>
+            </div>
+            <!--Footer-->
+            <div class="modal-footer justify-content-center">
+                <button type="submit" id="validation_install_appli" class="btn btn-success bouton-install" data-appli="" data-subdomain="">Installer</button>
             </div>
         </div>
     </div>
-    <!-- Modal: modalPoll -->
-    <!-- Modal: seedbox -->
-    <div class="modal fade right" id="seedbox" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
-        <div class="modal-dialog modal-full-height modal-lg" role="document">
-            <div class="modal-content">
+</div>
+<!-- Modal: modalPoll -->
+<!-- modal confirm uninstall -->
+<div class="modal" tabindex="-1" role="dialog" id="modal-confirm-uninstall">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Désinstallation de <span class="appli-uninstall"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+            </div>
+            <div class="modal-body">
+                <p>Etes vous sur de vouloir désinstaller <b><span class="appli-uninstall"></span></b> ?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="confirm-uninstall" data-appli="">Confirmer</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin modal confirm uninstall -->
+<!-- Modal: seedbox -->
+<div class="modal fade right" id="seedbox" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
+    <div class="modal-dialog modal-full-height modal-lg" role="document">
+        <div class="modal-content">
 
-                <div class="modal-header">
-                    <p class="heading lead">Installation seedbox
-                    </p>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <div class="modal-header">
+                <p class="heading lead">Installation seedbox
+                </p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true" class="white-text">×</span>
                     </button>
+            </div>
+
+            <div class="modal-body post">
+
+
+                <ul class="nav nav-tabs" id="tab-instsall-navigation" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="link-home-tab" data-toggle="tab" href="#tab-utilisateur" role="tab-utilisateur" aria-controls="home" aria-selected="true">Utilisateur</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" id="link-rclone-tab" data-toggle="tab" href="#tab-rclone" role="tab" aria-controls="tab-rclone" aria-selected="false">Rclone</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" id="link-gdrive-tab" data-toggle="tab" href="#tab-gdrive" role="tab" aria-controls="tab-gdrive" aria-selected="false">Gdrive</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="tab-utilisateur" role="tabpanel" aria-labelledby="home-tab">{% include "blocks/modal_install_etape1.twig" %}</div>
+                    <div class="tab-pane fade" id="tab-rclone" role="tabpanel" aria-labelledby="profile-tab">{% include "blocks/modal_install_etape2.twig" %}</div>
+                    <div class="tab-pane fade" id="tab-gdrive" role="tabpanel" aria-labelledby="contact-tab">{% include "blocks/modal_install_etape3.twig" %}</div>
                 </div>
 
-                <div class="modal-body post">
 
-
-                    <ul class="nav nav-tabs" id="tab-instsall-navigation" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" id="link-home-tab" data-toggle="tab" href="#tab-utilisateur" role="tab-utilisateur" aria-controls="home" aria-selected="true">Utilisateur</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link disabled" id="link-rclone-tab" data-toggle="tab" href="#tab-rclone" role="tab" aria-controls="tab-rclone" aria-selected="false">Rclone</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link disabled" id="link-gdrive-tab" data-toggle="tab" href="#tab-gdrive" role="tab" aria-controls="tab-gdrive" aria-selected="false">Gdrive</a>
-                        </li>
-                    </ul>
-
-                    <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade show active" id="tab-utilisateur" role="tabpanel" aria-labelledby="home-tab">{% include "blocks/modal_install_etape1.twig" %}</div>
-                        <div class="tab-pane fade" id="tab-rclone" role="tabpanel" aria-labelledby="profile-tab">{% include "blocks/modal_install_etape2.twig" %}</div>
-                        <div class="tab-pane fade" id="tab-gdrive" role="tabpanel" aria-labelledby="contact-tab">{% include "blocks/modal_install_etape3.twig" %}</div>
-                    </div>
-
-
-                </div>
-                <div class="modal-footer justify-content-center">
-                    <button id="retour-validation" data-step="1" class="btn btn-success" style="display:none;">Précédent</button> &nbsp;
-                    <button id="install-validation" data-step="1" class="btn btn-success">Etape suivante</button>
-                </div>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button id="retour-validation" data-step="1" class="btn btn-success" style="display:none;">Précédent</button> &nbsp;
+                <button id="install-validation" data-step="1" class="btn btn-success">Etape suivante</button>
             </div>
         </div>
     </div>
-    <!-- Modal: seedbox -->
+</div>
+<!-- Modal: seedbox -->
 
-    <!-- Modal: rclone -->
-    <div class="modal fade right" id="rclone" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
-        <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
-            <div class="modal-content">
+<!-- Modal: rclone -->
+<div class="modal fade right" id="rclone" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
+    <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
+        <div class="modal-content">
 
+        </div>
+    </div>
+</div>
+<!-- Modal: rclone -->
+
+<!-- Modal: logs -->
+<div class="modal fade" id="modal_logs" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Logs du serveur</h4>
+            </div>
+            <div class="modal-body" id="detail_log" style="white-space:pre-wrap; font-family: monospace;">
+
+            </div>
+            <div class="modal-footer float-right">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
             </div>
         </div>
     </div>
-    <!-- Modal: rclone -->
 
-    <!-- Modal: logs -->
-    <div class="modal fade" id="modal_logs" style="display: none;" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Logs du serveur</h4>
-                </div>
-                <div class="modal-body" id="detail_log" style="white-space:pre-wrap; font-family: monospace;">
 
-                </div>
-                <div class="modal-footer float-right">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
-                </div>
+</div>
+<!-- Modal: logs -->
+
+<!-- Modal: applis à installer -->
+<div class="modal fade right" id="modal_install_applis" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Installer une application</h4>
             </div>
-        </div>
-
-
-    </div>
-    <!-- Modal: logs -->
-    
-        <!-- Modal: applis à installer -->
-    <div class="modal fade right" id="modal_install_applis" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Installer une application</h4>
-                </div>
-                <div class="modal-body" id="detail_log">
+            <div class="modal-body" id="detail_log">
                 Cliquez sur une appli pour l'installer : <br />
                 <div class="row">
-                
-                {% for APPLI in UNINSTALLED %}
-                {% include 'blocks/_appli_a_installer.twig' %}
-                {% endfor %}
-                
-                </div>
-                </div>
-                <div class="modal-footer float-right">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+
+                    {% for APPLI in UNINSTALLED %} {% include 'blocks/_appli_a_installer.twig' %} {% endfor %}
+
                 </div>
             </div>
-        </div>
-
-
-    </div>
-    <!-- Modal: logs -->
-
-
-    <!-- Modal: token -->
-    <div class="modal fade right" id="rclone_token" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
-        <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
-            <div class="modal-content">
-                <!--Header-->
-
-
+            <div class="modal-footer float-right">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
             </div>
         </div>
     </div>
-    <!-- Modal: token -->
+
+
+</div>
+<!-- Modal: logs -->
+
+
+<!-- Modal: token -->
+<div class="modal fade right" id="rclone_token" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
+    <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
+        <div class="modal-content">
+            <!--Header-->
+
+
+        </div>
+    </div>
+</div>
+<!-- Modal: token -->
+    

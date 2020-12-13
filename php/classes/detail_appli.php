@@ -28,6 +28,7 @@ $tableau_appli = array(
     'traefik' =>  ["port" => 80], 
     'ubooquity' =>  ["port" => 2202], 
     'watchtower' =>  ["port" => 8080], 
+    'kitana' =>  ["port" => 31337], 
     // applis non gérees à partir d'ici
     'authelia' =>  ["port" => 8080], 
     'deluge' =>  ["port" => 8080], 
@@ -58,7 +59,6 @@ $tableau_appli = array(
     'filerun' =>  ["port" => 8080], 
     'firefox' =>  ["port" => 8080], 
     'jitsi' =>  ["port" => 8080], 
-    'kitana' =>  ["port" => 8080], 
     'komga' =>  ["port" => 8080], 
     'logarr' =>  ["port" => 8080], 
     'mattermost' =>  ["port" => 8080], 
