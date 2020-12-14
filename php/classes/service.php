@@ -497,20 +497,31 @@ class service
      */
     function get_installed_appli()
     {
+        global $debugbar;
+        $array_cache = array(
+            'collabora');
         $retour = array();
         $listfiles = scandir('/opt/seedbox/status/');
         foreach($listfiles as $file)
         {
             if(substr($file,0,1) !== '.')
             {
-                 $filename = '/opt/seedbox/status/' . $file;
-                 $handle     = fopen($filename, 'r');
-                 $contents = fread($handle, filesize($filename));
-                 
-                 if($contents == 2)
-                 {
-                      $retour[] = $file;
-                 }
+                if(substr($file,0,3) != 'db-')
+                {
+                    if(!in_array($file,$array_cache))
+                    {
+                         $filename = '/opt/seedbox/status/' . $file;
+                        $handle     = fopen($filename, 'r');
+                        $contents = fread($handle, filesize($filename));
+                         
+                        if($contents == 2)
+                        {
+                          $retour[] = $file;
+                        }
+                    }
+                   
+                }
+                
             }
         }
         return $retour;

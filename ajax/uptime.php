@@ -6,4 +6,15 @@ putenv('LC_ALL='.$locale);
 $data = shell_exec('who -b');
 $uptime = explode(' démarrage système ', $data);
 $uptime = $uptime[0].' '.$uptime[1];
-echo(''.$uptime.'');
+
+$newdate = str_replace("-","",$uptime);
+
+$date = new DateTime($newdate);
+$dateformat =  $date->format('d/m/Y');
+$heureformat = $date->format("H:i:s");
+
+
+
+
+echo $dateformat. ' ' . $heureformat;
+//echo $uptime;
