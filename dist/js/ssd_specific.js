@@ -361,7 +361,8 @@ $(document).ready(function() {
 
         let appli = $(this).attr('data-appli');
         // on met la bonne image
-        $("#logo-" + appli).attr("src", "https://www.scriptseedboxdocker.com/wp-content/uploads/icones/" + appli + ".png");
+        //$("#logo-" + appli).attr("src", "https://www.scriptseedboxdocker.com/wp-content/uploads/icones/" + appli + ".png");
+        $("#logo-" + appli).attr("src", "ajax/affiche_image.php?appli=" + appli);
         $.ajax({
             url: "ajax/check_version.php?service=" + appli,
         }).done(function(data) {
