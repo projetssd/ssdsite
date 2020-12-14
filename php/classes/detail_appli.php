@@ -35,7 +35,7 @@ $tableau_appli = array(
     'emby' =>  ["port" => 8080], 
     'heimdall' =>  ["port" => 8080], 
     'jdownloader' =>  ["port" => 8080], 
-    'Jellyfin' =>  ["port" => 8080], 
+    'jellyfin' =>  ["port" => 8080], 
     'lidarr' =>  ["port" => 8080], 
     'netdata' =>  ["port" => 8080], 
     'nzbhydra' =>  ["port" => 8080], 

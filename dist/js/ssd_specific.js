@@ -337,6 +337,23 @@ $(document).ready(function() {
             }
         });
     });
+    
+     // gestion de la zone de recherche pour les applis à installer
+    $("#uninstall-search").on('input', function() {
+        let searchcontent = $("#uninstall-search").val();
+        searchcontent = searchcontent.toLowerCase();
+        $(".div-appli-uninstalled").each(function() {
+
+            let iddiv = $(this).attr('id');
+            let nomdiv = $(this).attr('data-appli');
+            if (nomdiv.includes(searchcontent)) {
+                $("#" + iddiv).show();
+            }
+            else {
+                $("#" + iddiv).hide();
+            }
+        });
+    });
 
     // gestion de la case à cocher pour afficher les applis installées
     $("#installed_appli").change(function() {

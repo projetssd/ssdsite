@@ -550,7 +550,7 @@ class service
         {
             $retour[] = $val;
         }
-
+        sort($retour);
         return $retour;
     }
 }
