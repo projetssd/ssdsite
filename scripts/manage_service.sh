@@ -230,7 +230,7 @@ function uninstall() {
   log_applicatif $1
   ansible-playbook /opt/seedbox-compose/includes/dockerapps/templates/ansible/ansible.yml >> ${LOGFILE_APPLI}
   ansible-vault decrypt /opt/seedbox/variables/account.yml > /dev/null 2>&1
-  name=$(cat /tmp/name)
+  USER=$(cat /tmp/name)
 
   echo 0 > /opt/seedbox/status/$1
   sed -i "/$1/d" /opt/seedbox/variables/account.yml > /dev/null 2>&1
@@ -248,24 +248,24 @@ function uninstall() {
      ;;
      varken)
        docker rm -f influxdb telegraf grafana > /dev/null 2>&1
-       rm -rf /opt/seedbox/docker/$name/telegraf
-       rm -rf /opt/seedbox/docker/$name/grafana
-       rm -rf /opt/seedbox/docker/$name/influxdb
+       rm -rf /opt/seedbox/docker/$USER/telegraf
+       rm -rf /opt/seedbox/docker/$USER/grafana
+       rm -rf /opt/seedbox/docker/$USER/influxdb
      ;;
      jitsi)
       docker rm -f prosody jicofo jvb
-      rm -rf /opt/seedbox/docker/$name/.jitsi-meet-cfg
+      rm -rf /opt/seedbox/docker/$USER/.jitsi-meet-cfg
      ;;
      nextcloud)
        docker rm -f collabora coturn office
-       rm -rf /opt/seedbox/docker/$name/coturn
+       rm -rf /opt/seedbox/docker/$USER/coturn
      ;;
      rtorrentvpn)
        rm /opt/seedbox/conf/rutorrent-vpn.yml
      ;;
      *)
-     writelog "ACTION INDEFINIE" 'DEBUG' 
-       echo "Action indéfinie"
+     # writelog "ACTION INDEFINIE" 'DEBUG' 
+      rm -rf /opt/seedbox/docker/$USER/$1
      ;;
   esac
 
@@ -273,154 +273,6 @@ function uninstall() {
   docker volume rm $(docker volume ls -qf "dangling=true") > /dev/null 2>&1
   ansible-vault encrypt /opt/seedbox/variables/account.yml > /dev/null 2>&1
 }
-
-function seedbox() {
-  LOGFILE=${DIRNAME}/../logtail/log
-  rm -f $LOGFILE
-  # TEST ROOT USER
-  if [ "$USER" != "root" ]; then
-    echo "Ce script doit être lancé par root"
-    exit 1
-  fi
-
-  # Absolute path to this script.
-  CURRENT_SCRIPT=$(readlink -f "$0")
-  # Absolute path this script is in.
-  SCRIPTPATH=$(dirname "$CURRENT_SCRIPT")
-
-  # shellcheck source=/opt/seedbox/includes/functions.sh
-  source "${SCRIPTPATH}/includes/functions.sh"
-  # shellcheck source=/opt/seedbox/includes/variables.sh
-  source "${SCRIPTPATH}/includes/variables.sh"
-  clear
-
-  if [[ ! -d "$CONFDIR" ]]; then
-    echo -e "${CCYAN}
-   ___  ____  ____  ____  ____  _____  _  _
-  / __)( ___)(  _ \(  _ \(  _ \(  _  )( \/ )
-  \__ \ )__)  )(_) ))(_) )) _ < )(_)(  )  (
-  (___/(____)(____/(____/(____/(_____)(_/\_)
-
-  ${CEND}"
-
-  ## Constants
-  readonly PIP="9.0.3"
-  readonly ANSIBLE="2.5.14"
-
-  ## Environmental Variables
-  export DEBIAN_FRONTEND=noninteractive
-
-  ## Disable IPv6
-  if [ -f /etc/sysctl.d/99-sysctl.conf ]; then
-    grep -q -F 'net.ipv6.conf.all.disable_ipv6 = 1' /etc/sysctl.d/99-sysctl.conf ||
-      echo 'net.ipv6.conf.all.disable_ipv6 = 1' >>/etc/sysctl.d/99-sysctl.conf
-    grep -q -F 'net.ipv6.conf.default.disable_ipv6 = 1' /etc/sysctl.d/99-sysctl.conf ||
-      echo 'net.ipv6.conf.default.disable_ipv6 = 1' >>/etc/sysctl.d/99-sysctl.conf
-    grep -q -F 'net.ipv6.conf.lo.disable_ipv6 = 1' /etc/sysctl.d/99-sysctl.conf ||
-      echo 'net.ipv6.conf.lo.disable_ipv6 = 1' >>/etc/sysctl.d/99-sysctl.conf
-    sysctl -p
-  fi
-
-  ## Install Pre-Dependencies
-  apt-get install -y --reinstall \
-    software-properties-common \
-    apt-transport-https \
-    lsb-release
-  apt-get update
-
-  ## Add apt repos
-  osname=$(lsb_release -si)
-
-  if echo "$osname" "Debian" &>/dev/null; then
-    {
-      add-apt-repository main
-      add-apt-repository non-free
-      add-apt-repository contrib
-    } >>/dev/null 2>&1
-  elif echo "$osname" "Ubuntu" &>/dev/null; then
-    {
-      add-apt-repository main
-      add-apt-repository universe
-      add-apt-repository restricted
-      add-apt-repository multiverse
-    } >>/dev/null 2>&1
-
-  fi
-  apt-get update
-
-  ## Install apt Dependencies
-  apt-get install -y --reinstall \
-    nano \
-    git \
-    build-essential \
-    libssl-dev \
-    libffi-dev \
-    python3-dev \
-    python3-pip \
-    python-dev \
-    python-pip \
-    python-apt
-
-  ## Install pip3 Dependencies
-  python3 -m pip install --disable-pip-version-check --upgrade --force-reinstall \
-    pip==${PIP}
-  python3 -m pip install --disable-pip-version-check --upgrade --force-reinstall \
-    setuptools
-  python3 -m pip install --disable-pip-version-check --upgrade --force-reinstall \
-    pyOpenSSL \
-    requests \
-    netaddr
-
-  ## Install pip2 Dependencies
-  python -m pip install --disable-pip-version-check --upgrade --force-reinstall \
-    pip==${PIP}
-  python -m pip install --disable-pip-version-check --upgrade --force-reinstall \
-    setuptools
-  python -m pip install --disable-pip-version-check --upgrade --force-reinstall \
-    pyOpenSSL \
-    requests \
-    netaddr \
-    jmespath \
-    cryptography==2.9.2 \
-    ansible==${1-$ANSIBLE}
-
-  # Configuration ansible
-  mkdir -p /etc/ansible/inventories/ 1>/dev/null 2>&1
-  cat <<EOF >/etc/ansible/inventories/local
-  [local]
-  127.0.0.1 ansible_connection=local
-EOF
-
-  ### Reference: https://docs.ansible.com/ansible/2.4/intro_configuration.html
-
-  cat <<EOF >/etc/ansible/ansible.cfg
-  [defaults]
-  command_warnings = False
-  callback_whitelist = profile_tasks
-  deprecation_warnings=False
-  inventory = /etc/ansible/inventories/local
-  interpreter_python=/usr/bin/python
-EOF
-
-  ## Copy pip to /usr/bin
-  cp /usr/local/bin/pip /usr/bin/pip
-  cp /usr/local/bin/pip3 /usr/bin/pip3
-
-  conf_dir
-  update_system
-  install_base_packages
-  install_docker
-  install_traefik
-  install_rclone
-  install_watchtower
-  install_fail2ban
-  filebot
-  sauve
-  ansible-vault encrypt /opt/seedbox/variables/account.yml >/dev/null 2>&1
-
-  fi
-}
-
 
 function install() {
   # on appelle la fonction pour avoir le nom du log à créer

@@ -285,14 +285,28 @@ class service
             case 'rutorrent':
                 $version = 'image communauté Mondedié';
                 break;
-            case 'medusa':
-                $result  = shell_exec("docker inspect -f '{{.Config.Labels.build_version}}' medusa");
-                $temp    = explode('-', $result);
-                $version = $temp[1];
+            case 'emby':
+                $version  = shell_exec("docker exec -t emby sh -c 'cat /config/data/lastversion.txt'");
                 break;
-
+            case 'bitwarden':
+                $result  = shell_exec("docker exec -t bitwarden sh -c 'cat /web-vault/version.json'");
+                $detail    = explode(':', $result);
+                $html = str_replace('"', "", $detail[1]);
+                $version = str_replace("}", "", $html);
+                break;
+            case 'cloudcmd':
+                $result  = shell_exec("docker exec -t cloudcmd sh -c 'grep version /usr/src/app/package.json | head -1'");
+                $detail    = explode(':', $result);
+                $html = str_replace('"', "", $detail[1]);
+                $version = str_replace(",", "", $html);
+                break;
+            case 'mellow':
+                $result  = shell_exec("docker exec -t mellow sh -c 'grep version /usr/src/app/package.json | head -1'");
+                $detail    = explode(':', $result);
+                $html = str_replace('"', "", $detail[1]);
+                $version = str_replace(",", "", $html);
+                break;
             case 'jackett':
-
                 $html    = $this->get_html($this->url . '/api/v2.0/server/config');
                 $json    = json_decode($html, true);
                 $version = $json['app_version'];
@@ -300,18 +314,38 @@ class service
             case 'autoscan':
                 $version = shell_exec("docker exec autoscan autoscan --version");
                 break;
+            case 'filerun':
+                $version  = shell_exec("docker exec -t filerun sh -c 'cat /var/www/html/initial_version.txt'");
+                break;
             case 'medusa':
             case "calibre":
-            case "calibreweb":  
-            case "db-nextcloud": 
+            case "ombi":
+            case "calibreweb":
             case "nextcloud": 
             case "tautulli":
+            case "heimdall":
+            case "nzbhydra":
+            case "sabnzbd":
+            case "deluge":
+            case "sickchill":
+            case "bookstack":
+            case "codif":
+            case "duplicati":
                 $result  = shell_exec("docker inspect -f '{{.Config.Labels.build_version}}' " . $this->display_name);
                 $temp    = explode('-', $result);
                 $version = $temp[1];
                 break;
-             case "traefik":
+            case "readarr":
+                $version  = shell_exec('docker inspect -f \'{{ index .Config.Labels "org.opencontainers.image.version" }}\' readarr');
+                break;
+            case "traefik":
                 $version  = shell_exec('docker inspect -f \'{{ index .Config.Labels "org.opencontainers.image.version" }}\' traefik');
+                break;
+            case "firefox":
+                $version  = shell_exec('docker inspect -f \'{{ index .Config.Labels "org.label-schema.version" }}\' firefox');
+                break;
+            case "jdownloader":
+                $version  = shell_exec('docker inspect -f \'{{ index .Config.Labels "org.label-schema.schema-version" }}\' jdownloader');
                 break;
             case "ubooquity":
                 $temp  = shell_exec("docker inspect -f '{{.Config.Env}}' ubooquity");
@@ -328,8 +362,7 @@ class service
                 break;
             case "plex":
                 $version  = shell_exec('docker exec plex /usr/lib/plexmediaserver/Plex\ Media\ Server --version');
-                break;
-            
+                break;            
         }
 
         if (empty($version))
@@ -499,7 +532,7 @@ class service
     {
         global $debugbar;
         $array_cache = array(
-            'collabora');
+            'collabora','oauth','cloudproxy');
         $retour = array();
         $listfiles = scandir('/opt/seedbox/status/');
         foreach($listfiles as $file)
