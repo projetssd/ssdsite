@@ -1,124 +1,18 @@
-<form id="formUserConfigure" action="javascript:void(0);">
-
-    <!--Body-->
-    <p></p>
-    <p></p>
-    <div class="form-group row">
-        <label for="utilisateur" class="col-sm-3 col-form-label">Nom d'utilisateur</label>
-        <div class="col-sm-9">
-            <input type="text" class="form-control" id="utilisateur" name="utilisateur" placeholder="Enter...">
-        </div>
-    </div>
-    <div class="form-group row">
-        <label for="passe" class="col-sm-3 col-form-label">Passe</label>
-        <div class="col-sm-9">
-            <input type="password" class="form-control" id="passe" name="passe" placeholder="Enter...">
-        </div>
-    </div>
-    <div class="form-group row">
-        <label for="passe" class="col-sm-3 col-form-label">Confirmez le mot de passe</label>
-        <div class="col-sm-9">
-            <input type="password" class="form-control" id="passe2" name="passe2" placeholder="Enter...">
-        </div>
-    </div>
-
-    <div class="form-group row">
-        <label for="email" class="col-sm-3 col-form-label">Email</label>
-        <div class="col-sm-9">
-            <input type="text" class="form-control" name="email" id="email" placeholder="Enter...">
-        </div>
-    </div>
-
-    <div class="form-group row">
-        <label for="domaine" class="col-sm-3 col-form-label"><span data-toggle="tooltip" data-placement="top"
-                                                                   title="Tooltip">Domaine</span></label>
-        <div class="col-sm-9">
-            <input type="text" class="form-control" id="domaine" name="domaine" placeholder="Enter...">
-        </div>
-    </div>
-    <div class="form-group row">
-        <label for="plex" class="col-sm-3 col-form-label">Utilisateurs Plex</label>
-        <div class="col-sm-9">
-            <input type="checkbox" id="plex" name="plex" class="plex_install">
-        </div>
-    </div>
-    <!-- Checkbox -->
-
-    <!-- Checkbox -->
-    <div id="formBlockPlex" style="display:none">
+  <!--Header-->
 
 
-        <div class="form-group row">
-            <label for="idplex" class="col-sm-3 col-form-label">Nom d'utilisateur Plex</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" id="idplex" name="idplex" placeholder="Enter ...">
-            </div>
-        </div>
+                <!--Body-->
 
-        <div class="form-group row">
-            <label for="passplex" class="col-sm-3 col-form-label">Mot de passe Plex</label>
-            <div class="col-sm-9">
-                <input type="password" class="form-control" id="passplex" name="passplex" placeholder="Enter ...">
-            </div>
-        </div>
+                    <div>
+                        <p></p>
+                        <p id="text">Id Client</p>
+                        <input type="text" id="client" class="form-control"
+                               placeholder="Enter ..."></input>
+                    </div>
 
-    </div>
-    <!-- Checkbox -->
-    <div class="form-group row">
-        <label for="cloud" class="col-sm-3 col-form-label">Cloudflare</label>
-        <div class="col-sm-9">
-            <input type="checkbox" id="cloud" name="cloud" class="cloudflare_install">
-        </div>
-    </div>
-
-    <!-- Checkbox -->
-    <div id="formBlockCloudflare" style="display:none">
-        <div class="form-group row">
-            <label for="idcloud" class="col-sm-3 col-form-label">Mail Cloudflare</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" id="idcloud" name="idcloud" placeholder="Enter ...">
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <label for="passcloud" class="col-sm-3 col-form-label">API Cloudflare</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" id="passcloud" name="passcloud" placeholder="Enter ...">
-            </div>
-        </div>
-    </div>
-    <!-- Checkbox -->
-    <div class="form-group row">
-        <label for="cloud" class="col-sm-3 col-form-label">Google OAuth 2.0</label>
-        <div class="col-sm-9">
-            <input type="checkbox" id="oauth" name="oauth" class="oauth_install">
-        </div>
-    </div>
-
-    <!-- Checkbox -->
-    <div id="formBlockOauth" style="display:none">
-        <div class="form-group row">
-            <label for="idoauth" class="col-sm-3 col-form-label">Client OAuth 2.0</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" id="idoauth" name="idoauth" placeholder="Enter ...">
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <label for="clientoauth" class="col-sm-3 col-form-label">Secret OAuth 2.0</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" id="clientoauth" name="clientoauth" placeholder="Enter ...">
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <label for="mailoauth" class="col-sm-3 col-form-label">Mail(s) OAuth 2.0 Autorisé(s)</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" id="mailoauth" name="mailoauth" placeholder="Enter ...">
-            </div>
-        </div>
-    </div>
-
-    <!--Footer-->
-
-</form>
+                    <div>
+                        <p></p>
+                        <p id="text">Id Secret</p>
+                        <input type="text" id="secret" class="form-control"
+                               placeholder="Enter ..."></input>
+                    </div>
