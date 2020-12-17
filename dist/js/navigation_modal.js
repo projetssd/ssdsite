@@ -104,3 +104,10 @@ $("#install-validation").click(function() {
     }
 });
 
+$('.btnNext').click(function(){
+  $('.nav-item-example > a.nav-link.active').parent().next('li').find('a').trigger('click');
+});
+
+$('.btnPrevious').click(function(){
+  $('.nav-item-example > a.nav-link.active').parent().prev('li').find('a').trigger('click');
+});
