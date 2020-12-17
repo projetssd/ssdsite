@@ -445,6 +445,10 @@ $(document).ready(function() {
         console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
 
     });
+    
+    $("#affiche-exemple").click(function() {
+        $("#exemple_tab").modal('show');
+    });
 
 
 });

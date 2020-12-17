@@ -103,3 +103,4 @@ $("#install-validation").click(function() {
             break;
     }
 });
+
