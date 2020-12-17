@@ -98,15 +98,15 @@ writelog_appli "Création d'un shared drive"
 
   ## Creation rclone.conf
   writelog_appli "Création rclone.conf" 
-  echo "" >> /opt/seedbox/rclone/rclone.conf
-  echo "[$name]" >> /opt/seedbox/rclone/rclone.conf
-  echo "client_id = $client" >> /opt/seedbox/rclone/rclone.conf
-  echo "client_secret = $secret" >> /opt/seedbox/rclone/rclone.conf
-  echo "type = drive" >> /opt/seedbox/rclone/rclone.conf
-  echo "scope = drive" >> /opt/seedbox/rclone/rclone.conf
-  echo -n "token = {\"access_token\":${accesstoken}\"token_type\":\"Bearer\",\"refresh_token\":${refreshtoken}\"expiry\":\"${final}\"}" >> /opt/seedbox/rclone/rclone.conf
-  echo "" >> /opt/seedbox/rclone/rclone.conf
-  echo "team_drive = $teamid" >> /opt/seedbox/rclone/rclone.conf
+  echo "" >> /root/.config/rclone/rclone.conf
+  echo "[$name]" >> /root/.config/rclone/rclone.conf
+  echo "client_id = $client" >> /root/.config/rclone/rclone.conf
+  echo "client_secret = $secret" >> /root/.config/rclone/rclone.conf
+  echo "type = drive" >> /root/.config/rclone/rclone.conf
+  echo "scope = drive" >> /root/.config/rclone/rclone.conf
+  echo -n "token = {\"access_token\":${accesstoken}\"token_type\":\"Bearer\",\"refresh_token\":${refreshtoken}\"expiry\":\"${final}\"}" >> /root/.config/rclone/rclone.conf
+  echo "" >> /root/.config/rclone/rclone.conf
+  echo "team_drive = $teamid" >> /root/.config/rclone/rclone.conf
   echo ""
 
   ## creation du crypt
@@ -119,14 +119,14 @@ writelog_appli "Création d'un shared drive"
   ENC_SALT=`rclone obscure "$SALT"`
   crypt="_crypt"
 
-  echo "" >> /opt/seedbox/rclone/rclone.conf
-  echo "[$name$crypt]" >> /opt/seedbox/rclone/rclone.conf
-  echo "type = crypt" >> /opt/seedbox/rclone/rclone.conf
-  echo "remote = $name:/Medias" >> /opt/seedbox/rclone/rclone.conf
-  echo "filename_encryption = standard" >> /opt/seedbox/rclone/rclone.conf
-  echo "directory_name_encryption = true" >> /opt/seedbox/rclone/rclone.conf
-  echo "password = $ENC_PASSWORD" >> /opt/seedbox/rclone/rclone.conf
-  echo "password2 = $ENC_SALT" >> /opt/seedbox/rclone/rclone.conf
+  echo "" >> /root/.config/rclone/rclone.conf
+  echo "[$name$crypt]" >> /root/.config/rclone/rclone.conf
+  echo "type = crypt" >> /root/.config/rclone/rclone.conf
+  echo "remote = $name:/Medias" >> /root/.config/rclone/rclone.conf
+  echo "filename_encryption = standard" >> /root/.config/rclone/rclone.conf
+  echo "directory_name_encryption = true" >> /root/.config/rclone/rclone.conf
+  echo "password = $ENC_PASSWORD" >> /root/.config/rclone/rclone.conf
+  echo "password2 = $ENC_SALT" >> /root/.config/rclone/rclone.conf
 
 else
    writelog_appli "Pas de shared drive" 
@@ -134,14 +134,14 @@ else
 
   ## Creation rclone.conf
    writelog_appli "Création rclone.conf" 
-  echo "" >> /opt/seedbox/rclone/rclone.conf
-  echo "[$3]" >> /opt/seedbox/rclone/rclone.conf
-  echo "client_id = $client" >> /opt/seedbox/rclone/rclone.conf
-  echo "client_secret = $secret" >> /opt/seedbox/rclone/rclone.conf
-  echo "type = drive" >> /opt/seedbox/rclone/rclone.conf
-  echo "scope = drive" >> /opt/seedbox/rclone/rclone.conf
-  echo -n "token = {\"access_token\":${accesstoken}\"token_type\":\"Bearer\",\"refresh_token\":${refreshtoken}\"expiry\":\"${final}\"}" >> /opt/seedbox/rclone/rclone.conf
-  echo "" >> /opt/seedbox/rclone/rclone.conf
+  echo "" >> /root/.config/rclone/rclone.conf
+  echo "[$3]" >> /root/.config/rclone/rclone.conf
+  echo "client_id = $client" >> /root/.config/rclone/rclone.conf
+  echo "client_secret = $secret" >> /root/.config/rclone/rclone.conf
+  echo "type = drive" >> /root/.config/rclone/rclone.conf
+  echo "scope = drive" >> /root/.config/rclone/rclone.conf
+  echo -n "token = {\"access_token\":${accesstoken}\"token_type\":\"Bearer\",\"refresh_token\":${refreshtoken}\"expiry\":\"${final}\"}" >> /root/.config/rclone/rclone.conf
+  echo "" >> /root/.config/rclone/rclone.conf
   echo ""
 
  ## creation du crypt
@@ -155,16 +155,25 @@ else
   ENC_SALT=`rclone obscure "$SALT"`
   crypt="_crypt"
 
-  echo "" >> /opt/seedbox/rclone/rclone.conf
-  echo "[$3$crypt]" >> /opt/seedbox/rclone/rclone.conf
-  echo "type = crypt" >> /opt/seedbox/rclone/rclone.conf
-  echo "remote = $3:/Medias" >> /opt/seedbox/rclone/rclone.conf
-  echo "filename_encryption = standard" >> /opt/seedbox/rclone/rclone.conf
-  echo "directory_name_encryption = true" >> /opt/seedbox/rclone/rclone.conf
-  echo "password = $ENC_PASSWORD" >> /opt/seedbox/rclone/rclone.conf
-  echo "password2 = $ENC_SALT" >> /opt/seedbox/rclone/rclone.conf
+  echo "" >> /root/.config/rclone/rclone.conf
+  echo "[$3$crypt]" >> /root/.config/rclone/rclone.conf
+  echo "type = crypt" >> /root/.config/rclone/rclone.conf
+  echo "remote = $3:/Medias" >> /root/.config/rclone/rclone.conf
+  echo "filename_encryption = standard" >> /root/.config/rclone/rclone.conf
+  echo "directory_name_encryption = true" >> /root/.config/rclone/rclone.conf
+  echo "password = $ENC_PASSWORD" >> /root/.config/rclone/rclone.conf
+  echo "password2 = $ENC_SALT" >> /root/.config/rclone/rclone.conf
 
 fi
+ writelog_appli "Installation rclone"
+ log_applicatif InstallRclone
+ # maintenant, on a la variable LOGFILE_APPLI utilisable
+ writelog_appli "Installation rclone"    
+  
+ LOGFILE=${LOGFILE_APPLI}
+
+ ansible-playbook /opt/seedbox-compose/includes/config/roles/rclone/tasks/main.yml | tee -a $LOGFILE
+ rm -rf /opt/seedbox/rclone > /dev/null 2>&1
  writelog_appli "Terminé" 
 }
 
@@ -354,17 +363,11 @@ case $ACTION in
   uninstall)
     uninstall $2
   ;;
-  configure)
-    configure  $2 $3 $4 $5 $6 $7 $8 $9 ${10} ${11} ${12}
-  ;;
   credential)
     credential $2 $3
   ;;
   createtoken)
     createtoken $2 $3 $4
-  ;;
-  seedbox)
-    seedbox
   ;;
   *)
   writelog "ACTION INDEFINIE" 'DEBUG' 
