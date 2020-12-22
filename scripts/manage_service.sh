@@ -48,6 +48,17 @@ function writelog_appli()
    echo "${DATE} - ${1}" >> ${LOGFILE_APPLI}
 }
 
+function tools() 
+{
+ writelog_appli "Installation $1"
+ log_applicatif Install$1
+  
+ LOGFILE=${LOGFILE_APPLI}
+
+ ansible-playbook /opt/seedbox-compose/includes/config/roles/$1/tasks/main.yml | tee -a $LOGFILE
+ writelog_appli "Installation $1 terminée"
+}
+
 function credential() {
   mkdir -p /opt/seedbox/rclone
   echo $1 > /opt/seedbox/rclone/client
@@ -368,6 +379,9 @@ case $ACTION in
   ;;
   createtoken)
     createtoken $2 $3 $4
+  ;;
+  tools)
+    tools $2
   ;;
   *)
   writelog "ACTION INDEFINIE" 'DEBUG' 

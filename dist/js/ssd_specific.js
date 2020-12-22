@@ -68,6 +68,55 @@ function test_etat() {
 }
 
 $(document).ready(function() {
+
+    $("#plex_autoscan").click(function() {
+        var plexautoscan = $("#plex_autoscan").text();
+        console.log('affiche' + plexautoscan);
+        $('#modalOutils').modal('show');
+        $("#outils").html(plexautoscan);
+        $("#outils_install").attr('data-outils', plexautoscan);
+    });
+
+    $("#auto_scan").click(function() {
+        var autoscan = $("#auto_scan").text();
+        console.log('affiche' + autoscan);
+        $('#modalOutils').modal('show');
+        $("#outils").html(autoscan);
+        $("#outils_install").attr('data-outils', autoscan);
+    });
+
+    $("#cloud_plow").click(function() {
+        var cloudplow = $("#cloud_plow").text();
+        console.log('affiche' + cloudplow);
+        $('#modalOutils').modal('show');
+        $("#outils").html(cloudplow);
+        $("#outils_install").attr('data-outils', cloudplow);
+    });
+
+    $("#cr_op").click(function() {
+        var crop = $("#cr_op").text();
+        console.log('affiche' + crop);
+        $('#modalOutils').modal('show');
+        $("#outils").html(crop);
+        $("#outils_install").attr('data-outils', crop);
+    });
+
+    $(".option_install").click(function() {
+        var outils = $(this).attr('data-outils');
+        console.log('outils a la valeur ' + outils);
+        $('#modalOutils').modal('hide');
+        toastr.success("Installation de " + outils + " en cours...")
+
+        $.ajax({
+            url: "ajax/install_options.php?outils=" + outils
+        }).done(function(data) {
+            console.log("result " + data);
+            toastr.success("Installation de " + outils + " terminée");
+        }).fail(function() {
+            console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+        });
+    });
+
     $(".check_install").click(function() {
         if ($('#myCheck').is(':checked')) {
             $("#text").show();
@@ -76,32 +125,6 @@ $(document).ready(function() {
         else {
             $("#text").hide();
             $("#subdomain").hide();
-        }
-    });
-
-    $(".plex_install").click(function() {
-        if ($('#plex').is(':checked')) {
-            $("#formBlockPlex").show();
-        }
-        else {
-            $("#formBlockPlex").hide();
-        }
-    });
-
-    $(".cloudflare_install").click(function() {
-        if ($('#cloud').is(':checked')) {
-            $("#formBlockCloudflare").show();
-        }
-        else {
-            $("#formBlockCloudflare").hide();
-        }
-    });
-    $(".oauth_install").click(function() {
-        if ($('#oauth').is(':checked')) {
-            $("#formBlockOauth").show();
-        }
-        else {
-            $("#formBlockOauth").hide();
         }
     });
 
@@ -124,7 +147,6 @@ $(document).ready(function() {
         $("#confirm-uninstall").attr('data-appli', appli);
         $("#modal-confirm-uninstall").modal('show');
         $(".appli-uninstall").html(appli);
-
     });
 
     // confirmation de la désinstall
@@ -150,7 +172,6 @@ $(document).ready(function() {
             console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
             $("#status-" + appli).html("Erreur ajax");
         });
-
     });
 
     $(".install_appli_etape_1").click(function(event) {
@@ -162,37 +183,6 @@ $(document).ready(function() {
         $("#subdomain").val(appli);
         $('#modal_install_applis').modal('hide');
         $('#modalPoll').modal('show');
-
-
-    });
-
-
-    // je vais garder de coté cette fonction et la suivante au cas ou je mettrais un bouton supplementaire
-    // pour creer un rclone.conf en dehors d'une proceduree d install
-    // ainsi que les deux modals correspondant ds header.twig
-    $("#rclone_install_appli").click(function() {
-        if ($("#client").val() !== "") {
-            console.log('client n est pas vide');
-            var client = $("#client").val();
-            console.log('client a la valeur ' + client);
-            var secret = $("#secret").val();
-            console.log('secret a la valeur ' + secret);
-        }
-        else {
-            console.log('client est VIDE !');
-        }
-        $.ajax({
-            url: "ajax/install_rclone.php?client=" + client + "&secret=" + secret
-        }).done(function(data) {
-            // On est dans le done, tout est ok
-            // la requête est passée
-            // console.log("result " + data);
-            $('#rclone').modal('hide');
-            $('#rclone_token').modal('show');
-            window.open('https://accounts.google.com/o/oauth2/auth?client_id=' + client + '&redirect_uri=urn:ietf:wg:oauth:2.0:oob&scope=https://www.googleapis.com/auth/drive&response_type=code', '_blank');
-        }).fail(function() {
-            console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
-        });
     });
 
     // on va intercepter le click sur le bouton sur le modal rclone
@@ -260,8 +250,6 @@ $(document).ready(function() {
             toastr.warning("Erreur sur ajax");
             $("#status-" + appli).html("Erreur ajax");
         });
-
-
     });
 
     //le bouton restart
@@ -298,7 +286,6 @@ $(document).ready(function() {
             console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
             $("#status-" + appli).html("Erreur ajax");
         });
-
     });
 
     //le bouton stop
@@ -318,7 +305,6 @@ $(document).ready(function() {
             $(".start-stop-button-" + appli).show();
             $("#status-" + appli).html("Erreur ajax");
         });
-
     });
 
     // gestion de la zone de recherche

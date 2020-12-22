@@ -22,9 +22,22 @@
 
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <button type="button" class="btn btn-default" id="affiche-install-appli">Ajout applications
+                            <div class="dropdown">
+                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                Outils
                                 </button>
-                            <button type="button" class="btn btn-default install-modal">Configuration rclone
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" id="plex_autoscan" href="#"><span class="fa fa-life-ring"></span> plex_autoscan</a>
+                                        <a class="dropdown-item" id="auto_scan" href="#"><span class="fa fa-wrench"></span> autoscan</a>
+                                        <a class="dropdown-item" id="cloud_plow" href="#"><span class="fa fa-rocket"></span> cloudplow</a>
+                                        <a class="dropdown-item" id="cr_op" href="#"><span class="fa fa-taxi"></span> crop</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="#"><span class="fa fa-bullhorn"></span> Autres Applications</a>
+                                    </div>
+                            </div> 
+                                <button type="button" class="btn btn-default" id="affiche-install-appli">Ajout applications
+                                </button>
+                                <button type="button" class="btn btn-default install-modal">Configuration rclone
                                 </button>
                         </ol>
                     </div>
