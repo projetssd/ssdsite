@@ -69,36 +69,12 @@ function test_etat() {
 
 $(document).ready(function() {
 
-    $("#plex_autoscan").click(function() {
-        var plexautoscan = $("#plex_autoscan").text();
-        console.log('affiche' + plexautoscan);
-        $('#modalOutils').modal('show');
-        $("#outils").html(plexautoscan);
-        $("#outils_install").attr('data-outils', plexautoscan);
-    });
-
-    $("#auto_scan").click(function() {
-        var autoscan = $("#auto_scan").text();
-        console.log('affiche' + autoscan);
-        $('#modalOutils').modal('show');
-        $("#outils").html(autoscan);
-        $("#outils_install").attr('data-outils', autoscan);
-    });
-
-    $("#cloud_plow").click(function() {
-        var cloudplow = $("#cloud_plow").text();
-        console.log('affiche' + cloudplow);
-        $('#modalOutils').modal('show');
-        $("#outils").html(cloudplow);
-        $("#outils_install").attr('data-outils', cloudplow);
-    });
-
-    $("#cr_op").click(function() {
-        var crop = $("#cr_op").text();
-        console.log('affiche' + crop);
-        $('#modalOutils').modal('show');
-        $("#outils").html(crop);
-        $("#outils_install").attr('data-outils', crop);
+    $(".install_outils").click(function() {
+       var appli = $(this).attr('data-appli');
+       console.log('affiche' + appli);
+       $('#modalOutils').modal('show');
+       $("#outils").html(appli);
+       $("#outils_install").attr('data-outils', appli);
     });
 
     $(".option_install").click(function() {

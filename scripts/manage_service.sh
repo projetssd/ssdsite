@@ -50,8 +50,8 @@ function writelog_appli()
 
 function tools() 
 {
+ log_applicatif $1
  writelog_appli "Installation $1"
- log_applicatif Install$1
   
  LOGFILE=${LOGFILE_APPLI}
 
