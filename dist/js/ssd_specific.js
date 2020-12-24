@@ -71,10 +71,13 @@ $(document).ready(function() {
 
     $(".install_outils").click(function() {
        var appli = $(this).attr('data-appli');
-       console.log('affiche' + appli);
+       var desc = $("#desc-" + appli).html();
+       console.log('affiche' + desc);
        $('#modalOutils').modal('show');
+       $("#desc-" + appli).html(desc);
        $("#outils").html(appli);
        $("#outils_install").attr('data-outils', appli);
+
     });
 
     $(".option_install").click(function() {
