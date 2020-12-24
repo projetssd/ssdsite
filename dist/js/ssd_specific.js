@@ -74,10 +74,10 @@ $(document).ready(function() {
        var desc = $("#desc-" + appli).html();
        console.log('affiche' + desc);
        $('#modalOutils').modal('show');
-       $("#desc-" + appli).html(desc);
+       $("#description").css({"margin-left": "15px", "font-family": "Verdana", "margin-right": "15px"});
+       $("#description").html(desc);
        $("#outils").html(appli);
        $("#outils_install").attr('data-outils', appli);
-
     });
 
     $(".option_install").click(function() {
@@ -156,7 +156,10 @@ $(document).ready(function() {
     $(".install_appli_etape_1").click(function(event) {
         event.preventDefault();
         let appli = $(this).attr("data-appli");
-
+        var desc = $("#desc-" + appli).html();
+        console.log('affiche' + desc);
+        $("#description-appli").css({"margin-left": "15px", "font-family": "Verdana", "margin-right": "15px"});
+        $("#description-appli").html(desc);
         $("#nomappliencours").html(appli);
         $("#validation_install_appli").attr('data-appli', appli);
         $("#subdomain").val(appli);
@@ -322,6 +325,8 @@ $(document).ready(function() {
 
     // gestion de la case à cocher pour afficher les applis installées
     $("#installed_appli").change(function() {
+
+
         if ($(this).is(":checked")) {
             $(".divappli").each(function() {
                 let isinstalled = $(this).attr('data-installed');
