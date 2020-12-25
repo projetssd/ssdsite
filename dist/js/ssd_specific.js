@@ -83,6 +83,34 @@ $(document).ready(function() {
     $(".option_install").click(function() {
         var outils = $(this).attr('data-outils');
         console.log('outils a la valeur ' + outils);
+
+        if (outils == "oauth") {
+            console.log('toto n est pas vide');
+            $('#modalOutils').modal('hide');
+            $('#modalOauth').modal('show');
+            $(".oauth_install").click(function() {
+                var clientoauth = $("#clientoauth").val();
+                console.log('clientoauth a la valeur ' + clientoauth);
+                var secretoauth = $("#secretoauth").val();
+                console.log('secretoauth a la valeur ' + secretoauth);
+                var mailoauth = $("#mailoauth").val();
+                console.log('mailoauth a la valeur ' + mailoauth);
+            $('#modalOauth').modal('hide');
+            toastr.success("Installation de " + outils + " en cours");
+            toastr.warning("Déconnection du site imminente, nettoyer l'historique une fois l'installation terminée");
+
+            $.ajax({
+                url: "ajax/install_oauth.php?clientoauth=" + clientoauth + "&secretoauth=" + secretoauth + "&mailoauth=" + mailoauth
+            }).done(function(data) {
+                console.log("result " + data);
+                toastr.success("Installation de " + outils + " terminée");
+            }).fail(function() {
+                console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+            });
+
+        });
+        }
+        else {
         $('#modalOutils').modal('hide');
         toastr.success("Installation de " + outils + " en cours...")
 
@@ -94,6 +122,7 @@ $(document).ready(function() {
         }).fail(function() {
             console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
         });
+        }
     });
 
     $(".check_install").click(function() {

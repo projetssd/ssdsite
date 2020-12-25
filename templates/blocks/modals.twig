@@ -160,4 +160,32 @@
 </div>
 <!-- Modal: Outils -->
 
+<!-- Modal: Oauth -->
+<div class="modal fade right" id="modalOauth" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
+    <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
+        <div class="modal-content">
+            <!--Header-->
+            <div class="modal-header">
+                <p class="heading lead">Installation de Google Oauth</span>
+                </p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="white-text">×</span>
+                </button>
+            </div>
+            <!--Body-->
+            <div class="modal-body post">
+                <div>
+                    {% include "blocks/modal_install_oauth.twig" %}
+                </div>
+            </div>
+            <!--Footer-->
+            <div class="modal-footer justify-content-center">
+                <button type="submit" id="oauth_install" class="btn btn-success oauth_install" data-outils="">Installer</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal: Oauth -->
+
+
     
