@@ -80,6 +80,20 @@ $(document).ready(function() {
        $("#outils_install").attr('data-outils', appli);
     });
 
+    $("#form_install_oauth").validate({
+       rules: {
+           clientoauth: {
+               required: true
+           },
+           secretoauth: {
+               required: true
+           },
+           mailoauth: {
+               required: true
+           },
+       }
+    });
+
     $(".option_install").click(function() {
         var outils = $(this).attr('data-outils');
         console.log('outils a la valeur ' + outils);
@@ -88,27 +102,35 @@ $(document).ready(function() {
             console.log('toto n est pas vide');
             $('#modalOutils').modal('hide');
             $('#modalOauth').modal('show');
-            $(".oauth_install").click(function() {
-                var clientoauth = $("#clientoauth").val();
-                console.log('clientoauth a la valeur ' + clientoauth);
-                var secretoauth = $("#secretoauth").val();
-                console.log('secretoauth a la valeur ' + secretoauth);
-                var mailoauth = $("#mailoauth").val();
-                console.log('mailoauth a la valeur ' + mailoauth);
-            $('#modalOauth').modal('hide');
-            toastr.success("Installation de " + outils + " en cours");
-            toastr.warning("Déconnection du site imminente, nettoyer l'historique une fois l'installation terminée");
 
+            $(".oauth_install").click(function() {
+                if ($("#form_install_oauth").valid()) { 
+                    var clientoauth = $("#clientoauth").val();
+                    console.log('clientoauth a la valeur ' + clientoauth);
+                    var secretoauth = $("#secretoauth").val();
+                    console.log('secretoauth a la valeur ' + secretoauth);
+                    var mailoauth = $("#mailoauth").val();
+                    console.log('mailoauth a la valeur ' + mailoauth);
+                    $('#modalOauth').modal('hide');
+                    toastr.success("Installation de " + outils + " en cours");
+                    toastr.warning("Déconnection du site imminente, nettoyer l'historique une fois l'installation terminée");
             $.ajax({
-                url: "ajax/install_oauth.php?clientoauth=" + clientoauth + "&secretoauth=" + secretoauth + "&mailoauth=" + mailoauth
+                url: "ajax/install_oauth.php",
+                method: "POST",
+                data: { clientoauth: clientoauth, secretoauth: secretoauth, mailoauth: mailoauth }
             }).done(function(data) {
                 console.log("result " + data);
                 toastr.success("Installation de " + outils + " terminée");
             }).fail(function() {
                 console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
             });
-
+                }
+                else{
+                    toastr.warning('Merci de VERIFIER la saisie de l\'id client et\/ou de l\'id secret');
+                    console.log('le client ou le secret sont VIDES !')
+                }
         });
+
         }
         else {
         $('#modalOutils').modal('hide');

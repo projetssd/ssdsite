@@ -2,9 +2,9 @@
 
 require_once __DIR__ . '/../includes/header.php';
 
-$clientoauth = $_GET['clientoauth'];
-$secretoauth = $_GET['secretoauth'];
-$mailoauth = $_GET['mailoauth'];
+$clientoauth = $_POST['clientoauth'];
+$secretoauth = $_POST['secretoauth'];
+$mailoauth = $_POST['mailoauth'];
 
 $google = new oauth($clientoauth);
 $google->oauth($secretoauth, $mailoauth);
