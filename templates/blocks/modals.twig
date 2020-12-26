@@ -187,5 +187,29 @@
 </div>
 <!-- Modal: Oauth -->
 
-
-    
+<!-- Modal: cloudflare -->
+<div class="modal fade right" id="modalCloudflare" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
+    <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
+        <div class="modal-content">
+            <!--Header-->
+            <div class="modal-header">
+                <p class="heading lead">Installation de Cloudflare</span>
+                </p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="white-text">×</span>
+                </button>
+            </div>
+            <!--Body-->
+            <div class="modal-body post">
+                <div>
+                    {% include "blocks/modal_install_cloudflare.twig" %}
+                </div>
+            </div>
+            <!--Footer-->
+            <div class="modal-footer justify-content-center">
+                <button type="submit" id="cloud_install" class="btn btn-success cloud_install" data-outils="">Installer</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal: cloudflare -->

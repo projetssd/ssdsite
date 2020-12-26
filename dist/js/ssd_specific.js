@@ -94,12 +94,23 @@ $(document).ready(function() {
        }
     });
 
+    $("#form_install_cloud").validate({
+       rules: {
+           emailcloud: {
+               required: true
+           },
+           apicloud: {
+               required: true
+           },
+       }
+    });
+
     $(".option_install").click(function() {
         var outils = $(this).attr('data-outils');
         console.log('outils a la valeur ' + outils);
 
         if (outils == "oauth") {
-            console.log('toto n est pas vide');
+            console.log('outils n est pas vide');
             $('#modalOutils').modal('hide');
             $('#modalOauth').modal('show');
 
@@ -126,11 +137,41 @@ $(document).ready(function() {
             });
                 }
                 else{
-                    toastr.warning('Merci de VERIFIER la saisie de l\'id client et\/ou de l\'id secret');
-                    console.log('le client ou le secret sont VIDES !')
+                    toastr.warning('Merci de VERIFIER la saisie des champs');
+                    console.log('Au moins un des champs est VIDE !')
                 }
-        });
+            });
+        }
+        else if (outils == "cloudflare") {
+            console.log('outils n est pas vide');
+            $('#modalOutils').modal('hide');
+            $('#modalCloudflare').modal('show');
 
+            $(".cloud_install").click(function() {
+                if ($("#form_install_cloud").valid()) { 
+                    var emailcloud = $("#emailcloud").val();
+                    console.log('emailcloud a la valeur ' + emailcloud);
+                    var apicloud = $("#apicloud").val();
+                    console.log('apicloud a la valeur ' + apicloud);
+                    $('#modalCloudflare').modal('hide');
+                    toastr.success("Installation de " + outils + " en cours");
+                    toastr.warning("Déconnection temporaire du site imminente");
+            $.ajax({
+                url: "ajax/install_cloudflare.php",
+                method: "POST",
+                data: { emailcloud: emailcloud, apicloud: apicloud }
+            }).done(function(data) {
+                console.log("result " + data);
+                toastr.success("Installation de " + outils + " terminée");
+            }).fail(function() {
+                console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+            });
+                }
+                else{
+                    toastr.warning('Merci de VERIFIER la saisie des champs');
+                    console.log('Au moins un des champs est VIDE !')
+                }
+            });
         }
         else {
         $('#modalOutils').modal('hide');
