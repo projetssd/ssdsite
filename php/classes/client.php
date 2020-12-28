@@ -57,6 +57,4 @@ class client
         $log->writelog("Commande : " . $commande, "DEBUG");
         shell_exec($commande);
     }
-
-
 }
