@@ -12,6 +12,7 @@
                     </button>
             </div>
             <!--Body-->
+            <div id="description-appli"></div>
             <div class="modal-body post">
                 <!-- Checkbox -->
                 <div class="checkbox">
@@ -57,7 +58,6 @@
 <div class="modal fade right" id="seedbox" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
     <div class="modal-dialog modal-full-height modal-lg" role="document">
         <div class="modal-content">
-
             <div class="modal-header">
                 <p class="heading lead">Configuration rclone
                 </p>
@@ -65,10 +65,7 @@
                         <span aria-hidden="true" class="white-text">×</span>
                     </button>
             </div>
-
             <div class="modal-body post">
-
-
                 <ul class="nav nav-tabs" id="tab-instsall-navigation" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" id="link-rclone-tab" data-toggle="tab" href="#tab-rclone" role="tab" aria-controls="tab-rclone" aria-selected="false">Rclone</a>
@@ -77,13 +74,10 @@
                         <a class="nav-link disabled" id="link-gdrive-tab" data-toggle="tab" href="#tab-gdrive" role="tab" aria-controls="tab-gdrive" aria-selected="false">Gdrive</a>
                     </li>
                 </ul>
-
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active" id="tab-rclone" role="tabpanel" aria-labelledby="profile-tab">{% include "blocks/modal_install_etape1.twig" %}</div>
                     <div class="tab-pane fade" id="tab-gdrive" role="tabpanel" aria-labelledby="contact-tab">{% include "blocks/modal_install_etape2.twig" %}</div>
                 </div>
-
-
             </div>
             <div class="modal-footer justify-content-center">
                 <button id="install-validation" data-step="1" class="btn btn-success">Etape suivante</button>
@@ -92,16 +86,6 @@
     </div>
 </div>
 <!-- Modal: seedbox -->
-
-<!-- Modal: rclone -->
-<div class="modal fade right" id="rclone" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
-    <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
-        <div class="modal-content">
-
-        </div>
-    </div>
-</div>
-<!-- Modal: rclone -->
 
 <!-- Modal: logs -->
 <div class="modal fade" id="modal_logs" style="display: none;" aria-hidden="true">
@@ -149,21 +133,83 @@
             </div>
         </div>
     </div>
-
-
 </div>
 <!-- Modal: logs -->
 
-
-<!-- Modal: token -->
-<div class="modal fade right" id="rclone_token" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
+<!-- Modal: Outils -->
+<div class="modal fade right" id="modalOutils" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
     <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
         <div class="modal-content">
             <!--Header-->
 
-
+            <div class="modal-header">
+                <p class="heading lead">Installation de l'application <span id="outils"></span>
+                </p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="white-text">×</span>
+                </button>
+            </div>
+            <div id="description"></div>
+            <!--Body-->
+            <!--Footer-->
+            <div class="modal-footer justify-content-center">
+                <button type="submit" id="outils_install" class="btn btn-success option_install" data-outils="">Installer</button>
+            </div>
         </div>
     </div>
 </div>
-<!-- Modal: token -->
-    
+<!-- Modal: Outils -->
+
+<!-- Modal: Oauth -->
+<div class="modal fade right" id="modalOauth" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
+    <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
+        <div class="modal-content">
+            <!--Header-->
+            <div class="modal-header">
+                <p class="heading lead">Installation de Google Oauth</span>
+                </p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="white-text">×</span>
+                </button>
+            </div>
+            <!--Body-->
+            <div class="modal-body post">
+                <div>
+                    {% include "blocks/modal_install_oauth.twig" %}
+                </div>
+            </div>
+            <!--Footer-->
+            <div class="modal-footer justify-content-center">
+                <button type="submit" id="oauth_install" class="btn btn-success oauth_install" data-outils="">Installer</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal: Oauth -->
+
+<!-- Modal: cloudflare -->
+<div class="modal fade right" id="modalCloudflare" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
+    <div class="modal-dialog modal-full-height modal-right modal-notify modal-info" role="document">
+        <div class="modal-content">
+            <!--Header-->
+            <div class="modal-header">
+                <p class="heading lead">Installation de Cloudflare</span>
+                </p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="white-text">×</span>
+                </button>
+            </div>
+            <!--Body-->
+            <div class="modal-body post">
+                <div>
+                    {% include "blocks/modal_install_cloudflare.twig" %}
+                </div>
+            </div>
+            <!--Footer-->
+            <div class="modal-footer justify-content-center">
+                <button type="submit" id="cloud_install" class="btn btn-success cloud_install" data-outils="">Installer</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal: cloudflare -->

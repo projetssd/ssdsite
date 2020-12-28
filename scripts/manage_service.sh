@@ -48,6 +48,50 @@ function writelog_appli()
    echo "${DATE} - ${1}" >> ${LOGFILE_APPLI}
 }
 
+function tools() 
+{
+  log_applicatif $1
+  writelog_appli "Installation $1"
+  
+  LOGFILE=${LOGFILE_APPLI}
+
+  ansible-playbook /opt/seedbox-compose/includes/config/roles/$1/tasks/main.yml | tee -a $LOGFILE
+  writelog_appli "Installation $1 terminée"
+}
+
+function cloudflare()  {
+  log_applicatif Cloudflare
+  writelog_appli "Installation oauth"
+  
+  LOGFILE=${LOGFILE_APPLI}
+
+  source /opt/seedbox-compose/includes/variables.sh
+
+  ansible-playbook /opt/seedbox-compose/includes/dockerapps/templates/ansible/ansible.yml | tee -a $LOGFILE
+  ansible-vault decrypt /opt/seedbox/variables/account.yml > /dev/null 2>&1
+  USER=$(cat /tmp/name)
+  SERVICESPERUSER="$SERVICESUSER$USER"
+
+  sed -i "/login:/c\   login: $1" /opt/seedbox/variables/account.yml
+  sed -i "/api:/c\   api: $2" /opt/seedbox/variables/account.yml
+
+  ## reinstallation traefik
+  ansible-playbook /opt/seedbox-compose/includes/dockerapps/traefik.yml | tee -a $LOGFILE
+
+  ## reinitialisation des applications
+  while read line; do echo $line | cut -d'.' -f1; done < /home/$USER/resume > $SERVICESPERUSER
+  mv /home/$USER/resume /tmp
+
+  while read line; do
+    ansible-playbook /opt/seedbox/conf/$line.yml | tee -a $LOGFILE
+  done < $SERVICESPERUSER
+
+  mv /tmp/resume /home/$USER/
+  rm $SERVICESPERUSER
+  ansible-vault encrypt /opt/seedbox/variables/account.yml > /dev/null 2>&1
+  writelog_appli "Installation Cloudflare terminée"
+}
+
 function credential() {
   mkdir -p /opt/seedbox/rclone
   echo $1 > /opt/seedbox/rclone/client
@@ -351,6 +395,43 @@ EOF
 
 }
 
+function oauth() 
+{
+  log_applicatif oauth
+  writelog_appli "Installation oauth"
+  
+  LOGFILE=${LOGFILE_APPLI}
+
+  source /opt/seedbox-compose/includes/variables.sh
+
+  ansible-playbook /opt/seedbox-compose/includes/dockerapps/templates/ansible/ansible.yml | tee -a $LOGFILE
+  ansible-vault decrypt /opt/seedbox/variables/account.yml > /dev/null 2>&1
+  USER=$(cat /tmp/name)
+  SERVICESPERUSER="$SERVICESUSER$USER"
+
+  sed -i "/client:/c\   client: $1" /opt/seedbox/variables/account.yml
+  sed -i "/secret:/c\   secret: $2" /opt/seedbox/variables/account.yml
+  sed -i "/account:/c\   account: $3" /opt/seedbox/variables/account.yml
+  OPENSSL=$(openssl rand -hex 16)
+  sed -i "/openssl:/c\   openssl: $OPENSSL" /opt/seedbox/variables/account.yml
+
+  ## reinstallation traefik
+  ansible-playbook /opt/seedbox-compose/includes/dockerapps/traefik.yml | tee -a $LOGFILE
+
+  ## reinitialisation des applications
+  while read line; do echo $line | cut -d'.' -f1; done < /home/$USER/resume > $SERVICESPERUSER
+  mv /home/$USER/resume /tmp
+
+  while read line; do
+  ansible-playbook /opt/seedbox/conf/$line.yml | tee -a $LOGFILE
+  done < $SERVICESPERUSER
+
+  mv /tmp/resume /home/$USER/
+  rm $SERVICESPERUSER
+  ansible-vault encrypt /opt/seedbox/variables/account.yml > /dev/null 2>&1
+  writelog_appli "Installation Oauth terminée"
+}
+
 DIRNAME=$(dirname $0)
 
 writelog "Lancement du script" "DEBUG"
@@ -368,6 +449,15 @@ case $ACTION in
   ;;
   createtoken)
     createtoken $2 $3 $4
+  ;;
+  tools)
+    tools $2
+  ;;
+  oauth)
+    oauth $2 $3 $4
+  ;;
+  cloudflare)
+    cloudflare $2 $3
   ;;
   *)
   writelog "ACTION INDEFINIE" 'DEBUG' 

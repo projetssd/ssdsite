@@ -68,6 +68,126 @@ function test_etat() {
 }
 
 $(document).ready(function() {
+
+    $(".install_outils").click(function() {
+       var appli = $(this).attr('data-appli');
+       var desc = $("#desc-" + appli).html();
+       console.log('affiche' + desc);
+       $('#modalOutils').modal('show');
+       $("#description").css({"margin-left": "15px", "font-family": "Verdana", "margin-right": "15px"});
+       $("#description").html(desc);
+       $("#outils").html(appli);
+       $("#outils_install").attr('data-outils', appli);
+    });
+
+    $("#form_install_oauth").validate({
+       rules: {
+           clientoauth: {
+               required: true
+           },
+           secretoauth: {
+               required: true
+           },
+           mailoauth: {
+               required: true
+           },
+       }
+    });
+
+    $("#form_install_cloud").validate({
+       rules: {
+           emailcloud: {
+               required: true
+           },
+           apicloud: {
+               required: true
+           },
+       }
+    });
+
+    $(".option_install").click(function() {
+        var outils = $(this).attr('data-outils');
+        console.log('outils a la valeur ' + outils);
+
+        if (outils == "oauth") {
+            console.log('outils n est pas vide');
+            $('#modalOutils').modal('hide');
+            $('#modalOauth').modal('show');
+
+            $(".oauth_install").click(function() {
+                if ($("#form_install_oauth").valid()) { 
+                    var clientoauth = $("#clientoauth").val();
+                    console.log('clientoauth a la valeur ' + clientoauth);
+                    var secretoauth = $("#secretoauth").val();
+                    console.log('secretoauth a la valeur ' + secretoauth);
+                    var mailoauth = $("#mailoauth").val();
+                    console.log('mailoauth a la valeur ' + mailoauth);
+                    $('#modalOauth').modal('hide');
+                    toastr.success("Installation de " + outils + " en cours");
+                    toastr.warning("Déconnection du site imminente, nettoyer l'historique une fois l'installation terminée");
+            $.ajax({
+                url: "ajax/install_oauth.php",
+                method: "POST",
+                data: { clientoauth: clientoauth, secretoauth: secretoauth, mailoauth: mailoauth }
+            }).done(function(data) {
+                console.log("result " + data);
+                toastr.success("Installation de " + outils + " terminée");
+            }).fail(function() {
+                console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+            });
+                }
+                else{
+                    toastr.warning('Merci de VERIFIER la saisie des champs');
+                    console.log('Au moins un des champs est VIDE !')
+                }
+            });
+        }
+        else if (outils == "cloudflare") {
+            console.log('outils n est pas vide');
+            $('#modalOutils').modal('hide');
+            $('#modalCloudflare').modal('show');
+
+            $(".cloud_install").click(function() {
+                if ($("#form_install_cloud").valid()) { 
+                    var emailcloud = $("#emailcloud").val();
+                    console.log('emailcloud a la valeur ' + emailcloud);
+                    var apicloud = $("#apicloud").val();
+                    console.log('apicloud a la valeur ' + apicloud);
+                    $('#modalCloudflare').modal('hide');
+                    toastr.success("Installation de " + outils + " en cours");
+                    toastr.warning("Déconnection temporaire du site imminente");
+            $.ajax({
+                url: "ajax/install_cloudflare.php",
+                method: "POST",
+                data: { emailcloud: emailcloud, apicloud: apicloud }
+            }).done(function(data) {
+                console.log("result " + data);
+                toastr.success("Installation de " + outils + " terminée");
+            }).fail(function() {
+                console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+            });
+                }
+                else{
+                    toastr.warning('Merci de VERIFIER la saisie des champs');
+                    console.log('Au moins un des champs est VIDE !')
+                }
+            });
+        }
+        else {
+        $('#modalOutils').modal('hide');
+        toastr.success("Installation de " + outils + " en cours...")
+
+        $.ajax({
+            url: "ajax/install_options.php?outils=" + outils
+        }).done(function(data) {
+            console.log("result " + data);
+            toastr.success("Installation de " + outils + " terminée");
+        }).fail(function() {
+            console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+        });
+        }
+    });
+
     $(".check_install").click(function() {
         if ($('#myCheck').is(':checked')) {
             $("#text").show();
@@ -76,32 +196,6 @@ $(document).ready(function() {
         else {
             $("#text").hide();
             $("#subdomain").hide();
-        }
-    });
-
-    $(".plex_install").click(function() {
-        if ($('#plex').is(':checked')) {
-            $("#formBlockPlex").show();
-        }
-        else {
-            $("#formBlockPlex").hide();
-        }
-    });
-
-    $(".cloudflare_install").click(function() {
-        if ($('#cloud').is(':checked')) {
-            $("#formBlockCloudflare").show();
-        }
-        else {
-            $("#formBlockCloudflare").hide();
-        }
-    });
-    $(".oauth_install").click(function() {
-        if ($('#oauth').is(':checked')) {
-            $("#formBlockOauth").show();
-        }
-        else {
-            $("#formBlockOauth").hide();
         }
     });
 
@@ -124,7 +218,6 @@ $(document).ready(function() {
         $("#confirm-uninstall").attr('data-appli', appli);
         $("#modal-confirm-uninstall").modal('show');
         $(".appli-uninstall").html(appli);
-
     });
 
     // confirmation de la désinstall
@@ -150,49 +243,20 @@ $(document).ready(function() {
             console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
             $("#status-" + appli).html("Erreur ajax");
         });
-
     });
 
     $(".install_appli_etape_1").click(function(event) {
         event.preventDefault();
         let appli = $(this).attr("data-appli");
-
+        var desc = $("#desc-" + appli).html();
+        console.log('affiche' + desc);
+        $("#description-appli").css({"margin-left": "15px", "font-family": "Verdana", "margin-right": "15px"});
+        $("#description-appli").html(desc);
         $("#nomappliencours").html(appli);
         $("#validation_install_appli").attr('data-appli', appli);
         $("#subdomain").val(appli);
         $('#modal_install_applis').modal('hide');
         $('#modalPoll').modal('show');
-
-
-    });
-
-
-    // je vais garder de coté cette fonction et la suivante au cas ou je mettrais un bouton supplementaire
-    // pour creer un rclone.conf en dehors d'une proceduree d install
-    // ainsi que les deux modals correspondant ds header.twig
-    $("#rclone_install_appli").click(function() {
-        if ($("#client").val() !== "") {
-            console.log('client n est pas vide');
-            var client = $("#client").val();
-            console.log('client a la valeur ' + client);
-            var secret = $("#secret").val();
-            console.log('secret a la valeur ' + secret);
-        }
-        else {
-            console.log('client est VIDE !');
-        }
-        $.ajax({
-            url: "ajax/install_rclone.php?client=" + client + "&secret=" + secret
-        }).done(function(data) {
-            // On est dans le done, tout est ok
-            // la requête est passée
-            // console.log("result " + data);
-            $('#rclone').modal('hide');
-            $('#rclone_token').modal('show');
-            window.open('https://accounts.google.com/o/oauth2/auth?client_id=' + client + '&redirect_uri=urn:ietf:wg:oauth:2.0:oob&scope=https://www.googleapis.com/auth/drive&response_type=code', '_blank');
-        }).fail(function() {
-            console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
-        });
     });
 
     // on va intercepter le click sur le bouton sur le modal rclone
@@ -260,8 +324,6 @@ $(document).ready(function() {
             toastr.warning("Erreur sur ajax");
             $("#status-" + appli).html("Erreur ajax");
         });
-
-
     });
 
     //le bouton restart
@@ -298,7 +360,6 @@ $(document).ready(function() {
             console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
             $("#status-" + appli).html("Erreur ajax");
         });
-
     });
 
     //le bouton stop
@@ -318,7 +379,6 @@ $(document).ready(function() {
             $(".start-stop-button-" + appli).show();
             $("#status-" + appli).html("Erreur ajax");
         });
-
     });
 
     // gestion de la zone de recherche
@@ -357,6 +417,8 @@ $(document).ready(function() {
 
     // gestion de la case à cocher pour afficher les applis installées
     $("#installed_appli").change(function() {
+
+
         if ($(this).is(":checked")) {
             $(".divappli").each(function() {
                 let isinstalled = $(this).attr('data-installed');
