@@ -435,36 +435,22 @@ $(document).ready(function () {
         test_etat();
     }, 15000); // timer en ms
 
-    // statut du serveur
-    $.ajax({
-        url: "ajax/system_release.php",
-    }).done(function (data) {
-        $("#server-version").html(data);
+    function affiche_infos_ajax(ajaxpath, elementaafficher) {
+        $.ajax({
+            url: ajaxpath,
+        }).done(function (data) {
+            $("#" + elementaafficher).html(data);
+        }).fail(function () {
+            console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+            $("#" + elementaafficher).html("Erreur ajax");
+        });
+    }
 
-    }).fail(function () {
-        console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
-        $("#server-version").html("Erreur ajax");
-    });
-    // uptime
-    $.ajax({
-        url: "ajax/uptime.php",
-    }).done(function (data) {
-        $("#uptime").html(data);
+    affiche_infos_ajax("ajax/system_release.php", "server-version");
+    affiche_infos_ajax("ajax/uptime.php", "uptime");
+    affiche_infos_ajax("ajax/disque.php", "free-disk");
 
-    }).fail(function () {
-        console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
-        $("#uptime").html("Erreur ajax");
-    });
-    // disque libre
-    $.ajax({
-        url: "ajax/disque.php",
-    }).done(function (data) {
-        $("#free-disk").html(data);
 
-    }).fail(function () {
-        console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
-        $("#free-disk").html("Erreur ajax");
-    });
     // etat des vignettes d'appli
 
     test_etat();
