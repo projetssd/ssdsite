@@ -53,7 +53,7 @@ $("#install-validation").click(function() {
             else{
                 toastr.warning('Merci de VERIFIER la saisie de l\'id client et\/ou de l\'id secret');
                 console.log('le client ou le secret sont VIDES !')
-            };
+            }
 
 
             break;

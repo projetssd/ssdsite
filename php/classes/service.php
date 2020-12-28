@@ -36,6 +36,11 @@ class service
      * @var string Ligne de commande pour arrêter une appli
      */
     public $command_stop = '';
+
+    /**
+     * @var string Ligne de commande pour démarrer
+     */
+    public $command_start = '';
     /**
      * @var bool Est-ce que l'appli est installée ?
      */
@@ -49,10 +54,6 @@ class service
      */
     public $public_url;
     /**
-     * @var string Numéro de version
-     */
-    public $version;
-    /**
      * @var integer Port utilisé par l'appli
      */
     public $port = 0;
@@ -61,6 +62,15 @@ class service
      */
     public $host;
 
+    /**
+     * @var string Utilisation interne : chemin des fichiers status
+     */
+    private $status_file = '/opt/seedbox/status/';
+
+    /**
+     * @var string Chemin du fichier resume
+     */
+    private $resume_file = '/opt/seedbox/resume/';
 
     /**
      * service constructor.
@@ -79,16 +89,12 @@ class service
         // on commence par mettre tout ce qui est générique
         //
         $this->display_name      = trim($my_service); // on supprimer les espaces avant/après
-        $this->command_install   =
-            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh install ' . $this->display_name . ' ';
-        $this->command_uninstall =
-            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh uninstall ' . $this->display_name . ' ';
-        $this->command_restart   =
-            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh restart ' . $this->display_name . ' ';
-        $this->command_stop      =
-            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh stop ' . $this->display_name . ' ';
-        $this->command_start     =
-            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh start ' . $this->display_name . ' ';
+        $start_command           = 'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ';
+        $this->command_install   = $start_command . 'install ' . $this->display_name . ' ';
+        $this->command_uninstall = $start_command . 'uninstall ' . $this->display_name . ' ';
+        $this->command_restart   = $start_command . 'restart ' . $this->display_name . ' ';
+        $this->command_stop      = $start_command . 'stop ' . $this->display_name . ' ';
+        $this->command_start     = $start_command . 'start ' . $this->display_name . ' ';
 
         //
         // on va chercher l'ip du docker
@@ -108,7 +114,7 @@ class service
         // ici on va surcharger ce qui n'est pas générique
         require __DIR__ . '/detail_appli.php';
         $this->port = $tableau_appli[$my_service]['port'];
-        if($this->port == 0)
+        if ($this->port == 0)
         {
             $log = new log;
             $log->writelog("Appli " . $my_service . " non connue ?");
@@ -118,7 +124,7 @@ class service
 
         $this->url = "http://" . $this->host . ":" . $this->port;
 
-        if ($my_service != 'all')
+        if (($my_service != 'all') && $this->is_installed())
         {
             // on va remplir les valeurs par défaut
 
@@ -127,7 +133,7 @@ class service
             {
                 // on récupère les url publiques
                 // on lit le fichier
-                $file    = fopen('/opt/seedbox/resume', 'r');
+                $file    = fopen($this->resume_file, 'r');
                 $matches = array();
                 if ($file)
                 {
@@ -161,7 +167,7 @@ class service
         /**
          * Chemin du fichier qui contient les infos.
          */
-        $filename = '/opt/seedbox/status/' . $this->display_name;
+        $filename = $this->status_file . $this->display_name;
 
         $installed = false; // par défaut, on considère que le service n'est pas là
 
@@ -286,24 +292,25 @@ class service
                 $version = 'image communauté Mondedié';
                 break;
             case 'emby':
-                $version  = shell_exec("docker exec -t emby sh -c 'cat /config/data/lastversion.txt'");
+                $version = shell_exec("docker exec -t emby sh -c 'cat /config/data/lastversion.txt'");
                 break;
             case 'bitwarden':
                 $result  = shell_exec("docker exec -t bitwarden sh -c 'cat /web-vault/version.json'");
-                $detail    = explode(':', $result);
-                $html = str_replace('"', "", $detail[1]);
+                $detail  = explode(':', $result);
+                $html    = str_replace('"', "", $detail[1]);
                 $version = str_replace("}", "", $html);
                 break;
             case 'cloudcmd':
-                $result  = shell_exec("docker exec -t cloudcmd sh -c 'grep version /usr/src/app/package.json | head -1'");
-                $detail    = explode(':', $result);
-                $html = str_replace('"', "", $detail[1]);
+                $result  =
+                    shell_exec("docker exec -t cloudcmd sh -c 'grep version /usr/src/app/package.json | head -1'");
+                $detail  = explode(':', $result);
+                $html    = str_replace('"', "", $detail[1]);
                 $version = str_replace(",", "", $html);
                 break;
             case 'mellow':
                 $result  = shell_exec("docker exec -t mellow sh -c 'grep version /usr/src/app/package.json | head -1'");
-                $detail    = explode(':', $result);
-                $html = str_replace('"', "", $detail[1]);
+                $detail  = explode(':', $result);
+                $html    = str_replace('"', "", $detail[1]);
                 $version = str_replace(",", "", $html);
                 break;
             case 'jackett':
@@ -315,13 +322,13 @@ class service
                 $version = shell_exec("docker exec autoscan autoscan --version");
                 break;
             case 'filerun':
-                $version  = shell_exec("docker exec -t filerun sh -c 'cat /var/www/html/initial_version.txt'");
+                $version = shell_exec("docker exec -t filerun sh -c 'cat /var/www/html/initial_version.txt'");
                 break;
             case 'medusa':
             case "calibre":
             case "ombi":
             case "calibreweb":
-            case "nextcloud": 
+            case "nextcloud":
             case "tautulli":
             case "heimdall":
             case "nzbhydra":
@@ -336,33 +343,40 @@ class service
                 $version = $temp[1];
                 break;
             case "readarr":
-                $version  = shell_exec('docker inspect -f \'{{ index .Config.Labels "org.opencontainers.image.version" }}\' readarr');
+                $version =
+                    shell_exec('docker inspect -f \'{{ index .Config.Labels "org.opencontainers.image.version" }}\' readarr');
                 break;
             case "traefik":
-                $version  = shell_exec('docker inspect -f \'{{ index .Config.Labels "org.opencontainers.image.version" }}\' traefik');
+                $version =
+                    shell_exec('docker inspect -f \'{{ index .Config.Labels "org.opencontainers.image.version" }}\' traefik');
                 break;
             case "firefox":
-                $version  = shell_exec('docker inspect -f \'{{ index .Config.Labels "org.label-schema.version" }}\' firefox');
+                $version =
+                    shell_exec('docker inspect -f \'{{ index .Config.Labels "org.label-schema.version" }}\' firefox');
                 break;
             case "jdownloader":
-                $version  = shell_exec('docker inspect -f \'{{ index .Config.Labels "org.label-schema.schema-version" }}\' jdownloader');
+                $version =
+                    shell_exec('docker inspect -f \'{{ index .Config.Labels "org.label-schema.schema-version" }}\' jdownloader');
                 break;
             case "ubooquity":
-                $temp  = shell_exec("docker inspect -f '{{.Config.Env}}' ubooquity");
-                $tab_env = explode(" ",$temp);
-                foreach($tab_env as $detail_env)
+                $temp    = shell_exec("docker inspect -f '{{.Config.Env}}' ubooquity");
+                $tab_env = explode(" ", $temp);
+                foreach ($tab_env as $detail_env)
                 {
-                    
-                    if(strpos($detail_env,"APP_VERSION") !== false)
+
+                    if (strpos($detail_env, "APP_VERSION") !== false)
                     {
-                        $temp_version = explode("=",$detail_env);
-                        $version = $temp_version[1];
+                        $temp_version = explode("=", $detail_env);
+                        $version      = $temp_version[1];
                     }
                 }
                 break;
             case "plex":
-                $version  = shell_exec('docker exec plex /usr/lib/plexmediaserver/Plex\ Media\ Server --version');
-                break;            
+                $version = shell_exec('docker exec plex /usr/lib/plexmediaserver/Plex\ Media\ Server --version');
+                break;
+            default:
+                $version = 'Version inconnue';
+                break;
         }
 
         if (empty($version))
@@ -386,10 +400,10 @@ class service
         on ne stocke donc aucune info
         les infos seront lues dans le défilement des logs */
         $this->command_install .= " " . $subdomain;
-        $log = new log;
-        $log->writelog("-----------------",'DEBUG');
-        $log->writelog("Installation " . $this->display_name,'DEBUG');
-        $log->writelog("Commande " . $this->command_install,'DEBUG');
+        $log                   = new log;
+        $log->writelog("-----------------", 'DEBUG');
+        $log->writelog("Installation " . $this->display_name, 'DEBUG');
+        $log->writelog("Commande " . $this->command_install, 'DEBUG');
         shell_exec($this->command_install);
 
         return true;
@@ -403,9 +417,9 @@ class service
     public function uninstall()
     {
         $log = new log;
-        $log->writelog("-----------------",'DEBUG');
-        $log->writelog("Désinstall " . $this->display_name,'DEBUG');
-        $log->writelog("Commande " . $this->command_uninstall,'DEBUG');
+        $log->writelog("-----------------", 'DEBUG');
+        $log->writelog("Désinstall " . $this->display_name, 'DEBUG');
+        $log->writelog("Commande " . $this->command_uninstall, 'DEBUG');
         shell_exec($this->command_uninstall);
 
         return true;
@@ -419,19 +433,19 @@ class service
     public function restart()
     {
         $log = new log;
-        $log->writelog("-----------------",'DEBUG');
-        $log->writelog("Restart " . $this->display_name,'DEBUG');
+        $log->writelog("-----------------", 'DEBUG');
+        $log->writelog("Restart " . $this->display_name, 'DEBUG');
 
         if ($this->check())
         {
             // le service tourne, on va redémarrer
             shell_exec($this->command_restart);
-            $log->writelog("Commande " . $this->command_restart,'DEBUG');
+            $log->writelog("Commande " . $this->command_restart, 'DEBUG');
         } else
         {
             // le service ne tourne pas, on le démarre
             shell_exec($this->command_start);
-            $log->writelog("Commande " . $this->command_start,'DEBUG');
+            $log->writelog("Commande " . $this->command_start, 'DEBUG');
         }
 
         return true;
@@ -445,9 +459,9 @@ class service
     public function stop()
     {
         $log = new log;
-        $log->writelog("-----------------",'DEBUG');
-        $log->writelog("Stop " . $this->display_name,'DEBUG');
-        $log->writelog("Commande " . $this->command_stop,'DEBUG');
+        $log->writelog("-----------------", 'DEBUG');
+        $log->writelog("Stop " . $this->display_name, 'DEBUG');
+        $log->writelog("Commande " . $this->command_stop, 'DEBUG');
         shell_exec($this->command_stop);
 
         return true;
@@ -459,7 +473,7 @@ class service
      */
     public function get_public_url()
     {
-        $handle  = @fopen("/opt/seedbox/resume", "r");
+        $handle  = @fopen($this->resume_file, "r");
         $matches = array();
         if ($handle)
         {
@@ -532,54 +546,59 @@ class service
     {
         global $debugbar;
         $array_cache = array(
-            'collabora','oauth','cloudproxy');
-        $retour = array();
-        $listfiles = scandir('/opt/seedbox/status/');
-        foreach($listfiles as $file)
+            'collabora', 'oauth', 'cloudproxy');
+        $retour      = array();
+        $listfiles   = scandir($this->status_file);
+        foreach ($listfiles as $file)
         {
-            if(substr($file,0,1) !== '.')
+            if (substr($file, 0, 1) !== '.')
             {
-                if(substr($file,0,3) != 'db-')
+                if (substr($file, 0, 3) != 'db-')
                 {
-                    if(!in_array($file,$array_cache))
+                    if (!in_array($file, $array_cache))
                     {
-                         $filename = '/opt/seedbox/status/' . $file;
-                        $handle     = fopen($filename, 'r');
+                        $filename = $this->status_file . $file;
+                        $handle   = fopen($filename, 'r');
                         $contents = fread($handle, filesize($filename));
-                         
-                        if($contents == 2)
+
+                        if ($contents == 2)
                         {
-                          $retour[] = $file;
+                            $retour[] = $file;
                         }
                     }
-                   
+
                 }
-                
+
             }
         }
         return $retour;
     }
-    
+
+    /**
+     * @param $applis_installed array Tableau des applis installées
+     * @return array La liste des applis pas encore installées
+     * Fait un diff entre toutes applis et applis installées
+     */
     public function get_uninstalled_applis($applis_installed)
     {
         global $mode_debug;
         global $debugbar;
-        
+
         $retour = array();
         require __DIR__ . '/detail_appli.php';
-        
+
         $all_applis = array();
-        foreach($tableau_appli as $key => $val)
+        foreach ($tableau_appli as $key => $val)
         {
-            if($key != 'all')
+            if ($key != 'all')
             {
                 $all_applis[] = $key;
             }
         }
 
-        
+
         $retour = array();
-        foreach(array_diff($all_applis,$applis_installed) as $val)
+        foreach (array_diff($all_applis, $applis_installed) as $val)
         {
             $retour[] = $val;
         }

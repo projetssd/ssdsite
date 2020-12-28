@@ -21,7 +21,6 @@ $(document).ready(function() {
 
 
     $(".link_detail_log").click(function(event) {
-        var id = $(this).attr('id');
         var logfile = $(this).attr('data-logfile');
         event.preventDefault();
 

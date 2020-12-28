@@ -3,34 +3,65 @@
 
 class images
 {
+    /**
+     * @var string Application
+     */
     public $appli;
-    
+    /**
+     * @var string Chemin par défaut des images
+     */
+    private $chemin = __DIR__ . '/../../dist/appli_img/';
+    /**
+     * @var string Chemin par défaut des images distantes
+     */
+    private $chemin_distant = "https://www.scriptseedboxdocker.com/wp-content/uploads/icones/";
+    /**
+     * @var string Header par défaut (png)
+     */
+    private $header = 'Content-Type: image/png';
+
+    /**
+     * images constructor.
+     * @param string $appli Le nom de l'application
+     */
     public function __construct($appli)
     {
-        $this->appli = $appli;   
+        $this->appli = $appli;
     }
-    
+
+    /**
+     * Regarde si une image existe en local
+     * @return bool Vrai si image existe en local
+     */
     private function images_exists()
     {
-        return file_exists(__DIR__ . '/../../dist/appli_img/' . $this->appli . '.png');
+        return file_exists($this->chemin . $this->appli . '.png');
     }
-    
+
+    /**
+     * Regarde si une image existe en distant
+     * @return bool Vrai si image existe en distant
+     */
     private function distant_images_exists()
     {
-        return curl_init("https://www.scriptseedboxdocker.com/wp-content/uploads/icones/" . $this->appli . ".png") !== false;
+        return curl_init($this->chemin_distant . $this->appli . ".png") !== false;
     }
-    
+
+    /**
+     * Copie une image distante en local
+     * @return false|GdImage|resource false si erreur, sinon ressource image
+     */
     private function copy_img_to_local()
     {
         $log = new log;
         // d'abord on copie l'image vers un fichier temporaire
         $tmpfname = tempnam("/tmp", "img");
-        if(!copy("https://www.scriptseedboxdocker.com/wp-content/uploads/icones/" . $this->appli . ".png",$tmpfname))
+        if (!copy($this->chemin_distant . $this->appli . ".png", $tmpfname))
         {
-            
+
             $log->writelog("Erreur de copie de fichier distant :  ");
-            $log->writelog("https://www.scriptseedboxdocker.com/wp-content/uploads/icones/" . $this->appli . ".png");
-            $log->writelog(" vers " . $tmpfname); 
+            $log->writelog($this->chemin_distant . $this->appli . ".png");
+            $log->writelog(" vers " . $tmpfname);
             unlink($tmpfname);
             return false;
         }
@@ -47,26 +78,27 @@ class images
         list($width, $height) = getimagesize($tmpfname);
         $newimg = imagecreatetruecolor(40, 40);
         $log->writelog("Ancienne taille " . $width . " - " . $height);
-        if(!imagecopyresampled($newimg,$im,0,0,0,0,40,40,$width,$height))
+        if (!imagecopyresampled($newimg, $im, 0, 0, 0, 0, 40, 40, $width, $height))
         {
             $log->writelog("Erreur de redimensionnement de l'image");
         }
         //$newimg = $im;
         // on stocke l'image
-        imagepng($newimg,__DIR__ . '/../../dist/appli_img/' . $this->appli . '.png');
+        imagepng($newimg, $this->chemin . $this->appli . '.png');
         // on retourne l'image pour qu'elle soit affichée
         return $newimg;
     }
-    
-    
+
+    /**
+     * Affiche une image
+     * @return bool
+     */
     public function affiche_image()
     {
-        $log = new log;
         if ($this->images_exists())
         {
-            //$log->writelog("Image " . $this->appli . " locale existante");
-            $im = imagecreatefrompng(__DIR__ . '/../../dist/appli_img/' . $this->appli . '.png');
-            header('Content-Type: image/png');
+            $im = imagecreatefrompng($this->chemin . $this->appli . '.png');
+            header($this->header);
             imagepng($im);
             imagedestroy($im);
             return true;
@@ -74,16 +106,15 @@ class images
         // si on est ici c'est qu'on n'a pas l'image en local
         if($this->distant_images_exists())
         {
-            //$log->writelog("Image " . $this->appli . " distante existante");
             $im = $this->copy_img_to_local();
-            header('Content-Type: image/png');
+            header($this->header);
             imagepng($im);
             imagedestroy($im);
             return true;
         }
         // si on est là, c'est qu'on n'a rien...
         $im = imagecreatefrompng(__DIR__ . '/../../dist/img/no_logo.png');
-        header('Content-Type: image/png');
+        header($this->header);
         imagepng($im);
         imagedestroy($im);
         return true;

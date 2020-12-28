@@ -9,45 +9,52 @@ class client
      * @var string Nom du client
      */
     public $client;
-    public $secret;
+    /**
+     * @var string le token
+     */
     public $token;
-    public $drive;
-    public $drivename;
-
 
 
     /**
-     *  constructor.
-     * @param $client id oauth
+     * client constructor.
+     * @param string $rclone
      */
-
     public function __construct($rclone)
     {
         $this->client = $rclone;
-        $this->token = $rclone;
+        $this->token  = $rclone;
     }
 
+    /**
+     * @param string $secret
+     */
     function credential($secret)
     {
         $log = new log;
-        $log->writelog("-----------------",'DEBUG');
-        $log->writelog("credential " . $this->client,'DEBUG');
+        $log->writelog("-----------------", 'DEBUG');
+        $log->writelog("credential " . $this->client, 'DEBUG');
 
-        $commande = 'sudo ' . __DIR__ . '/../../scripts/manage_service.sh credential "' . $this->client . '" "' . $secret . '" ';
-        $log->writelog("Lancé","DEBUG");
-        $log->writelog("Commande : " . $commande,"DEBUG");
+        $commande =
+            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh credential "' . $this->client . '" "' . $secret . '" ';
+        $log->writelog("Lancé", "DEBUG");
+        $log->writelog("Commande : " . $commande, "DEBUG");
         shell_exec($commande);
     }
 
+    /**
+     * @param string $drive
+     * @param string $drivename
+     */
     function createtoken($drive, $drivename)
     {
         $log = new log;
-        $log->writelog("-----------------",'DEBUG');
-        $log->writelog("token " . $this->client,'DEBUG');
+        $log->writelog("-----------------", 'DEBUG');
+        $log->writelog("token " . $this->client, 'DEBUG');
 
-        $commande = 'sudo ' . __DIR__ . '/../../scripts/manage_service.sh createtoken "' . $this->token .  '" "' . $drive . '" "' . $drivename . '" ';
-        $log->writelog("Lancé","DEBUG");
-        $log->writelog("Commande : " . $commande,"DEBUG");
+        $commande =
+            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh createtoken "' . $this->token . '" "' . $drive . '" "' . $drivename . '" ';
+        $log->writelog("Lancé", "DEBUG");
+        $log->writelog("Commande : " . $commande, "DEBUG");
         shell_exec($commande);
     }
 

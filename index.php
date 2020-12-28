@@ -1,11 +1,6 @@
 <?php
 
 require 'includes/header.php';
-/*
-if($mode_debug)
-{
-    $debugbar['time']->startMeasure('monindex', 'Chargement index');
-}*/
 
 
 $service = new service('all');
@@ -15,15 +10,7 @@ $tab_installed = $service->get_installed_appli();
 $tab_uninstalled = $service->get_uninstalled_applis($tab_installed);
 
 
-
 $applis = $service->get_all($tab_installed);
-/*
-if($mode_debug)
-{
-    $debugbar['messages']->addMessage("On a chargé les éléments " . print_r($applis,true));
-    $debugbar['messages']->addMessage($applis);
-}*/
-
 
 // javascripts  utilisés
 $js = array(
@@ -40,7 +27,7 @@ $js = array(
     'get_logs.js',
     'test_git.js'
 );
-    
+
 // css utilisés
 $css = array(
     "all.min.css",
@@ -51,50 +38,45 @@ $css = array(
 
 
 $asset_css = '';
-$asset_js = '';
-if ($prod) {
+$asset_js  = '';
+if ($prod)
+{
     $config = [
-        'pipeline' => 'auto',
-        'public_dir' => __DIR__ ,
-        'css_dir' => 'dist/css',
-        'js_dir' => 'dist/js'
+        'pipeline'   => 'auto',
+        'public_dir' => __DIR__,
+        'css_dir'    => 'dist/css',
+        'js_dir'     => 'dist/js'
     ];
     $assets = new \Stolz\Assets\Manager($config);
     $assets->add($css);
     $assets->add($js);
     $asset_css = $assets->css();
-    $asset_js = $assets->js();
+    $asset_js  = $assets->js();
 }
-
-/*if($mode_debug)
-{
-    $debugbar['time']->stopMeasure('monindex');
-}*/
 
 /**
  * PLUS DE DEBUG BAR APRES CA !!
  */
-if($mode_debug)
+if ($mode_debug)
 {
     $debugbarrender = $debugbarRenderer->render();
 }
 
 
-
 // maintenant qu'on a toutes les variables, on appelle le bon template, en mettant les variables dedans
 $template = $twig->load('index.twig');
-echo $template->render(['IP' =>  $_SERVER['REMOTE_ADDR'],
-'TITRE' => 'Gestion du serveur SSD',
-'FREE_DISK' => $free_disk,
-'UPTIME'=> $uptime,
-'SERVER_NAME' => $server_name,
-'APPLIS' => $applis,
-'JS' => $js,
-'CSS' => $css,
-'PROD' => $prod,
-'ASSET_CSS' => $asset_css,
-'ASSET_JS' => $asset_js,
-'DEBUGBARJS' => $debugbar_js,
-'DEBUGBARRENDER' => $debugbarrender,
-'UNINSTALLED' => $tab_uninstalled
-]);
+echo $template->render(['IP'             => $_SERVER['REMOTE_ADDR'],
+                        'TITRE'          => 'Gestion du serveur SSD',
+                        'FREE_DISK'      => $free_disk,
+                        'UPTIME'         => $uptime,
+                        'SERVER_NAME'    => $server_name,
+                        'APPLIS'         => $applis,
+                        'JS'             => $js,
+                        'CSS'            => $css,
+                        'PROD'           => $prod,
+                        'ASSET_CSS'      => $asset_css,
+                        'ASSET_JS'       => $asset_js,
+                        'DEBUGBARJS'     => $debugbar_js,
+                        'DEBUGBARRENDER' => $debugbarrender,
+                        'UNINSTALLED'    => $tab_uninstalled
+                       ]);
