@@ -6,16 +6,15 @@ ne s'éxécute que quand la page est totalement chargée
 /*global toastr */
 
 function test_etat() {
-    $(".divappli").each(function() {
+    $(".divappli").each(function () {
         let appli = $(this).attr('data-appli');
         if ($("#status-" + appli).html() === "Installation...") {
             console.log('Appli en cours d install');
-        }
-        else {
+        } else {
             $.ajax({
                 url: "ajax/etat_service.php?service=" + appli,
                 dataType: "json"
-            }).done(function(data) {
+            }).done(function (data) {
                 // le "data" est le retour de la page etat_service
                 // c'est un json prêt à être exploité, de la forme
                 // {"running":true,"installed":true}
@@ -35,8 +34,7 @@ function test_etat() {
                         $("#version-" + appli).html(version);
                         $("#i_bouton_status_" + appli).removeClass("fa-play-circle").addClass("fa-redo-alt");
                         $("#stop-" + appli).show();
-                    }
-                    else {
+                    } else {
                         $("#texte-bouton-restart-" + appli).html("Démarrer");
                         $("#version-" + appli).html("Service non démarré");
                         $("#i_bouton_status_" + appli).addClass("fa-play-circle").removeClass("fa-redo-alt");
@@ -44,20 +42,18 @@ function test_etat() {
                     }
                     if (public_url !== false) {
                         $("#nomAppli-" + appli).unwrap().wrap('<a href="https://' + public_url + '" target="_blank">');
-                    }
-                    else {
+                    } else {
                         $("#nomAppli-" + appli).unwrap().wrap('<a>');
                     }
 
-                }
-                else {
+                } else {
                     $("#status-" + appli).html("Installer").removeClass("btn-warning").addClass("btn-success");
                     $("#div-" + appli).addClass('div-uninstalled').attr('data-installed', '0');
                     $(".start-stop-button-" + appli).hide();
                     $("#nomAppli-" + appli).unwrap().wrap('<a>');
                     $("#version-" + appli).html("Application non installée");
                 }
-            }).fail(function() {
+            }).fail(function () {
                 console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
                 $("#status-" + appli).html("Erreur ajax");
             });
@@ -67,45 +63,45 @@ function test_etat() {
 
 }
 
-$(document).ready(function() {
+$(document).ready(function () {
 
-    $(".install_outils").click(function() {
-       var appli = $(this).attr('data-appli');
-       var desc = $("#desc-" + appli).html();
-       console.log('affiche' + desc);
-       $('#modalOutils').modal('show');
-       $("#description").css({"margin-left": "15px", "font-family": "Verdana", "margin-right": "15px"});
-       $("#description").html(desc);
-       $("#outils").html(appli);
-       $("#outils_install").attr('data-outils', appli);
+    $(".install_outils").click(function () {
+        var appli = $(this).attr('data-appli');
+        var desc = $("#desc-" + appli).html();
+        console.log('affiche' + desc);
+        $('#modalOutils').modal('show');
+        $("#description").css({"margin-left": "15px", "font-family": "Verdana", "margin-right": "15px"});
+        $("#description").html(desc);
+        $("#outils").html(appli);
+        $("#outils_install").attr('data-outils', appli);
     });
 
     $("#form_install_oauth").validate({
-       rules: {
-           clientoauth: {
-               required: true
-           },
-           secretoauth: {
-               required: true
-           },
-           mailoauth: {
-               required: true
-           },
-       }
+        rules: {
+            clientoauth: {
+                required: true
+            },
+            secretoauth: {
+                required: true
+            },
+            mailoauth: {
+                required: true
+            },
+        }
     });
 
     $("#form_install_cloud").validate({
-       rules: {
-           emailcloud: {
-               required: true
-           },
-           apicloud: {
-               required: true
-           },
-       }
+        rules: {
+            emailcloud: {
+                required: true
+            },
+            apicloud: {
+                required: true
+            },
+        }
     });
 
-    $(".option_install").click(function() {
+    $(".option_install").click(function () {
         var outils = $(this).attr('data-outils');
         console.log('outils a la valeur ' + outils);
 
@@ -114,8 +110,8 @@ $(document).ready(function() {
             $('#modalOutils').modal('hide');
             $('#modalOauth').modal('show');
 
-            $(".oauth_install").click(function() {
-                if ($("#form_install_oauth").valid()) { 
+            $(".oauth_install").click(function () {
+                if ($("#form_install_oauth").valid()) {
                     var clientoauth = $("#clientoauth").val();
                     console.log('clientoauth a la valeur ' + clientoauth);
                     var secretoauth = $("#secretoauth").val();
@@ -125,30 +121,28 @@ $(document).ready(function() {
                     $('#modalOauth').modal('hide');
                     toastr.success("Installation de " + outils + " en cours");
                     toastr.warning("Déconnection du site imminente, nettoyer l'historique une fois l'installation terminée");
-            $.ajax({
-                url: "ajax/install_oauth.php",
-                method: "POST",
-                data: { clientoauth: clientoauth, secretoauth: secretoauth, mailoauth: mailoauth }
-            }).done(function(data) {
-                console.log("result " + data);
-                toastr.success("Installation de " + outils + " terminée");
-            }).fail(function() {
-                console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
-            });
-                }
-                else{
+                    $.ajax({
+                        url: "ajax/install_oauth.php",
+                        method: "POST",
+                        data: {clientoauth: clientoauth, secretoauth: secretoauth, mailoauth: mailoauth}
+                    }).done(function (data) {
+                        console.log("result " + data);
+                        toastr.success("Installation de " + outils + " terminée");
+                    }).fail(function () {
+                        console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+                    });
+                } else {
                     toastr.warning('Merci de VERIFIER la saisie des champs');
                     console.log('Au moins un des champs est VIDE !')
                 }
             });
-        }
-        else if (outils == "cloudflare") {
+        } else if (outils == "cloudflare") {
             console.log('outils n est pas vide');
             $('#modalOutils').modal('hide');
             $('#modalCloudflare').modal('show');
 
-            $(".cloud_install").click(function() {
-                if ($("#form_install_cloud").valid()) { 
+            $(".cloud_install").click(function () {
+                if ($("#form_install_cloud").valid()) {
                     var emailcloud = $("#emailcloud").val();
                     console.log('emailcloud a la valeur ' + emailcloud);
                     var apicloud = $("#apicloud").val();
@@ -156,64 +150,61 @@ $(document).ready(function() {
                     $('#modalCloudflare').modal('hide');
                     toastr.success("Installation de " + outils + " en cours");
                     toastr.warning("Déconnection temporaire du site imminente");
-            $.ajax({
-                url: "ajax/install_cloudflare.php",
-                method: "POST",
-                data: { emailcloud: emailcloud, apicloud: apicloud }
-            }).done(function(data) {
-                console.log("result " + data);
-                toastr.success("Installation de " + outils + " terminée");
-            }).fail(function() {
-                console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
-            });
-                }
-                else{
+                    $.ajax({
+                        url: "ajax/install_cloudflare.php",
+                        method: "POST",
+                        data: {emailcloud: emailcloud, apicloud: apicloud}
+                    }).done(function (data) {
+                        console.log("result " + data);
+                        toastr.success("Installation de " + outils + " terminée");
+                    }).fail(function () {
+                        console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+                    });
+                } else {
                     toastr.warning('Merci de VERIFIER la saisie des champs');
                     console.log('Au moins un des champs est VIDE !')
                 }
             });
-        }
-        else {
-        $('#modalOutils').modal('hide');
-        toastr.success("Installation de " + outils + " en cours...")
+        } else {
+            $('#modalOutils').modal('hide');
+            toastr.success("Installation de " + outils + " en cours...")
 
-        $.ajax({
-            url: "ajax/install_options.php?outils=" + outils
-        }).done(function(data) {
-            console.log("result " + data);
-            toastr.success("Installation de " + outils + " terminée");
-        }).fail(function() {
-            console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
-        });
+            $.ajax({
+                url: "ajax/install_options.php?outils=" + outils
+            }).done(function (data) {
+                console.log("result " + data);
+                toastr.success("Installation de " + outils + " terminée");
+            }).fail(function () {
+                console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+            });
         }
     });
 
-    $(".check_install").click(function() {
+    $(".check_install").click(function () {
         if ($('#myCheck').is(':checked')) {
             $("#text").show();
             $("#subdomain").show();
-        }
-        else {
+        } else {
             $("#text").hide();
             $("#subdomain").hide();
         }
     });
 
-    $("#affiche-install-appli").click(function() {
+    $("#affiche-install-appli").click(function () {
         console.log('affiche install');
         $('#modal_install_applis').modal('show');
     });
 
-    $(".install-modal").click(function() {
+    $(".install-modal").click(function () {
         $('#seedbox').modal('show');
     });
 
-    $(".rclone-modal").click(function() {
+    $(".rclone-modal").click(function () {
         $('#rclone_token').modal('show');
     });
 
     // affichage du pop up de confirmation de désinstall
-    $(".uninstall").click(function() {
+    $(".uninstall").click(function () {
         var appli = $(this).attr('data-appli');
         $("#confirm-uninstall").attr('data-appli', appli);
         $("#modal-confirm-uninstall").modal('show');
@@ -221,14 +212,14 @@ $(document).ready(function() {
     });
 
     // confirmation de la désinstall
-    $("#confirm-uninstall").click(function() {
+    $("#confirm-uninstall").click(function () {
         $("#modal-confirm-uninstall").modal('hide');
         var appli = $(this).attr('data-appli');
         toastr.warning("Désinstallation de " + appli + " en cours...")
 
         $.ajax({
             url: "ajax/uninstall_service.php?service=" + appli
-        }).done(function() {
+        }).done(function () {
             // On est dans le done, tout est ok
             // la requête est passée
             $("#status-" + appli).html("Installer").removeClass("btn-warning").addClass("btn-success");
@@ -239,13 +230,13 @@ $(document).ready(function() {
             // on ajoute la transparence
             $("#div-" + appli).addClass('div-uninstalled').attr('data-installed', '0');
             window.location.reload();
-        }).fail(function() {
+        }).fail(function () {
             console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
             $("#status-" + appli).html("Erreur ajax");
         });
     });
 
-    $(".install_appli_etape_1").click(function(event) {
+    $(".install_appli_etape_1").click(function (event) {
         event.preventDefault();
         let appli = $(this).attr("data-appli");
         var desc = $("#desc-" + appli).html();
@@ -260,7 +251,7 @@ $(document).ready(function() {
     });
 
     // on va intercepter le click sur le bouton sur le modal rclone
-    $("#rclone_token_valid").click(function() {
+    $("#rclone_token_valid").click(function () {
         if ($("#token").val() !== "") {
             console.log('token n est pas vide');
             var token = $("#token").val();
@@ -269,24 +260,23 @@ $(document).ready(function() {
             console.log('drive a la valeur ' + drive);
             var drivename = $("#drivename").val();
             console.log('drivename a la valeur ' + drivename);
-        }
-        else {
+        } else {
             console.log('TOKEN est VIDE !');
         }
         $.ajax({
             url: "ajax/install_token.php?token=" + token + "&drive=" + drive + "&drivename=" + drivename
-        }).done(function(data) {
+        }).done(function (data) {
             // On est dans le done, tout est ok
             // la requête est passée
             $('#rclone_token').modal('hide');
             console.log("result " + data);
-        }).fail(function() {
+        }).fail(function () {
             console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
         });
     });
 
     // on va intercepter le click sur le bouton status
-    $(".bouton-install").click(function() {
+    $(".bouton-install").click(function () {
         let appli = $(this).attr("data-appli");
         console.log("Appli appelée " + appli)
         // on va considérer que le texte du bouton est ok
@@ -296,8 +286,7 @@ $(document).ready(function() {
             var subdomain = $("#subdomain").val();
             console.log('Subdomain a la valeur ' + subdomain);
             $("#validation_install_appli").attr('data-subdomain', subdomain);
-        }
-        else {
+        } else {
             console.log('Subdomain est VIDE !');
         }
         // on change le texte du bouton
@@ -310,7 +299,7 @@ $(document).ready(function() {
         //$(".overlay").show();
         $.ajax({
             url: "ajax/install_service.php?service=" + appli + "&subdomain=" + subdomain
-        }).done(function(data) {
+        }).done(function (data) {
             // On est dans le done, tout est ok
             // la requête est passée
             console.log("result " + data);
@@ -318,7 +307,7 @@ $(document).ready(function() {
             toastr.success("Installation de " + appli + " terminée");
             window.location.reload();
 
-        }).fail(function() {
+        }).fail(function () {
             //$(".overlay").hide();
             console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
             toastr.warning("Erreur sur ajax");
@@ -327,7 +316,7 @@ $(document).ready(function() {
     });
 
     //le bouton restart
-    $(".bouton-start").click(function() {
+    $(".bouton-start").click(function () {
         console.log("Bouton start clické");
         let appli = $(this).attr("data-appli");
         console.log("Restart de " + appli);
@@ -337,7 +326,7 @@ $(document).ready(function() {
             url: "ajax/check_service.php?service=" + appli
             // appel simple, en GET
             // on peut rajouter des options si besoin pour du POST
-        }).done(function(data) {
+        }).done(function (data) {
             // On est dans le done, tout est ok
             // la requête est passée
             // le résultat de la requête est maintenant dans la variable "data"
@@ -347,96 +336,83 @@ $(document).ready(function() {
                 texte_alerte = 'Démarrage';
             }
             refresh_logs();
-        }).fail(function() {
+        }).fail(function () {
             console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
             $("#status-" + appli).html("Erreur ajax");
         });
         //
         $.ajax({
             url: "ajax/restart_service.php?service=" + appli
-        }).done(function() {
+        }).done(function () {
             toastr.success(texte_alerte + " de " + appli + " en cours");
-        }).fail(function() {
+        }).fail(function () {
             console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
             $("#status-" + appli).html("Erreur ajax");
         });
     });
 
     //le bouton stop
-    $(".bouton-stop").click(function() {
+    $(".bouton-stop").click(function () {
         console.log("Bouton stop clické");
         let appli = $(this).attr("data-appli");
         console.log("Arrêt de " + appli);
 
         $.ajax({
             url: "ajax/stop_service.php?service=" + appli
-        }).done(function() {
+        }).done(function () {
             toastr.success("Arrêt de " + appli + " en cours");
             $(".start-stop-button-" + appli).show();
             refresh_logs();
-        }).fail(function() {
+        }).fail(function () {
             console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
             $(".start-stop-button-" + appli).show();
             $("#status-" + appli).html("Erreur ajax");
         });
     });
 
+    function recherche(zonerecherche, zoneaffichage) {
+        let searchcontent = $("#" + zonerecherche).val();
+        searchcontent = searchcontent.toLowerCase();
+        $("." + zoneaffichage).each(function () {
+
+            let iddiv = $(this).attr('id');
+            let nomdiv = $(this).attr('data-appli');
+            if (nomdiv.includes(searchcontent)) {
+                $("#" + iddiv).show();
+            } else {
+                $("#" + iddiv).hide();
+            }
+        });
+    }
+
     // gestion de la zone de recherche
-    $("#searchappli").on('input', function() {
-        let searchcontent = $("#searchappli").val();
-        searchcontent = searchcontent.toLowerCase();
-        $(".divappli").each(function() {
-
-            let iddiv = $(this).attr('id');
-            let nomdiv = $(this).attr('data-appli');
-            if (nomdiv.includes(searchcontent)) {
-                $("#" + iddiv).show();
-            }
-            else {
-                $("#" + iddiv).hide();
-            }
-        });
+    $("#searchappli").on('input', function () {
+        recherche("searchappli", "divappli");
     });
-    
-     // gestion de la zone de recherche pour les applis à installer
-    $("#uninstall-search").on('input', function() {
-        let searchcontent = $("#uninstall-search").val();
-        searchcontent = searchcontent.toLowerCase();
-        $(".div-appli-uninstalled").each(function() {
 
-            let iddiv = $(this).attr('id');
-            let nomdiv = $(this).attr('data-appli');
-            if (nomdiv.includes(searchcontent)) {
-                $("#" + iddiv).show();
-            }
-            else {
-                $("#" + iddiv).hide();
-            }
-        });
+    // gestion de la zone de recherche pour les applis à installer
+    $("#uninstall-search").on('input', function () {
+        recherche("uninstall-search", "div-appli-uninstalled");
     });
 
     // gestion de la case à cocher pour afficher les applis installées
-    $("#installed_appli").change(function() {
-
-
+    $("#installed_appli").change(function () {
         if ($(this).is(":checked")) {
-            $(".divappli").each(function() {
+            $(".divappli").each(function () {
                 let isinstalled = $(this).attr('data-installed');
                 if (isinstalled == 1) {
                     $(this).show();
-                }
-                else {
+                } else {
                     $(this).hide();
                 }
             });
-        }
-        else {
+        } else {
             $(".divappli").show();
         }
     });
 
     // récupération des version
-    $(".divappli").each(function() {
+    $(".divappli").each(function () {
 
         let appli = $(this).attr('data-appli');
         // on met la bonne image
@@ -444,9 +420,9 @@ $(document).ready(function() {
         $("#logo-" + appli).attr("src", "ajax/affiche_image.php?appli=" + appli);
         $.ajax({
             url: "ajax/check_version.php?service=" + appli,
-        }).done(function(data) {
+        }).done(function (data) {
             $("#version-" + appli).html(data);
-        }).fail(function() {
+        }).fail(function () {
             console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
             $("#version-".appli).html("erreur ajax");
         });
@@ -455,37 +431,37 @@ $(document).ready(function() {
     });
 
     /* fonction de refresh automatique  */
-    window.setInterval(function() {
+    window.setInterval(function () {
         test_etat();
     }, 15000); // timer en ms
 
     // statut du serveur
     $.ajax({
         url: "ajax/system_release.php",
-    }).done(function(data) {
+    }).done(function (data) {
         $("#server-version").html(data);
 
-    }).fail(function() {
+    }).fail(function () {
         console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
         $("#server-version").html("Erreur ajax");
     });
     // uptime
     $.ajax({
         url: "ajax/uptime.php",
-    }).done(function(data) {
+    }).done(function (data) {
         $("#uptime").html(data);
 
-    }).fail(function() {
+    }).fail(function () {
         console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
         $("#uptime").html("Erreur ajax");
     });
     // disque libre
     $.ajax({
         url: "ajax/disque.php",
-    }).done(function(data) {
+    }).done(function (data) {
         $("#free-disk").html(data);
 
-    }).fail(function() {
+    }).fail(function () {
         console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
         $("#free-disk").html("Erreur ajax");
     });
@@ -498,12 +474,12 @@ $(document).ready(function() {
     // on va supprimer les vieux fichiers de logs
     $.ajax({
         url: "ajax/delete_old_logs.php",
-    }).done(function(data) {
+    }).done(function (data) {
         if (data == 'ok') {
             console.log('Vieux logs effacés');
         }
 
-    }).fail(function() {
+    }).fail(function () {
         console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
 
     });
