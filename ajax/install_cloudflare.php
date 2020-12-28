@@ -6,5 +6,5 @@ $emailcloud = $_POST['emailcloud'];
 $apicloud = $_POST['apicloud'];
 
 $cloud = new cloudflare($emailcloud);
-$cloud->cloudflare($apicloud);
+$cloud->function_cloudflare($apicloud);
 echo 'ok';

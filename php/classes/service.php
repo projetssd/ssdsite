@@ -99,16 +99,14 @@ class service
         //
         // on va chercher l'ip du docker
         //
-        $retour =
+        $this->url = 'http://127.0.0.1';
+        $retour    =
             exec("docker inspect -f '{{.NetworkSettings.Networks.bridge.IPAddress}}' " . $this->display_name, $tab_retour, $code_retour);
+
         if ($code_retour == 0)
         {
             $this->url  = 'http://' . $retour;
             $this->host = $retour;
-        } else
-        {
-            // docker non trouvé, on met l'ip locale histoire de ne pas laisser vide
-            $this->url = 'http://127.0.0.1';
         }
 
         // ici on va surcharger ce qui n'est pas générique
@@ -147,7 +145,7 @@ class service
                     }
                     fclose($file);
                 }
-                if (count($matches) != 0)
+                if (!empty($matches))
                 {
                     $tab_temp         = explode('=', $matches[0]);
                     $this->public_url = trim($tab_temp[1]);
@@ -169,7 +167,7 @@ class service
          */
         $filename = $this->status_file . $this->display_name;
 
-        $installed = false; // par défaut, on considère que le service n'est pas là
+        $tmp_installed = false; // par défaut, on considère que le service n'est pas là
 
         $contents = ''; // init de variable pour l'IDE
         if (file_exists($filename))
@@ -189,7 +187,7 @@ class service
                 break;
             case 2:
                 // déjà installé
-                $installed = true;
+                $tmp_installed = true;
                 break;
             case 3:
                 // en cours de désinstall
@@ -198,9 +196,9 @@ class service
                 break;
         }
 
-        $this->installed = $installed;
+        $this->installed = $tmp_installed;
 
-        return $installed;
+        return $tmp_installed;
     }
 
     /**
@@ -488,7 +486,7 @@ class service
             fclose($handle);
         }
         $matches = array_unique($matches);
-        if (count($matches) != 0)
+        if (!empty($matches))
         {
 
             $tab_temp         = explode('=', $matches[0]);
@@ -551,24 +549,15 @@ class service
         $listfiles   = scandir($this->status_file);
         foreach ($listfiles as $file)
         {
-            if (substr($file, 0, 1) !== '.')
+            if ((substr($file, 0, 1) !== '.') && (substr($file, 0, 3) != 'db-') && (!in_array($file, $array_cache)))
             {
-                if (substr($file, 0, 3) != 'db-')
+                $filename = $this->status_file . $file;
+                $handle   = fopen($filename, 'r');
+                $contents = fread($handle, filesize($filename));
+                if ($contents == 2)
                 {
-                    if (!in_array($file, $array_cache))
-                    {
-                        $filename = $this->status_file . $file;
-                        $handle   = fopen($filename, 'r');
-                        $contents = fread($handle, filesize($filename));
-
-                        if ($contents == 2)
-                        {
-                            $retour[] = $file;
-                        }
-                    }
-
+                    $retour[] = $file;
                 }
-
             }
         }
         return $retour;
