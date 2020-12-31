@@ -70,7 +70,7 @@ class service
     /**
      * @var string Chemin du fichier resume
      */
-    private $resume_file = '/opt/seedbox/resume/';
+    private $resume_file = '/opt/seedbox/resume';
 
     /**
      * service constructor.
