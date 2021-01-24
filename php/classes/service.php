@@ -89,7 +89,7 @@ class service
         // on commence par mettre tout ce qui est générique
         //
         $this->display_name      = trim($my_service); // on supprimer les espaces avant/après
-        $start_command           = 'sudo ' . __DIR__ . '/../../scripts/manage_service.sh ';
+        $start_command           = __DIR__ . '/../../scripts/manage_service.sh ';
         $this->command_install   = $start_command . 'install ' . $this->display_name . ' ';
         $this->command_uninstall = $start_command . 'uninstall ' . $this->display_name . ' ';
         $this->command_restart   = $start_command . 'restart ' . $this->display_name . ' ';
@@ -544,7 +544,7 @@ class service
     {
         global $debugbar;
         $array_cache = array(
-            'collabora', 'oauth', 'cloudproxy');
+            'collabora', 'oauth', 'cloudproxy', 'flaresolverr', 'office',);
         $retour      = array();
         $listfiles   = scandir($this->status_file);
         foreach ($listfiles as $file)

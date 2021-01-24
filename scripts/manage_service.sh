@@ -93,9 +93,9 @@ function cloudflare()  {
 }
 
 function credential() {
-  mkdir -p /opt/seedbox/rclone
-  echo $1 > /opt/seedbox/rclone/client
-  echo $2 > /opt/seedbox/rclone/secret
+  echo $1 > /tmp/client
+  echo $2 > /tmp/secret
+  env >> /tmp/fichier.log 2>&1
 }
 
 function createtoken() {
@@ -103,13 +103,25 @@ function createtoken() {
   log_applicatif CreateToken
   # maintenant, on a la variable LOGFILE_APPLI utilisable
   writelog_appli "Création d'un token" 
-  logfile=/opt/seedbox/rclone/log
 
-  logfile=/opt/seedbox/rclone/log
+  # Variables environement USER
+  #ansible-playbook "${BASEDIR}/includes/dockerapps/templates/ansible/ansible.yml"
+  TMPDIR=$(mktemp -d)
+  #USER=$(cat "$TMPNAME")
+  #HOME=$(eval echo "~${USER}")
+  RCLONE_CONFIG_FILE="${HOME}/.config/rclone/rclone.conf"
+
+  client=$(cat /tmp/client)
+  secret=$(cat /tmp/secret)
+
+  create_dir "${HOME}/.config/rclone"
+
+  touch "${RCLONE_CONFIG_FILE}"
+ 
+  logfile=${TMPDIR}/log
+
   curl https://rclone.org/install.sh | sudo bash
-  client=$(cat /opt/seedbox/rclone/client)
-  secret=$(cat /opt/seedbox/rclone/secret)
-  curl --request POST --data "code=$1&client_id=$client&client_secret=$secret&redirect_uri=urn:ietf:wg:oauth:2.0:oob&grant_type=authorization_code" https://accounts.google.com/o/oauth2/token | sudo tee $logfile 2>/dev/null >/dev/null &
+  curl --request POST --data "code=${1}&client_id=$client&client_secret=$secret&redirect_uri=urn:ietf:wg:oauth:2.0:oob&grant_type=authorization_code" https://accounts.google.com/o/oauth2/token | sudo tee $logfile 2>/dev/null >/dev/null &
 
   sleep 2
   accesstoken=$(cat $logfile | grep access_token | awk '{print $2}')
@@ -118,8 +130,8 @@ function createtoken() {
   rctime=$(date +"%H:%M:%S" --date="$givenDate 60 minutes")
   rczone=$(date +"%:z")
   final=$(echo "${rcdate}T${rctime}${rczone}")
-  ramdom=$(head /dev/urandom | tr -dc A-Za-z | head -c 8 > /opt/seedbox/rclone/chaine)
-  chaine=$(cat /opt/seedbox/rclone/chaine)
+  ramdom=$(head /dev/urandom | tr -dc A-Za-z | head -c 8 > ${TMPDIR}/chaine)
+  chaine=$(cat ${TMPDIR}/chaine)
 
 if [[ "$2" == "sharedrive" ]]; then 
 writelog_appli "Création d'un shared drive" 
@@ -129,48 +141,48 @@ writelog_appli "Création d'un shared drive"
     --header 'Accept: application/json' \
     --header 'Content-Type: application/json' \
     --data '{"name":"'$3'","backgroundImageLink":"https://pgblitz.com/styles/io_dark/images/pgblitz4.png"}' \
-    --compressed > /opt/seedbox/rclone/teamdrive
+    --compressed > ${TMPDIR}/teamdrive
 
   ###récupération des variables
-  cat /opt/seedbox/rclone/teamdrive | grep "id" | awk '{ print $2 }' | cut -c2- | rev | cut -c3- | rev > /opt/seedbox/rclone/teamdrive.id
-  cat /opt/seedbox/rclone/teamdrive | grep "name" | awk '{ print $2 }' | cut -c2- | rev | cut -c2- | rev > /opt/seedbox/rclone/teamdrive.name
-  name=$(sed -n ${typed}p /opt/seedbox/rclone/teamdrive.name)
-  id=$(sed -n ${typed}p /opt/seedbox/rclone/teamdrive.id)
-  echo "$name" > /opt/seedbox/rclone/pgclone.teamdrive
-  echo "$id" > /opt/seedbox/rclone/pgclone.teamid
-  teamid=$(cat /opt/seedbox/rclone/pgclone.teamid)
+  cat ${TMPDIR}/teamdrive | grep "id" | awk '{ print $2 }' | cut -c2- | rev | cut -c3- | rev > ${TMPDIR}/teamdrive.id
+  cat ${TMPDIR}/teamdrive | grep "name" | awk '{ print $2 }' | cut -c2- | rev | cut -c2- | rev > ${TMPDIR}/teamdrive.name
+  name=$(sed -n ${typed}p ${TMPDIR}/teamdrive.name)
+  id=$(sed -n ${typed}p ${TMPDIR}/teamdrive.id)
+  echo "$name" > ${TMPDIR}/pgclone.teamdrive
+  echo "$id" > ${TMPDIR}/pgclone.teamid
+  teamid=$(cat ${TMPDIR}/pgclone.teamid)
 
   ## Creation rclone.conf
   writelog_appli "Création rclone.conf" 
-  echo "" >> /root/.config/rclone/rclone.conf
-  echo "[$name]" >> /root/.config/rclone/rclone.conf
-  echo "client_id = $client" >> /root/.config/rclone/rclone.conf
-  echo "client_secret = $secret" >> /root/.config/rclone/rclone.conf
-  echo "type = drive" >> /root/.config/rclone/rclone.conf
-  echo "scope = drive" >> /root/.config/rclone/rclone.conf
-  echo -n "token = {\"access_token\":${accesstoken}\"token_type\":\"Bearer\",\"refresh_token\":${refreshtoken}\"expiry\":\"${final}\"}" >> /root/.config/rclone/rclone.conf
-  echo "" >> /root/.config/rclone/rclone.conf
-  echo "team_drive = $teamid" >> /root/.config/rclone/rclone.conf
+  echo "" >> ${RCLONE_CONFIG_FILE}
+  echo "[$name]" >> ${RCLONE_CONFIG_FILE}
+  echo "type = drive" >> ${RCLONE_CONFIG_FILE}
+  echo "client_id = $client" >> ${RCLONE_CONFIG_FILE}
+  echo "client_secret = $secret" >> ${RCLONE_CONFIG_FILE}
+  echo "scope = drive" >> ${RCLONE_CONFIG_FILE}
+  echo -n "token = {\"access_token\":${accesstoken}\"token_type\":\"Bearer\",\"refresh_token\":${refreshtoken}\"expiry\":\"${final}\"}" >> ${RCLONE_CONFIG_FILE}
+  echo "" >> ${RCLONE_CONFIG_FILE}
+  echo "team_drive = $teamid" >> ${RCLONE_CONFIG_FILE}
   echo ""
 
   ## creation du crypt
-  ramdom=$(head /dev/urandom | tr -dc A-Za-z | head -c 8 > /opt/seedbox/rclone/password)
-  ramdom=$(head /dev/urandom | tr -dc A-Za-z | head -c 8 > /opt/seedbox/rclone/salt)
+  ramdom=$(head /dev/urandom | tr -dc A-Za-z | head -c 8 > ${TMPDIR}/password)
+  ramdom=$(head /dev/urandom | tr -dc A-Za-z | head -c 8 > ${TMPDIR}/salt)
 
-  PASSWORD=`cat /opt/seedbox/rclone/password`
-  SALT=`cat /opt/seedbox/rclone/salt`
+  PASSWORD=`cat ${TMPDIR}/password`
+  SALT=`cat ${TMPDIR}/salt`
   ENC_PASSWORD=`rclone obscure "$PASSWORD"`
   ENC_SALT=`rclone obscure "$SALT"`
   crypt="_crypt"
 
-  echo "" >> /root/.config/rclone/rclone.conf
-  echo "[$name$crypt]" >> /root/.config/rclone/rclone.conf
-  echo "type = crypt" >> /root/.config/rclone/rclone.conf
-  echo "remote = $name:/Medias" >> /root/.config/rclone/rclone.conf
-  echo "filename_encryption = standard" >> /root/.config/rclone/rclone.conf
-  echo "directory_name_encryption = true" >> /root/.config/rclone/rclone.conf
-  echo "password = $ENC_PASSWORD" >> /root/.config/rclone/rclone.conf
-  echo "password2 = $ENC_SALT" >> /root/.config/rclone/rclone.conf
+  echo "" >> ${RCLONE_CONFIG_FILE}
+  echo "[$name$crypt]" >> ${RCLONE_CONFIG_FILE}
+  echo "type = crypt" >> ${RCLONE_CONFIG_FILE}
+  echo "remote = $name:/Medias" >> ${RCLONE_CONFIG_FILE}
+  echo "filename_encryption = standard" >> ${RCLONE_CONFIG_FILE}
+  echo "directory_name_encryption = true" >> ${RCLONE_CONFIG_FILE}
+  echo "password = $ENC_PASSWORD" >> ${RCLONE_CONFIG_FILE}
+  echo "password2 = $ENC_SALT" >> ${RCLONE_CONFIG_FILE}
 
 else
    writelog_appli "Pas de shared drive" 
@@ -178,47 +190,48 @@ else
 
   ## Creation rclone.conf
    writelog_appli "Création rclone.conf" 
-  echo "" >> /root/.config/rclone/rclone.conf
-  echo "[$3]" >> /root/.config/rclone/rclone.conf
-  echo "client_id = $client" >> /root/.config/rclone/rclone.conf
-  echo "client_secret = $secret" >> /root/.config/rclone/rclone.conf
-  echo "type = drive" >> /root/.config/rclone/rclone.conf
-  echo "scope = drive" >> /root/.config/rclone/rclone.conf
-  echo -n "token = {\"access_token\":${accesstoken}\"token_type\":\"Bearer\",\"refresh_token\":${refreshtoken}\"expiry\":\"${final}\"}" >> /root/.config/rclone/rclone.conf
-  echo "" >> /root/.config/rclone/rclone.conf
+  echo "" >> ${RCLONE_CONFIG_FILE}
+  echo "[$3]" >> ${RCLONE_CONFIG_FILE}
+  echo "type = drive" >> ${RCLONE_CONFIG_FILE}
+  echo "client_id = $client" >> ${RCLONE_CONFIG_FILE}
+  echo "client_secret = $secret" >> ${RCLONE_CONFIG_FILE}
+  echo "scope = drive" >> ${RCLONE_CONFIG_FILE}
+  echo -n "token = {\"access_token\":${accesstoken}\"token_type\":\"Bearer\",\"refresh_token\":${refreshtoken}\"expiry\":\"${final}\"}" >> ${RCLONE_CONFIG_FILE}
+  echo "" >> ${RCLONE_CONFIG_FILE}
   echo ""
 
  ## creation du crypt
 
-  ramdom=$(head /dev/urandom | tr -dc A-Za-z | head -c 8 > /opt/seedbox/rclone/password)
-  ramdom=$(head /dev/urandom | tr -dc A-Za-z | head -c 8 > /opt/seedbox/rclone/salt)
+  ramdom=$(head /dev/urandom | tr -dc A-Za-z | head -c 8 > ${TMPDIR}/password)
+  ramdom=$(head /dev/urandom | tr -dc A-Za-z | head -c 8 > ${TMPDIR}/salt)
 
-  PASSWORD=`cat /opt/seedbox/rclone/password`
-  SALT=`cat /opt/seedbox/rclone/salt`
+  PASSWORD=`cat ${TMPDIR}/password`
+  SALT=`cat ${TMPDIR}/salt`
   ENC_PASSWORD=`rclone obscure "$PASSWORD"`
   ENC_SALT=`rclone obscure "$SALT"`
   crypt="_crypt"
 
-  echo "" >> /root/.config/rclone/rclone.conf
-  echo "[$3$crypt]" >> /root/.config/rclone/rclone.conf
-  echo "type = crypt" >> /root/.config/rclone/rclone.conf
-  echo "remote = $3:/Medias" >> /root/.config/rclone/rclone.conf
-  echo "filename_encryption = standard" >> /root/.config/rclone/rclone.conf
-  echo "directory_name_encryption = true" >> /root/.config/rclone/rclone.conf
-  echo "password = $ENC_PASSWORD" >> /root/.config/rclone/rclone.conf
-  echo "password2 = $ENC_SALT" >> /root/.config/rclone/rclone.conf
+  echo "" >> ${RCLONE_CONFIG_FILE}
+  echo "[$3$crypt]" >> ${RCLONE_CONFIG_FILE}
+  echo "type = crypt" >> ${RCLONE_CONFIG_FILE}
+  echo "remote = $3:/Medias" >> ${RCLONE_CONFIG_FILE}
+  echo "filename_encryption = standard" >> ${RCLONE_CONFIG_FILE}
+  echo "directory_name_encryption = true" >> ${RCLONE_CONFIG_FILE}
+  echo "password = $ENC_PASSWORD" >> ${RCLONE_CONFIG_FILE}
+  echo "password2 = $ENC_SALT" >> ${RCLONE_CONFIG_FILE}
 
 fi
- writelog_appli "Installation rclone"
- log_applicatif InstallRclone
- # maintenant, on a la variable LOGFILE_APPLI utilisable
- writelog_appli "Installation rclone"    
+  writelog_appli "Installation rclone"
+  log_applicatif InstallRclone
+  # maintenant, on a la variable LOGFILE_APPLI utilisable
+  writelog_appli "Installation rclone"    
   
- LOGFILE=${LOGFILE_APPLI}
+  LOGFILE=${LOGFILE_APPLI}
 
- ansible-playbook /opt/seedbox-compose/includes/config/roles/rclone/tasks/main.yml | tee -a $LOGFILE
- rm -rf /opt/seedbox/rclone > /dev/null 2>&1
- writelog_appli "Terminé" 
+  ansible-playbook /opt/seedbox-compose/includes/config/roles/rclone/tasks/main.yml | tee -a $LOGFILE
+  writelog_appli "Terminé" 
+  rm /tmp/client /tmp/secret $TMPDIR
+ 
 }
 
 function configure() {
@@ -280,51 +293,70 @@ function configure() {
 }
 
 function uninstall() {
-  log_applicatif $1
-  ansible-playbook /opt/seedbox-compose/includes/dockerapps/templates/ansible/ansible.yml >> ${LOGFILE_APPLI}
-  ansible-vault decrypt /opt/seedbox/variables/account.yml > /dev/null 2>&1
-  USER=$(cat /tmp/name)
+  log_applicatif ${1}
+  ansible-playbook "${BASEDIR}/includes/dockerapps/templates/ansible/ansible.yml" >> ${LOGFILE_APPLI}
+  ansible-vault decrypt "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
 
-  echo 0 > /opt/seedbox/status/$1
-  sed -i "/$1/d" /opt/seedbox/variables/account.yml > /dev/null 2>&1
-  sed -i "/$1/d" /opt/seedbox/resume > /dev/null 2>&1
-  docker rm -f "$1" > /dev/null 2>&1
-  rm /opt/seedbox/conf/$1.yml > /dev/null 2>&1
+  DOMAIN=$(cat "$TMPDOMAIN")
+  USER=$(cat "$TMPNAME")
 
-  if docker ps | grep -q db-$1; then
-  docker rm -f db-$1 > /dev/null 2>&1
+  # Mise à jour du status actif de l'appli
+  echo 0 > "${CONFDIR}/status/${1}"
+
+  # Mise à jour du fichier account.yml
+  grep "${1}: ." "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
+  if [ $? -eq 0 ]; then
+    sed -i "/${2}/,+2d" "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
+  fi
+  grep "${1}:" "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
+  if [ $? -eq 0 ] || [ "${1}" != "plex" ] ; then
+    sed -i "/${1}/,+1d" "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
   fi
 
-  case $1 in
+  sed -i "/${1}/d" "${CONFDIR}/resume" > /dev/null 2>&1
+  sed -i "/${1}/d" "/home/${USER}/resume" > /dev/null 2>&1
+
+  # supression des volumes
+  docker rm -f "$1" > /dev/null 2>&1
+  rm "${CONFDIR}/conf/${1}.yml" > /dev/null 2>&1
+  rm "${CONFDIR}/vars/${1}.yml" > /dev/null 2>&1
+
+  # supressions des mariadb associées
+  if docker ps | grep -q db-${1}; then
+  docker rm -f db-${1} > /dev/null 2>&1
+  fi
+
+  # supressions des applis complexes
+  case ${1} in
      seafile)
        docker rm -f db-seafile memcached > /dev/null 2>&1
      ;;
      varken)
        docker rm -f influxdb telegraf grafana > /dev/null 2>&1
-       rm -rf /opt/seedbox/docker/$USER/telegraf
-       rm -rf /opt/seedbox/docker/$USER/grafana
-       rm -rf /opt/seedbox/docker/$USER/influxdb
+       rm -rf "${CONFDIR}/docker/${USER}/telegraf"
+       rm -rf "${CONFDIR}/docker/${USER}/grafana"
+       rm -rf "${CONFDIR}/docker/${USER}/influxdb"
      ;;
      jitsi)
       docker rm -f prosody jicofo jvb
-      rm -rf /opt/seedbox/docker/$USER/.jitsi-meet-cfg
+      rm -rf "${CONFDIR}/docker/${USER}/.jitsi-meet-cfg"
      ;;
      nextcloud)
        docker rm -f collabora coturn office
-       rm -rf /opt/seedbox/docker/$USER/coturn
+       rm -rf "${CONFDIR}/docker/${USER}/coturn"
      ;;
      rtorrentvpn)
-       rm /opt/seedbox/conf/rutorrent-vpn.yml
+       rm "${CONFDIR}/conf/rutorrent-vpn.yml"
      ;;
      *)
      # writelog "ACTION INDEFINIE" 'DEBUG' 
-      rm -rf /opt/seedbox/docker/$USER/$1
+      rm -rf "${CONFDIR}/docker/${USER}/${1}"
      ;;
   esac
-
+ 
+  # supression des images non utilisées && network eventuels && crypt account.yml
   docker system prune -af > /dev/null 2>&1
-  docker volume rm $(docker volume ls -qf "dangling=true") > /dev/null 2>&1
-  ansible-vault encrypt /opt/seedbox/variables/account.yml > /dev/null 2>&1
+  ansible-vault encrypt "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
 }
 
 function install() {
@@ -334,53 +366,56 @@ function install() {
   writelog_appli "Installation de l'appli ${1}"    
   
   LOGFILE=${LOGFILE_APPLI}
-  #rm -f $LOGFILE
-
-  source /opt/seedbox-compose/includes/variables.sh
     
-  ansible-playbook /opt/seedbox-compose/includes/dockerapps/templates/ansible/ansible.yml
-  ansible-vault decrypt /opt/seedbox/variables/account.yml > /dev/null 2>&1
-    
-  domain=$(cat /tmp/domain)
-    
-  if [[ ! -d "$CONFDIR/conf" ]]; then
-    mkdir -p $CONFDIR/conf > /dev/null 2>&1
-  fi
+  ansible-playbook "${BASEDIR}/includes/dockerapps/templates/ansible/ansible.yml" | tee -a $LOGFILE
+  ansible-vault decrypt "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
+  
+  #declaration des variables utiles
+  DOMAIN=$(cat "$TMPDOMAIN")
+  USER=$(cat "$TMPNAME")
 
-  grep "sub" /opt/seedbox/variables/account.yml > /dev/null 2>&1
-  if [ $? -eq 1 ]; then
-    sed -i '/transcodes/a sub:' /opt/seedbox/variables/account.yml 
-  fi
-
+  # Mise à jour des données subdomain et auth dans account.yml
   if [ $2 != "undefined" ]; then
-    sed -i "/$1/d" /opt/seedbox/variables/account.yml > /dev/null 2>&1
-    sed -i "/sub/a \ \ \ $1: $2" /opt/seedbox/variables/account.yml > /dev/null 2>&1
+    grep "${1}: ." "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
+    if [ $? -eq 0 ]; then
+      sed -i "/${1}: ./d" "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
+    fi
+    grep "${1}:" "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
+    if [ $? -eq 1 ]; then
+      sed -i "/sub/a \ \ \ ${1}:" "${CONFDIR}/variables/account.yml"
+    fi
+    sed -i "/${1}:/a \ \ \ \ \ ${1}: ${2}" "${CONFDIR}/variables/account.yml"
   fi
     
   ## Installation
-  if [ -e "/opt/seedbox/conf/$1.yml" ]; then
-    ansible-playbook "$CONFDIR/conf/$1.yml" | tee -a $LOGFILE
-  elif [[ "$1" == "plex" ]]; then
-    ansible-playbook /opt/seedbox-compose/includes/config/roles/plex/tasks/main.yml
-    cp "/opt/seedbox-compose/includes/config/roles/plex/tasks/main.yml" "$CONFDIR/conf/$1.yml" > /dev/null 2>&1
-  elif [[ "$1" == "mattermost" ]]; then
-    /opt/seedbox-compose/includes/dockerapps/templates/mattermost/mattermost.sh
+  # On est dans le cas générique
+  # on regarde s'il y a un playbook existant
+  if [[ -f "${CONFDIR}/conf/${1}.yml" ]]; then
+    # il y a déjà un playbook "perso", on le lance
+    ansible-playbook "${CONFDIR}/conf/${1}.yml" | tee -a $LOGFILE
+  elif [[ -f "${CONFDIR}/vars/${1}.yml" ]]; then
+    # il y a des variables persos, on les lance
+    ansible-playbook "${BASEDIR}/includes/dockerapps/generique.yml" --extra-vars "@${CONFDIR}/vars/${1}.yml" | tee -a $LOGFILE
+  elif [[ -f "${BASEDIR}/includes/dockerapps/${1}.yml" ]]; then
+    # pas de playbook perso ni de vars perso
+    # Il y a un playbook spécifique pour cette appli, on le copie
+    cp "${BASEDIR}/includes/dockerapps/${1}.yml" "${CONFDIR}/conf/${1}.yml" 
+    # puis on le lance
+    ansible-playbook "${CONFDIR}/conf/${1}.yml" | tee -a $LOGFILE
   else
-    ansible-playbook "$BASEDIR/includes/dockerapps/$1.yml" | tee -a $LOGFILE
-    cp "$BASEDIR/includes/dockerapps/$1.yml" "$CONFDIR/conf/$1.yml" > /dev/null 2>&1
+    # on copie les variables pour le user
+    cp "${BASEDIR}/includes/dockerapps/vars/${1}.yml" "${CONFDIR}/vars/${1}.yml" 
+    # puis on lance le générique avec ce qu'on vient de copier
+    ansible-playbook "${BASEDIR}/includes/dockerapps/generique.yml" --extra-vars "@${CONFDIR}/vars/${1}.yml" | tee -a $LOGFILE
   fi
 
-  # mise à jour du fichier "/opt/seedbox/resume"
-  grep $1 /opt/seedbox/variables/account.yml > /dev/null 2>&1
-  if [ $? -eq 0 ]; then
-    fqdn="$2.$domain"
-    echo "$1 = $fqdn" | tee -a /opt/seedbox/resume  > /dev/null
-  else
-    fqdn="$1.$domain"
-    echo "$1 = $fqdn" | tee -a /opt/seedbox/resume  > /dev/null
-  fi
-  fqdn=""
-  ansible-vault encrypt /opt/seedbox/variables/account.yml > /dev/null 2>&1
+  # mise à jour du fichier "/opt/seedbox/resume" && "/home/user/resume"
+  FQDNTMP="${2}.${DOMAIN}"
+  echo "${1} = ${FQDNTMP}" | tee -a "${CONFDIR}/resume"  > /dev/null
+  echo "${1}.${DOMAIN}" >> "/home/${USER}/resume"
+
+  # crypt fichier account.yml
+  ansible-vault encrypt "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
     
     					tee -a $LOGFILE <<-EOF
     
@@ -432,11 +467,18 @@ function oauth()
   writelog_appli "Installation Oauth terminée"
 }
 
+# Variables d'environnement
 DIRNAME=$(dirname $0)
+export PATH="$HOME/.local/bin:$PATH"
+source /opt/seedbox-compose/profile.sh
+#ansible-playbook "${BASEDIR}/includes/dockerapps/templates/ansible/ansible.yml"
+#USER=$(cat "$TMPNAME")
+#HOME=$(eval echo "~${USER}")
 
 writelog "Lancement du script" "DEBUG"
 ACTION=$1
 writelog "Action = ${ACTION}" "DEBUG"
+
 case $ACTION in
   install) 
     install $2 $3
