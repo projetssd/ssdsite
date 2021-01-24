@@ -29,7 +29,7 @@ class cloudflare
         $log->writelog("cloudflare" . $this->emailcloud, 'DEBUG');
 
         $commande =
-            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh cloudflare "' . $this->emailcloud . '" "' . $apicloud . '" ';
+            __DIR__ . '/../../scripts/manage_service.sh cloudflare "' . $this->emailcloud . '" "' . $apicloud . '" ';
         $log->writelog("Lancé", "DEBUG");
         $log->writelog("Commande : " . $commande, "DEBUG");
         shell_exec($commande);

@@ -55,7 +55,7 @@ function tools()
   
   LOGFILE=${LOGFILE_APPLI}
 
-  ansible-playbook /opt/seedbox-compose/includes/config/roles/$1/tasks/main.yml | tee -a $LOGFILE
+  ansible-playbook "${BASEDIR}/includes/config/roles/${1}/tasks/main.yml" | tee -a ${LOGFILE}
   writelog_appli "Installation $1 terminée"
 }
 
@@ -65,37 +65,38 @@ function cloudflare()  {
   
   LOGFILE=${LOGFILE_APPLI}
 
-  source /opt/seedbox-compose/includes/variables.sh
+  ansible-vault decrypt "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
+  SERVICESPERUSER=${SERVICESUSER}${USER}"
 
-  ansible-playbook /opt/seedbox-compose/includes/dockerapps/templates/ansible/ansible.yml | tee -a $LOGFILE
-  ansible-vault decrypt /opt/seedbox/variables/account.yml > /dev/null 2>&1
-  USER=$(cat /tmp/name)
-  SERVICESPERUSER="$SERVICESUSER$USER"
+  # Ajout id cloudflare dans account.yml
+  sed -i "/login:/c\   login: $1" "${CONFDIR}/variables/account.yml"
+  sed -i "/api:/c\   api: $2" "${CONFDIR}/variables/account.yml"
 
-  sed -i "/login:/c\   login: $1" /opt/seedbox/variables/account.yml
-  sed -i "/api:/c\   api: $2" /opt/seedbox/variables/account.yml
+  ## Réinstallation traefik
+  ansible-playbook "${BASEDIR}/includes/dockerapps/traefik.yml" | tee -a ${LOGFILE}
 
-  ## reinstallation traefik
-  ansible-playbook /opt/seedbox-compose/includes/dockerapps/traefik.yml | tee -a $LOGFILE
+  # Listing des applications
+  while read line; do echo ${line} | cut -d '.' -f1; done < /home/${USER}/resume > ${SERVICESPERUSER}
 
-  ## reinitialisation des applications
-  while read line; do echo $line | cut -d'.' -f1; done < /home/$USER/resume > $SERVICESPERUSER
-  mv /home/$USER/resume /tmp
-
+  # Réinitialisation des applis
   while read line; do
-    ansible-playbook /opt/seedbox/conf/$line.yml | tee -a $LOGFILE
-  done < $SERVICESPERUSER
+    if [[ -f "${CONFDIR}/conf/${line}.yml" ]]; then
+      # il y a déjà un playbook "perso", on le lance
+      ansible-playbook "${CONFDIR}/conf/${line}.yml" | tee -a ${LOGFILE}
+    elif [[ -f "${CONFDIR}/vars/${line}.yml" ]]; then
+      # il y a des variables persos, on les lance
+      ansible-playbook "${BASEDIR}/includes/dockerapps/generique.yml" --extra-vars "@${CONFDIR}/vars/${1}.yml" | tee -a ${LOGFILE}
+    fi
+  done < ${SERVICESPERUSER}
 
-  mv /tmp/resume /home/$USER/
-  rm $SERVICESPERUSER
-  ansible-vault encrypt /opt/seedbox/variables/account.yml > /dev/null 2>&1
+  rm ${SERVICESPERUSER}
+  ansible-vault encrypt ${CONFDIR}/variables/account.yml > /dev/null 2>&1
   writelog_appli "Installation Cloudflare terminée"
 }
 
 function credential() {
-  echo $1 > /tmp/client
-  echo $2 > /tmp/secret
-  env >> /tmp/fichier.log 2>&1
+  echo ${1} > /tmp/client
+  echo ${2} > /tmp/secret
 }
 
 function createtoken() {
@@ -105,20 +106,14 @@ function createtoken() {
   writelog_appli "Création d'un token" 
 
   # Variables environement USER
-  #ansible-playbook "${BASEDIR}/includes/dockerapps/templates/ansible/ansible.yml"
   TMPDIR=$(mktemp -d)
-  #USER=$(cat "$TMPNAME")
-  #HOME=$(eval echo "~${USER}")
   RCLONE_CONFIG_FILE="${HOME}/.config/rclone/rclone.conf"
-
   client=$(cat /tmp/client)
   secret=$(cat /tmp/secret)
-
+  logfile=${TMPDIR}/log
   create_dir "${HOME}/.config/rclone"
-
   touch "${RCLONE_CONFIG_FILE}"
  
-  logfile=${TMPDIR}/log
 
   curl https://rclone.org/install.sh | sudo bash
   curl --request POST --data "code=${1}&client_id=$client&client_secret=$secret&redirect_uri=urn:ietf:wg:oauth:2.0:oob&grant_type=authorization_code" https://accounts.google.com/o/oauth2/token | sudo tee $logfile 2>/dev/null >/dev/null &
@@ -228,9 +223,10 @@ fi
   
   LOGFILE=${LOGFILE_APPLI}
 
-  ansible-playbook /opt/seedbox-compose/includes/config/roles/rclone/tasks/main.yml | tee -a $LOGFILE
+  #ansible-playbook /opt/seedbox-compose/includes/config/roles/rclone/tasks/main.yml | tee -a ${LOGFILE}
   writelog_appli "Terminé" 
-  rm /tmp/client /tmp/secret $TMPDIR
+  rm /tmp/client /tmp/secret 
+  rm -rf ${TMPDIR}
  
 }
 
@@ -294,11 +290,9 @@ function configure() {
 
 function uninstall() {
   log_applicatif ${1}
-  ansible-playbook "${BASEDIR}/includes/dockerapps/templates/ansible/ansible.yml" >> ${LOGFILE_APPLI}
-  ansible-vault decrypt "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
 
-  DOMAIN=$(cat "$TMPDOMAIN")
-  USER=$(cat "$TMPNAME")
+  ansible-vault decrypt "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
+  DOMAIN=$(grep domain "${CONFDIR}/variables/account.yml" | cut -d : -f2 | tr -d ' ')
 
   # Mise à jour du status actif de l'appli
   echo 0 > "${CONFDIR}/status/${1}"
@@ -367,12 +361,10 @@ function install() {
   
   LOGFILE=${LOGFILE_APPLI}
     
-  ansible-playbook "${BASEDIR}/includes/dockerapps/templates/ansible/ansible.yml" | tee -a $LOGFILE
   ansible-vault decrypt "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
   
   #declaration des variables utiles
-  DOMAIN=$(cat "$TMPDOMAIN")
-  USER=$(cat "$TMPNAME")
+  DOMAIN=$(grep domain "${CONFDIR}/variables/account.yml" | cut -d : -f2 | tr -d ' ')
 
   # Mise à jour des données subdomain et auth dans account.yml
   if [ $2 != "undefined" ]; then
@@ -386,27 +378,29 @@ function install() {
     fi
     sed -i "/${1}:/a \ \ \ \ \ ${1}: ${2}" "${CONFDIR}/variables/account.yml"
   fi
+
+  # auth à intégrer
     
   ## Installation
   # On est dans le cas générique
   # on regarde s'il y a un playbook existant
   if [[ -f "${CONFDIR}/conf/${1}.yml" ]]; then
     # il y a déjà un playbook "perso", on le lance
-    ansible-playbook "${CONFDIR}/conf/${1}.yml" | tee -a $LOGFILE
+    ansible-playbook "${CONFDIR}/conf/${1}.yml" | tee -a ${LOGFILE}
   elif [[ -f "${CONFDIR}/vars/${1}.yml" ]]; then
     # il y a des variables persos, on les lance
-    ansible-playbook "${BASEDIR}/includes/dockerapps/generique.yml" --extra-vars "@${CONFDIR}/vars/${1}.yml" | tee -a $LOGFILE
+    ansible-playbook "${BASEDIR}/includes/dockerapps/generique.yml" --extra-vars "@${CONFDIR}/vars/${1}.yml" | tee -a ${LOGFILE}
   elif [[ -f "${BASEDIR}/includes/dockerapps/${1}.yml" ]]; then
     # pas de playbook perso ni de vars perso
     # Il y a un playbook spécifique pour cette appli, on le copie
     cp "${BASEDIR}/includes/dockerapps/${1}.yml" "${CONFDIR}/conf/${1}.yml" 
     # puis on le lance
-    ansible-playbook "${CONFDIR}/conf/${1}.yml" | tee -a $LOGFILE
+    ansible-playbook "${CONFDIR}/conf/${1}.yml" | tee -a ${LOGFILE}
   else
     # on copie les variables pour le user
     cp "${BASEDIR}/includes/dockerapps/vars/${1}.yml" "${CONFDIR}/vars/${1}.yml" 
     # puis on lance le générique avec ce qu'on vient de copier
-    ansible-playbook "${BASEDIR}/includes/dockerapps/generique.yml" --extra-vars "@${CONFDIR}/vars/${1}.yml" | tee -a $LOGFILE
+    ansible-playbook "${BASEDIR}/includes/dockerapps/generique.yml" --extra-vars "@${CONFDIR}/vars/${1}.yml" | tee -a ${LOGFILE}
   fi
 
   # mise à jour du fichier "/opt/seedbox/resume" && "/home/user/resume"
@@ -417,7 +411,7 @@ function install() {
   # crypt fichier account.yml
   ansible-vault encrypt "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
     
-    					tee -a $LOGFILE <<-EOF
+    					tee -a ${LOGFILE} <<-EOF
     
     🚀 $1                             📓 https://wiki.scriptseedboxdocker.com
     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -437,33 +431,36 @@ function oauth()
   
   LOGFILE=${LOGFILE_APPLI}
 
-  source /opt/seedbox-compose/includes/variables.sh
+  ansible-vault decrypt "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
+  SERVICESPERUSER=${SERVICESUSER}${USER}
 
-  ansible-playbook /opt/seedbox-compose/includes/dockerapps/templates/ansible/ansible.yml | tee -a $LOGFILE
-  ansible-vault decrypt /opt/seedbox/variables/account.yml > /dev/null 2>&1
-  USER=$(cat /tmp/name)
-  SERVICESPERUSER="$SERVICESUSER$USER"
-
-  sed -i "/client:/c\   client: $1" /opt/seedbox/variables/account.yml
-  sed -i "/secret:/c\   secret: $2" /opt/seedbox/variables/account.yml
-  sed -i "/account:/c\   account: $3" /opt/seedbox/variables/account.yml
+  # Ajout id oauth dans account.yml
+  sed -i "/client:/c\   client: ${1}" "${CONFDIR}/variables/account.yml"
+  sed -i "/secret:/c\   secret: ${2}" "${CONFDIR}/variables/account.yml"
+  sed -i "/account:/c\   account: ${3}" "${CONFDIR}/variables/account.yml"
   OPENSSL=$(openssl rand -hex 16)
-  sed -i "/openssl:/c\   openssl: $OPENSSL" /opt/seedbox/variables/account.yml
+  sed -i "/openssl:/c\   openssl: $OPENSSL" "${CONFDIR}/variables/account.yml"
 
   ## reinstallation traefik
-  ansible-playbook /opt/seedbox-compose/includes/dockerapps/traefik.yml | tee -a $LOGFILE
+  ansible-playbook "${BASEDIR}/includes/dockerapps/traefik.yml" | tee -a ${LOGFILE}
 
-  ## reinitialisation des applications
-  while read line; do echo $line | cut -d'.' -f1; done < /home/$USER/resume > $SERVICESPERUSER
-  mv /home/$USER/resume /tmp
+  # listing applis déjà installées
+  while read line; do echo ${line} | cut -d'.' -f1; done < /home/${USER}/resume > ${SERVICESPERUSER}
 
+  # Réinitialisations des applis
   while read line; do
-  ansible-playbook /opt/seedbox/conf/$line.yml | tee -a $LOGFILE
-  done < $SERVICESPERUSER
+    if [[ -f "${CONFDIR}/conf/${line}.yml" ]]; then
+      # il y a déjà un playbook "perso", on le lance
+      ansible-playbook "${CONFDIR}/conf/${line}.yml" | tee -a ${LOGFILE}
+    elif [[ -f "${CONFDIR}/vars/${line}.yml" ]]; then
+      # il y a des variables persos, on les lance
+      ansible-playbook "${BASEDIR}/includes/dockerapps/generique.yml" --extra-vars "@${CONFDIR}/vars/${1}.yml" | tee -a ${LOGFILE}
+    fi
+  done < ${SERVICESPERUSER}
 
-  mv /tmp/resume /home/$USER/
+  # supression des variables temporaires
   rm $SERVICESPERUSER
-  ansible-vault encrypt /opt/seedbox/variables/account.yml > /dev/null 2>&1
+  ansible-vault encrypt "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
   writelog_appli "Installation Oauth terminée"
 }
 
@@ -471,9 +468,6 @@ function oauth()
 DIRNAME=$(dirname $0)
 export PATH="$HOME/.local/bin:$PATH"
 source /opt/seedbox-compose/profile.sh
-#ansible-playbook "${BASEDIR}/includes/dockerapps/templates/ansible/ansible.yml"
-#USER=$(cat "$TMPNAME")
-#HOME=$(eval echo "~${USER}")
 
 writelog "Lancement du script" "DEBUG"
 ACTION=$1

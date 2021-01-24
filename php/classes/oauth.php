@@ -30,7 +30,7 @@ class oauth
         $log->writelog("oauth" . $this->clientoauth, 'DEBUG');
 
         $commande =
-            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh oauth "' . $this->clientoauth . '" "' . $secretoauth . '" "' . $mailoauth . '" ';
+            __DIR__ . '/../../scripts/manage_service.sh oauth "' . $this->clientoauth . '" "' . $secretoauth . '" "' . $mailoauth . '" ';
         $log->writelog("Lancé", "DEBUG");
         $log->writelog("Commande : " . $commande, "DEBUG");
         shell_exec($commande);

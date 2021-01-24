@@ -26,7 +26,7 @@ class options
         $log->writelog("-----------------",'DEBUG');
         $log->writelog("tools" . $this->outils,'DEBUG');
 
-        $commande = 'sudo ' . __DIR__ . '/../../scripts/manage_service.sh tools "' . $this->outils . '" ';
+        $commande = __DIR__ . '/../../scripts/manage_service.sh tools "' . $this->outils . '" ';
         $log->writelog("Lancé","DEBUG");
         $log->writelog("Commande : " . $commande,"DEBUG");
         shell_exec($commande);
