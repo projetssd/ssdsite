@@ -50,13 +50,13 @@ function writelog_appli()
 
 function tools() 
 {
-  log_applicatif $1
-  writelog_appli "Installation $1"
+  log_applicatif ${1}
+  writelog_appli "Installation ${1}"
   
   LOGFILE=${LOGFILE_APPLI}
 
   ansible-playbook "${BASEDIR}/includes/config/roles/${1}/tasks/main.yml" | tee -a ${LOGFILE}
-  writelog_appli "Installation $1 terminée"
+  writelog_appli "Installation ${1} terminée"
 }
 
 function cloudflare()  {
@@ -66,7 +66,7 @@ function cloudflare()  {
   LOGFILE=${LOGFILE_APPLI}
 
   ansible-vault decrypt "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
-  SERVICESPERUSER=${SERVICESUSER}${USER}"
+  SERVICESPERUSER=${SERVICESUSER}${USER}
 
   # Ajout id cloudflare dans account.yml
   sed -i "/login:/c\   login: $1" "${CONFDIR}/variables/account.yml"
@@ -85,7 +85,7 @@ function cloudflare()  {
       ansible-playbook "${CONFDIR}/conf/${line}.yml" | tee -a ${LOGFILE}
     elif [[ -f "${CONFDIR}/vars/${line}.yml" ]]; then
       # il y a des variables persos, on les lance
-      ansible-playbook "${BASEDIR}/includes/dockerapps/generique.yml" --extra-vars "@${CONFDIR}/vars/${1}.yml" | tee -a ${LOGFILE}
+      ansible-playbook "${BASEDIR}/includes/dockerapps/generique.yml" --extra-vars "@${CONFDIR}/vars/${line}.yml" | tee -a ${LOGFILE}
     fi
   done < ${SERVICESPERUSER}
 
@@ -176,8 +176,8 @@ writelog_appli "Création d'un shared drive"
   echo "remote = $name:/Medias" >> ${RCLONE_CONFIG_FILE}
   echo "filename_encryption = standard" >> ${RCLONE_CONFIG_FILE}
   echo "directory_name_encryption = true" >> ${RCLONE_CONFIG_FILE}
-  echo "password = $ENC_PASSWORD" >> ${RCLONE_CONFIG_FILE}
-  echo "password2 = $ENC_SALT" >> ${RCLONE_CONFIG_FILE}
+  echo "password = ${ENC_PASSWORD}" >> ${RCLONE_CONFIG_FILE}
+  echo "password2 = ${ENC_SALT}" >> ${RCLONE_CONFIG_FILE}
 
 else
    writelog_appli "Pas de shared drive" 
@@ -202,8 +202,8 @@ else
 
   PASSWORD=`cat ${TMPDIR}/password`
   SALT=`cat ${TMPDIR}/salt`
-  ENC_PASSWORD=`rclone obscure "$PASSWORD"`
-  ENC_SALT=`rclone obscure "$SALT"`
+  ENC_PASSWORD=`rclone obscure "${PASSWORD}"`
+  ENC_SALT=`rclone obscure "${SALT}"`
   crypt="_crypt"
 
   echo "" >> ${RCLONE_CONFIG_FILE}
@@ -212,8 +212,8 @@ else
   echo "remote = $3:/Medias" >> ${RCLONE_CONFIG_FILE}
   echo "filename_encryption = standard" >> ${RCLONE_CONFIG_FILE}
   echo "directory_name_encryption = true" >> ${RCLONE_CONFIG_FILE}
-  echo "password = $ENC_PASSWORD" >> ${RCLONE_CONFIG_FILE}
-  echo "password2 = $ENC_SALT" >> ${RCLONE_CONFIG_FILE}
+  echo "password = ${ENC_PASSWORD}" >> ${RCLONE_CONFIG_FILE}
+  echo "password2 = ${ENC_SALT}" >> ${RCLONE_CONFIG_FILE}
 
 fi
   writelog_appli "Installation rclone"
@@ -454,7 +454,7 @@ function oauth()
       ansible-playbook "${CONFDIR}/conf/${line}.yml" | tee -a ${LOGFILE}
     elif [[ -f "${CONFDIR}/vars/${line}.yml" ]]; then
       # il y a des variables persos, on les lance
-      ansible-playbook "${BASEDIR}/includes/dockerapps/generique.yml" --extra-vars "@${CONFDIR}/vars/${1}.yml" | tee -a ${LOGFILE}
+      ansible-playbook "${BASEDIR}/includes/dockerapps/generique.yml" --extra-vars "@${CONFDIR}/vars/${line}.yml" | tee -a ${LOGFILE}
     fi
   done < ${SERVICESPERUSER}
 
