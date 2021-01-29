@@ -267,7 +267,7 @@ function uninstall() {
   # Mise à jour du fichier account.yml
   grep "${1}: ." "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
   if [ $? -eq 0 ]; then
-    sed -i "/${2}/,+2d" "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
+    sed -i "/${1}/,+2d" "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
   fi
   grep "${1}:" "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
   if [ $? -eq 0 ]; then
@@ -332,13 +332,15 @@ function install() {
   writelog_appli "Installation de l'appli ${1}"    
   
   LOGFILE=${LOGFILE_APPLI}
+
+  echo $3 > /tmp/$3
     
   ansible-vault decrypt "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
   
   #declaration des variables utiles
   DOMAIN=$(grep domain "${CONFDIR}/variables/account.yml" | cut -d : -f2 | tr -d ' ')
 
-  # Mise à jour des données subdomain et auth dans account.yml
+  # Mise à jour des données subdomain dans account.yml
   grep "${1}: ." "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
   if [ $? -eq 0 ]; then
     sed -i "/${1}: ./d" "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
@@ -346,7 +348,12 @@ function install() {
   sed -i "/sub/a \ \ \ ${1}:" "${CONFDIR}/variables/account.yml"
   sed -i "/ \ \ ${1}:/a \ \ \ \ \ ${1}: ${2}" "${CONFDIR}/variables/account.yml"
 
-  # auth à intégrer
+  # Mise à jour des données auth dans account.yml
+  grep "${3}: ." "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
+  if [ $? -eq 0 ]; then
+    sed -i "/${3}: ./d" "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
+  fi
+  sed -i "/ \ \ ${1}: ./a \ \ \ \ \ auth: ${3}" "${CONFDIR}/variables/account.yml"
     
   ## Installation
   # On est dans le cas générique
@@ -442,7 +449,7 @@ writelog "Action = ${ACTION}" "DEBUG"
 
 case $ACTION in
   install) 
-    install ${2} ${3}
+    install ${2} ${3} ${4}
   ;;
   uninstall)
     uninstall ${2}
