@@ -48,6 +48,27 @@ function writelog_appli()
    echo "${DATE} - ${1}" >> ${LOGFILE_APPLI}
 }
 
+function create_plex()
+{
+  ansible-vault decrypt "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
+  log_applicatif TokenPlex
+  writelog_appli "récuperation token plex" 
+  # recuperation token plex
+  curl -qu "${1}":"${2}" 'https://plex.tv/users/sign_in.xml' \
+      -X POST -H 'X-Plex-Device-Name: PlexMediaServer' \
+      -H 'X-Plex-Provides: server' \
+      -H 'X-Plex-Version: 0.9' \
+      -H 'X-Plex-Platform-Version: 0.9' \
+      -H 'X-Plex-Platform: xcid' \
+      -H 'X-Plex-Product: Plex Media Server'\
+      -H 'X-Plex-Device: Linux'\
+      -H 'X-Plex-Client-Identifier: XXXX' --compressed >/tmp/plex_sign_in
+  token=$(sed -n 's/.*<authentication-token>\(.*\)<\/authentication-token>.*/\1/p' /tmp/plex_sign_in)
+  sed -i "/token:/c\   token: ${token}" "${CONFDIR}/variables/account.yml"
+  sed -i "/ident:/c\   ident: ${1}" "${CONFDIR}/variables/account.yml"
+  sed -i "/sesame:/c\   sesame: ${2}" "${CONFDIR}/variables/account.yml"
+}
+
 function tools() 
 {
   log_applicatif ${1}
@@ -59,7 +80,7 @@ function tools()
   writelog_appli "Installation ${1} terminée"
 }
 
-function cloudflare()  {
+function clflare()  {
   log_applicatif Cloudflare
   writelog_appli "Installation oauth"
   
@@ -69,8 +90,8 @@ function cloudflare()  {
   SERVICESPERUSER=${SERVICESUSER}${USER}
 
   # Ajout id cloudflare dans account.yml
-  sed -i "/login:/c\   login: $1" "${CONFDIR}/variables/account.yml"
-  sed -i "/api:/c\   api: $2" "${CONFDIR}/variables/account.yml"
+  sed -i "/login:/c\   login: ${1}" "${CONFDIR}/variables/account.yml"
+  sed -i "/api:/c\   api: ${2}" "${CONFDIR}/variables/account.yml"
 
   ## Réinstallation traefik
   ansible-playbook "${BASEDIR}/includes/dockerapps/traefik.yml" | tee -a ${LOGFILE}
@@ -106,6 +127,7 @@ function createtoken() {
   writelog_appli "Création d'un token" 
 
   # Variables environement USER
+  ansible-vault decrypt "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
   TMPDIR=$(mktemp -d)
   RCLONE_CONFIG_FILE="${HOME}/.config/rclone/rclone.conf"
   client=$(cat /tmp/client)
@@ -216,6 +238,9 @@ else
   echo "password2 = ${ENC_SALT}" >> ${RCLONE_CONFIG_FILE}
 
 fi
+  # incrementation du remote ds le account.yml
+  sed -i "/rclone/c \ \ \ remote: $3$crypt" ${CONFDIR}/variables/account.yml > /dev/null 2>&1
+
   writelog_appli "Installation rclone"
   log_applicatif InstallRclone
   # maintenant, on a la variable LOGFILE_APPLI utilisable
@@ -223,69 +248,11 @@ fi
   
   LOGFILE=${LOGFILE_APPLI}
 
-  #ansible-playbook /opt/seedbox-compose/includes/config/roles/rclone/tasks/main.yml | tee -a ${LOGFILE}
+  ansible-playbook /opt/seedbox-compose/includes/config/roles/rclone/tasks/main.yml | tee -a ${LOGFILE}
+  ansible-vault encrypt "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
   writelog_appli "Terminé" 
   rm /tmp/client /tmp/secret 
   rm -rf ${TMPDIR}
- 
-}
-
-function configure() {
-  log_applicatif ConfigureSeedbox
-  ACCOUNT=/opt/seedbox/variables/account.yml
-  writelog_appli "recuperation token plex" 
-  # recuperation token plex
-  curl -qu "$5":"$6" 'https://plex.tv/users/sign_in.xml' \
-      -X POST -H 'X-Plex-Device-Name: PlexMediaServer' \
-      -H 'X-Plex-Provides: server' \
-      -H 'X-Plex-Version: 0.9' \
-      -H 'X-Plex-Platform-Version: 0.9' \
-      -H 'X-Plex-Platform: xcid' \
-      -H 'X-Plex-Product: Plex Media Server'\
-      -H 'X-Plex-Device: Linux'\
-      -H 'X-Plex-Client-Identifier: XXXX' --compressed >/tmp/plex_sign_in
-  token=$(sed -n 's/.*<authentication-token>\(.*\)<\/authentication-token>.*/\1/p' /tmp/plex_sign_in)
-
-  #openssl OAuth
-  openssl=$(openssl rand -hex 16)
-
-  # creation utilisateur
-  writelog_appli "Création utilisateur" 
-  useradd -m $1 -s /bin/bash
-  usermod -aG docker $1
-  passwd $2
-  chsh -s /bin/bash $2
-  chown -R $1:$1 /home/$1
-  chmod 755 /home/$1
-  userid=$(id -u $1)
-  grpid=$(id -g $1)
-  htpasswd -c -b /tmp/.htpasswd $1 $2 > /dev/null 2>&1
-  htpwd=$(cat /tmp/.htpasswd)
-
-  # Mise en place du fichier account.yml
-   writelog_appli "Mise en place du fichier account.yml" 
-  cp /opt/seedbox-compose/includes/config/account.yml $ACCOUNT
-  echo $2 > ~/.vault_pass
-  echo "vault_password_file = ~/.vault_pass" >> /etc/ansible/ansible.cfg
-
-  #incrementation des variables dans account.yml
-  sed -i "s/name:/name: $1/
-          s/pass:/pass: $2/
-          s/userid:/userid: $userid/
-          s/groupid:/groupid: $grpid/
-          s/group:/group: $1/
-          s/mail:/mail: $3/
-          s/domain:/domain: $4/
-          s/ident:/ident: $5/
-          s/sesame:/sesame: $6/
-          s/token:/token: $token/
-          s/login:/login: $7/
-          s/api:/api: $8/
-          s/client:/client: $9/
-          s/secret:/secret: ${10}/
-          s/account:/account: ${11}/
-          s/openssl:/openssl: $openssl/
-          /htpwd:/c\   htpwd: $htpwd" $ACCOUNT
 }
 
 function uninstall() {
@@ -303,17 +270,18 @@ function uninstall() {
     sed -i "/${2}/,+2d" "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
   fi
   grep "${1}:" "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
-  if [ $? -eq 0 ] || [ "${1}" != "plex" ] ; then
-    sed -i "/${1}/,+1d" "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
+  if [ $? -eq 0 ]; then
+    sed -i "/ \ \ ${1}:/,+1d" "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
   fi
 
   sed -i "/${1}/d" "${CONFDIR}/resume" > /dev/null 2>&1
   sed -i "/${1}/d" "/home/${USER}/resume" > /dev/null 2>&1
 
   # supression des volumes
-  docker rm -f "$1" > /dev/null 2>&1
+  docker rm -f "${1}" > /dev/null 2>&1
   rm "${CONFDIR}/conf/${1}.yml" > /dev/null 2>&1
   rm "${CONFDIR}/vars/${1}.yml" > /dev/null 2>&1
+  rm -rf ${CONFDIR}/docker/${USER}/${1}
 
   # supressions des mariadb associées
   if docker ps | grep -q db-${1}; then
@@ -342,9 +310,13 @@ function uninstall() {
      rtorrentvpn)
        rm "${CONFDIR}/conf/rutorrent-vpn.yml"
      ;;
+     plex)
+      sed -i "/token:/c\   token:" "${CONFDIR}/variables/account.yml"
+      sed -i "/ident:/c\   ident:" "${CONFDIR}/variables/account.yml"
+      sed -i "/sesame:/c\   sesame:" "${CONFDIR}/variables/account.yml"
+     ;;
      *)
      # writelog "ACTION INDEFINIE" 'DEBUG' 
-      rm -rf "${CONFDIR}/docker/${USER}/${1}"
      ;;
   esac
  
@@ -355,7 +327,7 @@ function uninstall() {
 
 function install() {
   # on appelle la fonction pour avoir le nom du log à créer
-  log_applicatif $1
+  log_applicatif ${1}
   # maintenant, on a la variable LOGFILE_APPLI utilisable
   writelog_appli "Installation de l'appli ${1}"    
   
@@ -367,17 +339,12 @@ function install() {
   DOMAIN=$(grep domain "${CONFDIR}/variables/account.yml" | cut -d : -f2 | tr -d ' ')
 
   # Mise à jour des données subdomain et auth dans account.yml
-  if [ $2 != "undefined" ]; then
-    grep "${1}: ." "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
-    if [ $? -eq 0 ]; then
-      sed -i "/${1}: ./d" "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
-    fi
-    grep "${1}:" "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
-    if [ $? -eq 1 ]; then
-      sed -i "/sub/a \ \ \ ${1}:" "${CONFDIR}/variables/account.yml"
-    fi
-    sed -i "/${1}:/a \ \ \ \ \ ${1}: ${2}" "${CONFDIR}/variables/account.yml"
+  grep "${1}: ." "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
+  if [ $? -eq 0 ]; then
+    sed -i "/${1}: ./d" "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
   fi
+  sed -i "/sub/a \ \ \ ${1}:" "${CONFDIR}/variables/account.yml"
+  sed -i "/ \ \ ${1}:/a \ \ \ \ \ ${1}: ${2}" "${CONFDIR}/variables/account.yml"
 
   # auth à intégrer
     
@@ -413,7 +380,7 @@ function install() {
     
     					tee -a ${LOGFILE} <<-EOF
     
-    🚀 $1                             📓 https://wiki.scriptseedboxdocker.com
+       $1                             📓 https://wiki.scriptseedboxdocker.com
     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     
                        Installation de $1 effectuée avec succés
@@ -424,7 +391,7 @@ EOF
 
 }
 
-function oauth() 
+function goauth() 
 {
   log_applicatif oauth
   writelog_appli "Installation oauth"
@@ -470,30 +437,33 @@ export PATH="$HOME/.local/bin:$PATH"
 source /opt/seedbox-compose/profile.sh
 
 writelog "Lancement du script" "DEBUG"
-ACTION=$1
+ACTION=${1}
 writelog "Action = ${ACTION}" "DEBUG"
 
 case $ACTION in
   install) 
-    install $2 $3
+    install ${2} ${3}
   ;;
   uninstall)
-    uninstall $2
+    uninstall ${2}
   ;;
   credential)
-    credential $2 $3
+    credential ${2} ${3}
   ;;
   createtoken)
-    createtoken $2 $3 $4
+    createtoken ${2} ${3} ${4}
   ;;
   tools)
-    tools $2
+    tools ${2}
   ;;
-  oauth)
-    oauth $2 $3 $4
+  goauth)
+    goauth ${2} ${3} ${4}
   ;;
-  cloudflare)
-    cloudflare $2 $3
+  clflare)
+    clflare ${2} ${3}
+  ;;
+  create_plex)
+    create_plex ${2} ${3}
   ;;
   *)
   writelog "ACTION INDEFINIE" 'DEBUG' 

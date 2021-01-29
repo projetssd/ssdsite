@@ -7,5 +7,5 @@ $secretoauth = $_POST['secretoauth'];
 $mailoauth = $_POST['mailoauth'];
 
 $google = new oauth($clientoauth);
-$google->function_oauth($secretoauth, $mailoauth);
+$google->goauth($secretoauth, $mailoauth);
 echo 'ok';
