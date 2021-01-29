@@ -265,14 +265,7 @@ function uninstall() {
   echo 0 > "${CONFDIR}/status/${1}"
 
   # Mise à jour du fichier account.yml
-  grep "${1}: ." "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
-  if [ $? -eq 0 ]; then
-    sed -i "/${1}/,+2d" "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
-  fi
-  grep "${1}:" "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
-  if [ $? -eq 0 ]; then
-    sed -i "/ \ \ ${1}:/,+1d" "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
-  fi
+  sed -i "/ \ \ ${1}/,+2d" "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
 
   sed -i "/${1}/d" "${CONFDIR}/resume" > /dev/null 2>&1
   sed -i "/${1}/d" "/home/${USER}/resume" > /dev/null 2>&1
