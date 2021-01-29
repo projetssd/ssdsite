@@ -5,7 +5,625 @@
     {% include 'header.twig' %}
 </head>
 
-<body class="hold-transition sidebar-mini sidebar-collapse">
+<body data-theme="dark">
+    {# {% include 'blocks/modals.twig' %} #}
+    <!-- ============================================================== -->
+    <!-- Preloader - style you can find in spinners.css -->
+    <!-- ============================================================== -->
+    <div class="preloader">
+        <div class="lds-ripple">
+            <div class="lds-pos"></div>
+            <div class="lds-pos"></div>
+        </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- Main wrapper - style you can find in pages.scss -->
+    <!-- ============================================================== -->
+    <div id="main-wrapper">
+        <!-- ============================================================== -->
+        <!-- Topbar header - style you can find in pages.scss -->
+        <!-- ============================================================== -->
+        <header class="topbar">
+            <nav class="navbar top-navbar navbar-expand-md navbar-dark">
+                <div class="navbar-header">
+                    <!-- This is for the sidebar toggle which is visible on mobile only -->
+                    <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)"><i
+                            class="ti-menu ti-close"></i></a>
+                    <!-- ============================================================== -->
+                    <!-- Logo -->
+                    <!-- ============================================================== -->
+                    <a class="navbar-brand" href="index.html">
+                        <!-- Logo icon -->
+                        <b class="logo-icon">
+                            <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
+                            <!-- Light Logo icon -->
+                            <img src="assets/images/logo-light-icon@2x.png" alt="homepage" width="76px"
+                                class="light-logo" />
+                        </b>
+                        <!--End Logo icon -->
+                        <!-- Logo text -->
+                        <span class="logo-text">
+                            <!-- Light Logo text -->
+                            <img src="assets/images/logo-light-text@2x.png" class="light-logo" width="91px"
+                                alt="homepage" />
+                        </span>
+                    </a>
+                    <!-- ============================================================== -->
+                    <!-- End Logo -->
+                    <!-- ============================================================== -->
+                    <!-- ============================================================== -->
+                    <!-- Toggle which is visible on mobile only -->
+                    <!-- ============================================================== -->
+                    <a class="topbartoggler d-block d-md-none waves-effect waves-light" href="javascript:void(0)"
+                        data-toggle="collapse" data-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><i
+                            class="ti-more"></i></a>
+                </div>
+                <!-- ============================================================== -->
+                <!-- End Logo -->
+                <!-- ============================================================== -->
+                <div class="navbar-collapse collapse" id="navbarSupportedContent">
+                    <!-- ============================================================== -->
+                    <!-- toggle and nav items -->
+                    <!-- ============================================================== -->
+                    <ul class="navbar-nav float-left mr-auto">
+                        <li class="nav-item d-none d-md-block"><a
+                                class="nav-link sidebartoggler waves-effect waves-light" href="javascript:void(0)"
+                                data-sidebartype="mini-sidebar"><i class="mdi mdi-menu font-24"></i></a></li>
+                        <!-- ============================================================== -->
+                        <!-- mega menu -->
+                        <!-- ============================================================== -->
+                        <li class="nav-item dropdown mega-dropdown"><a
+                                class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                <span class="d-none d-md-block">Infos <i class="fa fa-angle-down"></i></span>
+                                <span class="d-block d-md-none"><i class="mdi mdi-dialpad font-24"></i></span>
+                            </a>
+                            <div class="dropdown-menu animated bounceInDown">
+                                <div class="mega-dropdown-menu row">
+                                    <div class="col-lg-3 col-xlg-2 m-b-30">
+                                        <h4 class="m-b-20">Mon serveur</h4>
+                                        <div class="card card-hover">
+                                            <div class="card-body"
+                                                style="background:url(assets/images/background/active-bg.png) no-repeat top center;">
+                                                <div class="p-t-20 text-center">
+                                                    <span class="display-7 d-block font-medium">Nom du serveur</span>
+                                                    <span>Ubuntu 18.04.5 LTS</span>
+                                                    <!-- row -->
+                                                    <div class="row m-t-30 m-b-20">
+                                                        <!-- column -->
+                                                        <div class="col-4 border-right">
+                                                            <h3 class="m-b-0 font-medium">9Go</h3>Libre
+                                                        </div>
+                                                        <!-- column -->
+                                                        <div class="col-4 border-right">
+                                                            <h3 class="m-b-0 font-medium">12J</h3>Up
+                                                        </div>
+                                                        <!-- column -->
+                                                        <div class="col-4 text-right">
+                                                            <h3 class="m-b-0 font-medium">45°</h3>Temp
+                                                        </div>
+                                                    </div>
+                                                    <a href="javascript:void(0)"
+                                                        class="waves-effect waves-light m-t-20 btn btn-lg btn-warning accent-4 m-b-20">Relancer
+                                                        Docker</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 m-b-30">
+                                        <h4 class="m-b-20">Last release</h4>
+                                        <!-- Accordian -->
+                                        <div id="accordion">
+                                            <div class="card m-b-5">
+                                                <div class="card-header" id="headingOne">
+                                                    <h5 class="mb-0">
+                                                        <button class="btn btn-link" data-toggle="collapse"
+                                                            data-target="#collapseOne" aria-expanded="true"
+                                                            aria-controls="collapseOne">
+                                                            V. 2.01234
+                                                        </button>
+                                                    </h5>
+                                                </div>
+                                                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                                                    data-parent="#accordion">
+                                                    <div class="card-body">
+                                                        Anim pariatur cliche reprehenderit, enim eiusmod high life
+                                                        accusamus terry.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card m-b-5">
+                                                <div class="card-header" id="headingTwo">
+                                                    <h5 class="mb-0">
+                                                        <button class="btn btn-link collapsed" data-toggle="collapse"
+                                                            data-target="#collapseTwo" aria-expanded="false"
+                                                            aria-controls="collapseTwo">
+                                                            V. 2.01233
+                                                        </button>
+                                                    </h5>
+                                                </div>
+                                                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+                                                    data-parent="#accordion">
+                                                    <div class="card-body">
+                                                        Anim pariatur cliche reprehenderit, enim eiusmod high life
+                                                        accusamus terry.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card m-b-5">
+                                                <div class="card-header" id="headingThree">
+                                                    <h5 class="mb-0">
+                                                        <button class="btn btn-link collapsed" data-toggle="collapse"
+                                                            data-target="#collapseThree" aria-expanded="false"
+                                                            aria-controls="collapseThree">
+                                                            V. 2.01232
+                                                        </button>
+                                                    </h5>
+                                                </div>
+                                                <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
+                                                    data-parent="#accordion">
+                                                    <div class="card-body">
+                                                        Anim pariatur cliche reprehenderit, enim eiusmod high life
+                                                        accusamus terry.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3  m-b-30">
+                                        <h4 class="m-b-20">Contact</h4>
+                                        <!-- Contact -->
+                                        <form>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" id="exampleInputname1"
+                                                    placeholder="Enter Name">
+                                            </div>
+                                            <div class="form-group">
+                                                <input type="email" class="form-control" placeholder="Enter email">
+                                            </div>
+                                            <div class="form-group">
+                                                <textarea class="form-control" id="exampleTextarea" rows="3"
+                                                    placeholder="Message"></textarea>
+                                            </div>
+                                            <button type="submit" class="btn btn-info">Submit</button>
+                                        </form>
+                                    </div>
+                                    <div class="col-lg-3 col-xlg-4 m-b-30">
+                                        <h4 class="m-b-20">Lien utiles</h4>
+                                        <!-- List style -->
+                                        <ul class="list-style-none">
+                                            <li><a href="javascript:void(0)"><i class="fa fa-check text-success"></i>
+                                                    You can give link</a></li>
+                                            <li><a href="javascript:void(0)"><i class="fa fa-check text-success"></i>
+                                                    Give link</a></li>
+                                            <li><a href="javascript:void(0)"><i class="fa fa-check text-success"></i>
+                                                    Another Give link</a></li>
+                                            <li><a href="javascript:void(0)"><i class="fa fa-check text-success"></i>
+                                                    Forth link</a></li>
+                                            <li><a href="javascript:void(0)"><i class="fa fa-check text-success"></i>
+                                                    Another fifth link</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <!-- ============================================================== -->
+                        <!-- End mega menu -->
+                        <!-- ============================================================== -->
+                    </ul>
+                    <!-- ============================================================== -->
+                    <!-- Right side toggle and nav items -->
+                    <!-- ============================================================== -->
+                    <ul class="navbar-nav float-right">
+                        <!-- ============================================================== -->
+                        <!-- Comment -->
+                        <!-- ============================================================== -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false"> <i class="mdi mdi-bell font-24"></i>
+
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right mailbox animated bounceInDown">
+                                <span class="with-arrow"><span class="bg-primary"></span></span>
+                                <ul class="list-style-none">
+                                    <li>
+                                        <div class="drop-title bg-primary text-white">
+                                            <h4 class="m-b-0 m-t-5">Notifications</h4>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="message-center notifications">
+                                            <!-- Message -->
+                                            <a href="javascript:void(0)" class="message-item">
+                                                <span class="btn btn-success btn-circle"><i
+                                                        class="ti-calendar"></i></span>
+                                                <span class="mail-contnet">
+                                                    <h5 class="message-title">Luanch Admin</h5> <span
+                                                        class="mail-desc">Just see the my new admin!</span> <span
+                                                        class="time">9:30 AM</span>
+                                                </span>
+                                            </a>
+                                            <!-- Message -->
+                                            <a href="javascript:void(0)" class="message-item">
+                                                <span class="btn btn-success btn-circle"><i
+                                                        class="ti-calendar"></i></span>
+                                                <span class="mail-contnet">
+                                                    <h5 class="message-title">Event today</h5> <span
+                                                        class="mail-desc">Just a reminder that you have event</span>
+                                                    <span class="time">9:10 AM</span>
+                                                </span>
+                                            </a>
+                                            <!-- Message -->
+                                            <a href="javascript:void(0)" class="message-item">
+                                                <span class="btn btn-success btn-circle"><i
+                                                        class="ti-calendar"></i></span>
+                                                <span class="mail-contnet">
+                                                    <h5 class="message-title">Settings</h5> <span class="mail-desc">You
+                                                        can customize this template as you want</span> <span
+                                                        class="time">9:08 AM</span>
+                                                </span>
+                                            </a>
+                                            <!-- Message -->
+                                            <a href="javascript:void(0)" class="message-item">
+                                                <span class="btn btn-success btn-circle"><i
+                                                        class="ti-calendar"></i></span>
+                                                <span class="mail-contnet">
+                                                    <h5 class="message-title">Pavan kumar</h5> <span
+                                                        class="mail-desc">Just see the my admin!</span> <span
+                                                        class="time">9:02 AM</span>
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <a class="nav-link text-center m-b-5" href="javascript:void(0);"> <strong>Check
+                                                all notifications</strong> <i class="fa fa-angle-right"></i> </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <!-- ============================================================== -->
+                        <!-- End Comment -->
+                        <!-- ============================================================== -->
+                        <!-- ============================================================== -->
+                        <!-- User profile and search -->
+                        <!-- ============================================================== -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic" href=""
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img
+                                    src="assets/images/users/1.jpg" alt="user" class="rounded-circle" width="31"></a>
+                            <div class="dropdown-menu dropdown-menu-right user-dd animated flipInY">
+                                <span class="with-arrow"><span class="bg-primary"></span></span>
+                                <div class="d-flex no-block align-items-center p-15 bg-primary text-white m-b-10">
+                                    <div class=""><img src="assets/images/users/1.jpg" alt="user" class="img-circle"
+                                            width="60"></div>
+                                    <div class="m-l-10">
+                                        <h4 class="m-b-0">Steave Jobs</h4>
+                                        <p class=" m-b-0">varun@gmail.com</p>
+                                    </div>
+                                </div>
+                                <a class="dropdown-item" href="javascript:void(0)"><i class="ti-user m-r-5 m-l-5"></i>
+                                    My Profile</a>
+                                <a class="dropdown-item" href="javascript:void(0)"><i class="ti-wallet m-r-5 m-l-5"></i>
+                                    My Balance</a>
+                                <a class="dropdown-item" href="javascript:void(0)"><i class="ti-email m-r-5 m-l-5"></i>
+                                    Inbox</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="javascript:void(0)"><i
+                                        class="ti-settings m-r-5 m-l-5"></i> Account Setting</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="javascript:void(0)"><i
+                                        class="fa fa-power-off m-r-5 m-l-5"></i> Logout</a>
+                                <div class="dropdown-divider"></div>
+                                <div class="p-l-30 p-10"><a href="javascript:void(0)"
+                                        class="btn btn-sm btn-success btn-rounded">View Profile</a></div>
+                            </div>
+                        </li>
+                        <!-- ============================================================== -->
+                        <!-- User profile and search -->
+                        <!-- ============================================================== -->
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!-- ============================================================== -->
+        <!-- End Topbar header -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        <aside class="left-sidebar">
+            <!-- Sidebar scroll-->
+            <div class="scroll-sidebar">
+                <!-- Sidebar navigation-->
+                <nav class="sidebar-nav">
+                    <ul id="sidebarnav">
+                        <!-- User Profile-->
+                        <li class="nav-small-cap"><i class="mdi mdi-dots-horizontal"></i> <span
+                                class="hide-menu">Menu</span></li>
+                        <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark" href="index.html"
+                                aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span
+                                    class="hide-menu">Accueil </span></a></li>
+                    </ul>
+                </nav>
+                <!-- End Sidebar navigation -->
+            </div>
+            <!-- End Sidebar scroll-->
+        </aside>
+        <!-- ============================================================== -->
+        <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Page wrapper  -->
+        <!-- ============================================================== -->
+        <div class="page-wrapper">
+            <!-- ============================================================== -->
+            <!-- Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <div class="page-breadcrumb">
+                <div class="row">
+                    <div class="col-9 align-self-center">
+                        <h4 class="page-title">Gestion du serveur SSD</h4>
+                        <div class="d-flex align-items-center">
+                            <nav aria-label="breadcrumb">
+                            </nav>
+                        </div>
+                    </div>
+                    <div class="col-3 align-self-center">
+                        <div class="d-flex no-block justify-content-end align-items-center">
+                            <input class="form-control form-control-navbar" id="searchappli" type="search"
+                                placeholder="Recherche" aria-label="Search">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Container fluid  -->
+            <!-- ============================================================== -->
+            <div class="container-fluid">
+                <!-- ============================================================== -->
+                <!-- Start Page Content -->
+                <!-- ============================================================== -->
+                <div class="row">
+                    <!-- Column -->
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card">
+                            <div class="card-body user-block">
+                                <img class="img-circle img-bordered-sm" id="logo-jackett" alt="jackett"
+                                    src="ajax/affiche_image.php?appli=jackett">
+                                <h4 class="card-title text-white m-b-0"><a href="https://jackett.dsfsdf"
+                                        target="_blank"><span class="username" id="nomAppli-jackett">Jackett</span></a>
+                                </h4>
+                                <span class="description" id="version-jackett">v0.17.50</span>
+                                <p class="card-text m-t-20">With supporting text below as a natural lead-in to
+                                    additional
+                                    content.</p>
+                                <div>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-light dropdown-toggle"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="ti-settings"></i>
+                                        </button>
+                                        <div class="dropdown-menu animated flipInX">
+                                            <a class="dropdown-item" href="javascript:void(0)">Redémarrer</a>
+                                            <a class="dropdown-item" href="javascript:void(0)">Arrêter</a>
+                                            <a class="dropdown-item" href="javascript:void(0)">Sauvegarder</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="javascript:void(0)">Configurer</a>
+                                        </div>
+                                    </div>
+
+                                    <span class="float-right">
+                                        <div class="btn-group">
+                                            <button href="javascript:void(0)" id="slide-toast" type="button"
+                                                class="btn btn-warning">Désinstaller</button>
+                                            <button type="button"
+                                                class="btn btn-warning dropdown-toggle dropdown-toggle-split"
+                                                id="dropdownMenuReference" data-toggle="dropdown" aria-haspopup="true"
+                                                aria-expanded="false" data-reference="parent">
+                                                <span class="sr-only">Toggle Dropdown</span>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="#">Et supprimer les données</a>
+                                            </div>
+                                        </div>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Column -->
+                    <!-- Column -->
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card">
+                            <div class="card-body user-block">
+                                <img class="img-circle img-bordered-sm" id="logo-jackett" alt="jackett"
+                                    src="ajax/affiche_image.php?appli=jackett">
+                                <h4 class="card-title text-white m-b-0"><a href="https://jackett.dsfsdf"
+                                        target="_blank"><span class="username" id="nomAppli-jackett">Jackett</span></a>
+                                </h4>
+                                <span class="description" id="version-jackett">v0.17.50</span>
+                                <p class="card-text m-t-20">With supporting text below as a natural lead-in to
+                                    additional
+                                    content.</p>
+                                <div>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-light dropdown-toggle"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="ti-settings"></i>
+                                        </button>
+                                        <div class="dropdown-menu animated flipInX">
+                                            <a class="dropdown-item" href="javascript:void(0)">Redémarrer</a>
+                                            <a class="dropdown-item" href="javascript:void(0)">Arrêter</a>
+                                            <a class="dropdown-item" href="javascript:void(0)">Sauvegarder</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="javascript:void(0)">Configurer</a>
+                                        </div>
+                                    </div>
+
+                                    <span class="float-right">
+                                        <div class="btn-group">
+                                            <button href="javascript:void(0)" type="button"
+                                                class="btn btn-warning">Désinstaller</button>
+                                            <button type="button"
+                                                class="btn btn-warning dropdown-toggle dropdown-toggle-split"
+                                                id="dropdownMenuReference" data-toggle="dropdown" aria-haspopup="true"
+                                                aria-expanded="false" data-reference="parent">
+                                                <span class="sr-only">Toggle Dropdown</span>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="#">Et supprimer les données</a>
+                                            </div>
+                                        </div>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Column -->
+                    <!-- Column -->
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card">
+                            <div class="card-body user-block">
+                                <img class="img-circle img-bordered-sm" id="logo-jackett" alt="jackett"
+                                    src="ajax/affiche_image.php?appli=jackett">
+                                <h4 class="card-title text-white m-b-0"><a href="https://jackett.dsfsdf"
+                                        target="_blank"><span class="username" id="nomAppli-jackett">Jackett</span></a>
+                                </h4>
+                                <span class="description" id="version-jackett">v0.17.50</span>
+                                <p class="card-text m-t-20">With supporting text below as a natural lead-in to
+                                    additional
+                                    content.</p>
+                                <div>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-light dropdown-toggle"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="ti-settings"></i>
+                                        </button>
+                                        <div class="dropdown-menu animated flipInX">
+                                            <a class="dropdown-item" href="javascript:void(0)">Redémarrer</a>
+                                            <a class="dropdown-item" href="javascript:void(0)">Arrêter</a>
+                                            <a class="dropdown-item" href="javascript:void(0)">Sauvegarder</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="javascript:void(0)">Configurer</a>
+                                        </div>
+                                    </div>
+
+                                    <span class="float-right">
+                                        <div class="btn-group">
+                                            <button href="javascript:void(0)" type="button"
+                                                class="btn btn-warning">Désinstaller</button>
+                                            <button type="button"
+                                                class="btn btn-warning dropdown-toggle dropdown-toggle-split"
+                                                id="dropdownMenuReference" data-toggle="dropdown" aria-haspopup="true"
+                                                aria-expanded="false" data-reference="parent">
+                                                <span class="sr-only">Toggle Dropdown</span>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="#">Et supprimer les données</a>
+                                            </div>
+                                        </div>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Column -->
+                    <!-- Column -->
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card">
+                            <div class="card-body user-block">
+                                <img class="img-circle img-bordered-sm" id="logo-jackett" alt="jackett"
+                                    src="ajax/affiche_image.php?appli=jackett">
+                                <h4 class="card-title text-white m-b-0"><a href="https://jackett.dsfsdf"
+                                        target="_blank"><span class="username" id="nomAppli-jackett">Jackett</span></a>
+                                </h4>
+                                <span class="description" id="version-jackett">v0.17.50</span>
+                                <p class="card-text m-t-20">With supporting text below as a natural lead-in to
+                                    additional
+                                    content.</p>
+                                <div>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-light dropdown-toggle"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="ti-settings"></i>
+                                        </button>
+                                        <div class="dropdown-menu animated flipInX">
+                                            <a class="dropdown-item" href="javascript:void(0)">Redémarrer</a>
+                                            <a class="dropdown-item" href="javascript:void(0)">Arrêter</a>
+                                            <a class="dropdown-item" href="javascript:void(0)">Sauvegarder</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="javascript:void(0)">Configurer</a>
+                                        </div>
+                                    </div>
+
+                                    <span class="float-right">
+                                        <div class="btn-group">
+                                            <button href="javascript:void(0)" type="button"
+                                                class="btn btn-warning">Désinstaller</button>
+                                            <button type="button"
+                                                class="btn btn-warning dropdown-toggle dropdown-toggle-split"
+                                                id="dropdownMenuReference" data-toggle="dropdown" aria-haspopup="true"
+                                                aria-expanded="false" data-reference="parent">
+                                                <span class="sr-only">Toggle Dropdown</span>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="#">Et supprimer les données</a>
+                                            </div>
+                                        </div>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Column -->
+                </div>
+                <!-- ============================================================== -->
+                <!-- End PAge Content -->
+                <!-- ============================================================== -->
+                <!-- ============================================================== -->
+                <!-- Right sidebar -->
+                <!-- ============================================================== -->
+                <!-- .right-sidebar -->
+                <!-- ============================================================== -->
+                <!-- End Right sidebar -->
+                <!-- ============================================================== -->
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Container fluid  -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- footer -->
+            <!-- ============================================================== -->
+            <footer class="footer text-center">
+                <strong>Copyright © 2020 <a href="http://scriptseedboxdocker.com">SSD</a>.</strong> All rights reserved.
+            </footer>
+            <!-- ============================================================== -->
+            <!-- End footer -->
+            <!-- ============================================================== -->
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Page wrapper  -->
+        <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- End Wrapper -->
+    <!-- ============================================================== -->
+
+</body>
+{% include 'footer.twig' %}
+{#
+
+
+
+
+
+
+
 
     {% include 'haut_page.twig' %}
     <!-- Content Wrapper. Contains page content -->
@@ -80,3 +698,4 @@
 {% include 'footer.twig' %}
 
 </html>
+#}

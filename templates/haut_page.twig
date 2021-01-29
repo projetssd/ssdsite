@@ -2,22 +2,22 @@
 (modals, ... )
 #}
 
-<!-- OVERLAY : spinner pleine page -->
-<div class="overlay">
-    <div class="sk-chase">
-        <div class="sk-chase-dot"></div>
-        <div class="sk-chase-dot"></div>
-        <div class="sk-chase-dot"></div>
-        <div class="sk-chase-dot"></div>
-        <div class="sk-chase-dot"></div>
-        <div class="sk-chase-dot"></div>
+{% include 'blocks/modals.twig' %}
+
+<!-- ============================================================== -->
+<!-- Preloader - style you can find in spinners.css -->
+<!-- ============================================================== -->
+<div class="preloader">
+    <div class="lds-ripple">
+        <div class="lds-pos"></div>
+        <div class="lds-pos"></div>
     </div>
 </div>
-<!-- OVERLAY -->
 
-
-<!-- Site wrapper -->
-<div class="wrapper">
+<!-- ============================================================== -->
+<!-- Main wrapper - style you can find in pages.scss -->
+<!-- ============================================================== -->
+<div id="main-wrapper">
     <!-- Navbar -->
     <nav class="main-header navbar navbar-expand navbar-white navbar-light">
         <!-- START top navbar links -->
@@ -54,7 +54,7 @@
     </nav>
 
 
-    {% include 'blocks/modals.twig' %}
+
 
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
