@@ -101,6 +101,17 @@ $(document).ready(function () {
         }
     });
 
+    $("#form_modal_plex").validate({
+        rules: {
+            plexident: {
+                required: true
+            },
+            plexpass: {
+                required: true
+            },
+        }
+    });
+
     $(".option_install").click(function () {
         var outils = $(this).attr('data-outils');
         console.log('outils a la valeur ' + outils);
@@ -246,6 +257,11 @@ $(document).ready(function () {
         $("#nomappliencours").html(appli);
         $("#validation_install_appli").attr('data-appli', appli);
         $("#subdomain").val(appli);
+        if (appli == "plex") {
+            $("#plex-appli").show();
+        }else{
+            $("#plex-appli").hide();
+        }
         $('#modal_install_applis').modal('hide');
         $('#modalPoll').modal('show');
     });
@@ -289,6 +305,38 @@ $(document).ready(function () {
         } else {
             console.log('Subdomain est VIDE !');
         }
+
+        if (appli == "plex") {
+            if ($("#form_modal_plex").valid()) {
+                console.log('plexident n est pas vide');
+                var plexident = $("#plexident").val();
+                console.log('id plex a la valeur ' + plexident);
+                console.log('plexpass n est pas vide');
+                var plexpass = $("#plexpass").val();
+                console.log('pass plex a la valeur ' + plexpass);
+                    $.ajax({
+                        url: "ajax/install_plex.php",
+                        method: "POST",
+                        data: {plexident: plexident, plexpass: plexpass}
+
+                    }).done(function (data) {
+                        toastr.success("recuperation du token terminée");
+                        toastr.success("Poursuite de l installation Plex");
+                        console.log("result " + data);
+
+                    }).fail(function () {
+                        console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+                        toastr.warning("Erreur sur ajax");
+                        $("#status-" + appli).html("Erreur ajax");
+                    });
+
+            } else {
+                toastr.warning('Merci de VERIFIER la saisie des champs');
+                console.log('Au moins un des champs est VIDE !')
+                return;
+            }
+        }
+
         // on change le texte du bouton
         $("#status-" + appli).html("Installation...");
         // on lance un ajax qui va installer tout ça
@@ -297,6 +345,7 @@ $(document).ready(function () {
         toastr.success("Installation de " + appli + " commencée");
         console.log('Subdomain a ENCORE la valeur ' + subdomain);
         //$(".overlay").show();
+
         $.ajax({
             url: "ajax/install_service.php?service=" + appli + "&subdomain=" + subdomain
         }).done(function (data) {

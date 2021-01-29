@@ -78,6 +78,7 @@ $("#install-validation").click(function() {
                 console.log('drive a la valeur ' + drive);
                 var drivename = $("#drivename").val();
                 console.log('drivename a la valeur ' + drivename);
+                $('#seedbox').modal('hide');
                 $.ajax({
                     url: "ajax/install_token.php",
                     method: "POST",
@@ -87,7 +88,6 @@ $("#install-validation").click(function() {
                 }).done(function(data) {
                     // On est dans le done, tout est ok
                     // la requête est passée
-                    $('#rclone_token').modal('hide');
                     console.log("result " + data);
                 }).fail(function() {
                     console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');

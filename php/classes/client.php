@@ -35,7 +35,7 @@ class client
         $log->writelog("credential " . $this->client, 'DEBUG');
 
         $commande =
-            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh credential "' . $this->client . '" "' . $secret . '" ';
+            __DIR__ . '/../../scripts/manage_service.sh credential "' . $this->client . '" "' . $secret . '" ';
         $log->writelog("Lancé", "DEBUG");
         $log->writelog("Commande : " . $commande, "DEBUG");
         shell_exec($commande);
@@ -52,7 +52,7 @@ class client
         $log->writelog("token " . $this->client, 'DEBUG');
 
         $commande =
-            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh createtoken "' . $this->token . '" "' . $drive . '" "' . $drivename . '" ';
+            __DIR__ . '/../../scripts/manage_service.sh createtoken "' . $this->token . '" "' . $drive . '" "' . $drivename . '" ';
         $log->writelog("Lancé", "DEBUG");
         $log->writelog("Commande : " . $commande, "DEBUG");
         shell_exec($commande);
