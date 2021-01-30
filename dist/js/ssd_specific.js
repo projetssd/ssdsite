@@ -7,6 +7,7 @@ ne s'éxécute que quand la page est totalement chargée
 
 function test_etat() {
     $(".divappli").each(function () {
+        
         let appli = $(this).attr('data-appli');
         if ($("#status-" + appli).html() === "Installation...") {
             console.log('Appli en cours d install');
@@ -64,14 +65,18 @@ function test_etat() {
 }
 
 $(document).ready(function () {
+    // etat des vignettes d'appli
+    test_etat();
 
     $(".install_outils").click(function () {
+        
         var appli = $(this).attr('data-appli');
+        console.log('install outils ' + appli);
         var desc = $("#desc-" + appli).html();
-        console.log('affiche' + desc);
+        //console.log('affiche' + desc);
         $('#modalOutils').modal('show');
         $("#description").css({"margin-left": "15px", "font-family": "Verdana", "margin-right": "15px"});
-        $("#description").html(desc);
+        //$("#description").html(desc);
         $("#outils").html(appli);
         $("#outils_install").attr('data-outils', appli);
     });
@@ -500,9 +505,7 @@ $(document).ready(function () {
     affiche_infos_ajax("ajax/disque.php", "free-disk");
 
 
-    // etat des vignettes d'appli
 
-    test_etat();
     // on met à blanc les valeurs
     $("#subdomain").val('');
     $("#myCheck").prop("checked", false);

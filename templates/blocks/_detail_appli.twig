@@ -1,4 +1,4 @@
-<div class="col-lg-3 col-md-6" divappli {% if not MYAPPLI.installed %}div-uninstalled {% endif %}" id="div-{{ MYAPPLI.display_name }}" data-appli="{{ MYAPPLI.display_name }}" data-installed="{% if MYAPPLI.installed %}1{% else %}0{% endif %}">
+<div class="col-lg-3 col-md-6 divappli"  {% if not MYAPPLI.installed %}div-uninstalled {% endif %}" id="div-{{ MYAPPLI.display_name }}" data-appli="{{ MYAPPLI.display_name }}" data-installed="{% if MYAPPLI.installed %}1{% else %}0{% endif %}">
     <div class="card">
         <div class="card-body user-block">
             <img class="img-circle img-bordered-sm" id="logo-{{ MYAPPLI.display_name }}" alt="{{ MYAPPLI.display_name }}"
@@ -7,10 +7,9 @@
             </h4>
             <span class="description" id="version-{{ MYAPPLI.display_name }}"></span>
             
-            {# <p class="card-text m-t-20">With supporting text below as a natural lead-in to
+            <p class="card-text m-t-20">With supporting text below as a natural lead-in to
                 additional
-                content.</p> #}
-                
+                content.</p> 
             <div>
                 <div class="btn-group">
                     <button type="button" class="btn btn-light dropdown-toggle"
@@ -18,8 +17,9 @@
                         <i class="ti-settings"></i>
                     </button>
                     <div class="dropdown-menu animated flipInX">
-                        <a class="dropdown-item" href="javascript:void(0)">Redémarrer</a>
-                        <a class="dropdown-item" href="javascript:void(0)">Arrêter</a>
+                        <a class="dropdown-item" id="texte-bouton-restart-{{ MYAPPLI.display_name }}" href="javascript:void(0)">Redémarrer</a>
+                        <a class="dropdown-item start-stop-button-{{ MYAPPLI.display_name }}" href="javascript:void(0)" data-appli="{{ MYAPPLI.display_name }}" id="stop-{{ MYAPPLI.display_name }}">Arrêter</a>
+
                         <a class="dropdown-item" href="javascript:void(0)">Sauvegarder</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="javascript:void(0)">Configurer</a>
