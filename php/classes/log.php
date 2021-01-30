@@ -72,19 +72,27 @@ class log
             // on ne prend pas les logs qui commencent par  ssdsite
             if ((substr($val, 0, 1) !== '.') && (substr($val, 0, 7) !== 'ssdsite'))
             {
-                $temp        = explode('.', $val);
-                $tabexplode  = explode('-', $temp[0]);
-                $date        = new DateTime($tabexplode[0] . " " . $tabexplode[1]);
-                $dateformat  = $date->format('d/m/Y');
-                $heureformat = $date->format("H:i:s");
-                $retour[]    = array(
-                    "nomfichier" => $val,
-                    "date"       => $dateformat,
-                    "heure"      => $heureformat,
-                    "action"     => $tabexplode[2],
-                    "appli"      => $tabexplode[3]
-                );
-                $current_file++;
+                try
+                {
+                    $temp        = explode('.', $val);
+                    $tabexplode  = explode('-', $temp[0]);
+                    $date        = new DateTime($tabexplode[0] . " " . $tabexplode[1]);
+                    $dateformat  = $date->format('d/m/Y');
+                    $heureformat = $date->format("H:i:s");
+                    $retour[]    = array(
+                        "nomfichier" => $val,
+                        "date"       => $dateformat,
+                        "heure"      => $heureformat,
+                        "action"     => $tabexplode[2],
+                        "appli"      => $tabexplode[3]
+                    );
+                    $current_file++;
+                }
+                catch (Exception $e)
+                {
+                    // on n'arrive pas à calculer la date
+                    ;
+                }
                 if ($current_file >= $max_files)
                 {
                     // on s'arrête là
