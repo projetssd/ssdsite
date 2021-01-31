@@ -257,6 +257,7 @@ fi
 
 function uninstall() {
   log_applicatif ${1}
+  writelog_appli "Désinstallation"
 
   ansible-vault decrypt "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
   DOMAIN=$(grep domain "${CONFDIR}/variables/account.yml" | cut -d : -f2 | tr -d ' ')
@@ -434,7 +435,12 @@ function goauth()
 # Variables d'environnement
 DIRNAME=$(dirname $0)
 export PATH="$HOME/.local/bin:$PATH"
-source /opt/seedbox-compose/profile.sh
+if [[ -f "/opt/seedbox-compose/profile.sh" ]]; then
+  source /opt/seedbox-compose/profile.sh
+else  
+  export CONFDIR=/opt/seedbox
+fi
+
 
 writelog "Lancement du script" "DEBUG"
 ACTION=${1}

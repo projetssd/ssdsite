@@ -5,8 +5,7 @@ setlocale(LC_ALL, $locale);
 putenv('LC_ALL='.$locale);
 $data = trim(shell_exec('who -b'));
 $uptime = explode(' ', $data);
-$uptime = $uptime[2].' '.$uptime[3];
-
+$uptime = $uptime[3].' '.$uptime[4];
 $newdate = str_replace("-","",$uptime);
 
 $date = new DateTime($newdate);

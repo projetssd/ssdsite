@@ -1,8 +1,22 @@
-.post {
-  height: 100px;
+.user-block {
+    float: left;
+    margin-bottom: 15px;
+    width: 100%;
 }
-
-.post-hidden {
-  display: none;
+.img-bordered-sm {
+    border: 2px solid #adb5bd;
+    padding: 2px;
 }
-
+.img-circle {
+    border-radius: 50%;
+}
+.user-block img {
+    float: right;
+    height: 40px;
+    width: 40px;
+}
+.user-block .description {
+    color: #6c757d;
+    font-size: 13px;
+    margin-top: -3px;
+}

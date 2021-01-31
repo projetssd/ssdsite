@@ -1,12 +1,15 @@
 /* global $ */
 
 function refresh_logs() {
+    $(".div_detail_log").hide();
     $.ajax({
         url: "ajax/get_logs.php",
         dataType: "json"
     }).done(function(data) {
         $.each(data, function(i, item) {
-            $("#detail_log_" + i).attr('data-logfile', item.nomfichier).html(item.action + " - " + item.appli)
+            $("#div_log_" + i).show();
+            $("#a_detail_log_" + i).attr('data-logfile', item.nomfichier);
+            $("#detail_log_" + i).html(item.action + " - " + item.appli);
             $("#date_log_" + i).html('Le ' + item.date + " à " + item.heure);
             $("#div_log_" + i).show();
         });

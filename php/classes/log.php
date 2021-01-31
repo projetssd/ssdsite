@@ -56,7 +56,7 @@ class log
      * @throws Exception
      * Va chercher les max_files derniers fichiers de logs
      */
-    public function get_logs($max_files = 5)
+    public function get_logs($max_files = 15)
     {
         $current_file = 0;
         // on prend les fichiers par ordre alpha inverse
@@ -72,19 +72,28 @@ class log
             // on ne prend pas les logs qui commencent par  ssdsite
             if ((substr($val, 0, 1) !== '.') && (substr($val, 0, 7) !== 'ssdsite'))
             {
-                $temp        = explode('.', $val);
-                $tabexplode  = explode('-', $temp[0]);
-                $date        = new DateTime($tabexplode[0] . " " . $tabexplode[1]);
-                $dateformat  = $date->format('d/m/Y');
-                $heureformat = $date->format("H:i:s");
-                $retour[]    = array(
-                    "nomfichier" => $val,
-                    "date"       => $dateformat,
-                    "heure"      => $heureformat,
-                    "action"     => $tabexplode[2],
-                    "appli"      => $tabexplode[3]
-                );
-                $current_file++;
+                try
+                {
+                    $temp        = explode('.', $val);
+                    $tabexplode  = explode('-', $temp[0]);
+                    $date        = new DateTime($tabexplode[0] . " " . $tabexplode[1]);
+                    $dateformat  = $date->format('d/m/Y');
+                    $heureformat = $date->format("H:i:s");
+                    $retour[]    = array(
+                        "nomfichier" => $val,
+                        "nomcourt"   => $temp[1],
+                        "date"       => $dateformat,
+                        "heure"      => $heureformat,
+                        "action"     => $tabexplode[2],
+                        "appli"      => $tabexplode[3]
+                    );
+                    $current_file++;
+                }
+                catch (Exception $e)
+                {
+                    // on n'arrive pas à calculer la date
+                    ;
+                }
                 if ($current_file >= $max_files)
                 {
                     // on s'arrête là

@@ -1,3 +1,35 @@
+<li>
+    <div class="drop-title bg-primary text-white">
+        <h4 class="m-b-0 m-t-5">Notifications</h4>
+    </div>
+</li>
+<li>
+    <div class="message-center notifications">
+        <!-- Message -->
+        {% for i in 0..15 %}
+        <div class="div_detail_log" id="div_log_{{ i }}">
+        <a href="javascript:void(0)" id="a_detail_log_{{ i }}" class="message-item link_detail_log" data-logfile="">
+            <span class="btn btn-success btn-circle"><i
+                    class="ti-calendar"></i></span>
+            <span class="mail-contnet">
+                <h5 class="message-title" id="detail_log_{{ i }}"></h5>  
+                <span class="time" id="date_log_{{ i }}"></span>
+            </span>
+        </a>
+        </div>
+        {% endfor %}
+       
+       
+    </div>
+</li>
+<li>
+    <a class="nav-link text-center m-b-5" href="javascript:void(0);"> <strong>Check
+            all notifications</strong> <i class="fa fa-angle-right"></i> </a>
+</li>
+                                    
+{# ancien template 
+
+
 <!-- Dernieres activites -->
 <div class="card card-primary">
     <div class="card-header">
@@ -16,3 +48,4 @@
     <!-- /.card-body -->
 </div>
 <!-- /.card -->
+#}
