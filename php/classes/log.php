@@ -81,6 +81,7 @@ class log
                     $heureformat = $date->format("H:i:s");
                     $retour[]    = array(
                         "nomfichier" => $val,
+                        "nomcourt"   => $temp[1],
                         "date"       => $dateformat,
                         "heure"      => $heureformat,
                         "action"     => $tabexplode[2],

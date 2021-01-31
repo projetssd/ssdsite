@@ -6,7 +6,9 @@ function refresh_logs() {
         dataType: "json"
     }).done(function(data) {
         $.each(data, function(i, item) {
-            $("#detail_log_" + i).attr('data-logfile', item.nomfichier).html(item.action + " - " + item.appli)
+            console.log(item.nomfichier);
+            $("#a_detail_log_" + i).attr('data-logfile', item.nomfichier);
+            $("#detail_log_" + i).html(item.action + " - " + item.appli);
             $("#date_log_" + i).html('Le ' + item.date + " à " + item.heure);
             $("#div_log_" + i).show();
         });
