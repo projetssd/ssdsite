@@ -257,6 +257,7 @@ fi
 
 function uninstall() {
   log_applicatif ${1}
+  wirtelog_appli "Désinstallation"
 
   ansible-vault decrypt "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
   DOMAIN=$(grep domain "${CONFDIR}/variables/account.yml" | cut -d : -f2 | tr -d ' ')
