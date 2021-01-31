@@ -435,7 +435,12 @@ function goauth()
 # Variables d'environnement
 DIRNAME=$(dirname $0)
 export PATH="$HOME/.local/bin:$PATH"
-source /opt/seedbox-compose/profile.sh
+if [[ -f "/opt/seedbox-compose/profile.sh" ]]; then
+  source /opt/seedbox-compose/profile.sh
+else  
+  export CONDFDIR=/opt/seedbox
+fi
+
 
 writelog "Lancement du script" "DEBUG"
 ACTION=${1}
