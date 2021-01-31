@@ -76,7 +76,7 @@ $(document).ready(function () {
         //console.log('affiche' + desc);
         $('#modalOutils').modal('show');
         $("#description").css({"margin-left": "15px", "font-family": "Verdana", "margin-right": "15px"});
-        //$("#description").html(desc);
+        $("#description").html(desc);
         $("#outils").html(appli);
         $("#outils_install").attr('data-outils', appli);
     });
