@@ -56,7 +56,7 @@ class log
      * @throws Exception
      * Va chercher les max_files derniers fichiers de logs
      */
-    public function get_logs($max_files = 5)
+    public function get_logs($max_files = 15)
     {
         $current_file = 0;
         // on prend les fichiers par ordre alpha inverse
