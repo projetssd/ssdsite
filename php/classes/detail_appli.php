@@ -5,6 +5,7 @@ $tableau_appli = array(
     "all" => ["port" => 9999],
     // applis normales
     'mellow' =>  ["port" => 5060],
+    'oauth' =>  ["port" => 80],
     'filerun' =>  ["port" => 80],
     'duplicati' =>  ["port" => 8200],
     'codif' =>  ["port" => 8443],

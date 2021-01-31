@@ -5,30 +5,33 @@ ne s'éxécute que quand la page est totalement chargée
 
 /*global toastr */
 
-function test_oauth() {
-        let appli = "oauth";
-            $.ajax({
-                url: "ajax/etat_service.php?service=" + appli,
-                dataType: "json"
-            }).done(function (data) {
-                // le "data" est le retour de la page etat_service
-                // c'est un json prêt à être exploité, de la forme
-                // {"running":true,"installed":true}
-
-                let running = data.running;
-                let installed = data.installed;
-                if (installed == 0) {
-                    if (running) {
-                        console.log('oauth est installé');
-                    }else{
-                        $('#modalPoll').modal('hide');
-                        $('#modalOauth').modal('show');
-                        toastr.success("Installation préalable de " + appli + " indispensable. Relancer ensuite l\'install de l\'appli");
-                    }
+function oauth() {
+            $(".oauth_install").click(function () {
+                if ($("#form_install_oauth").valid()) {
+                    var clientoauth = $("#clientoauth").val();
+                    console.log('clientoauth a la valeur ' + clientoauth);
+                    var secretoauth = $("#secretoauth").val();
+                    console.log('secretoauth a la valeur ' + secretoauth);
+                    var mailoauth = $("#mailoauth").val();
+                    console.log('mailoauth a la valeur ' + mailoauth);
+                    $('#modalOauth').modal('hide');
+                    toastr.success("Installation de oauth en cours");
+                    toastr.warning("Déconnection du site imminente, nettoyer l'historique une fois l'installation terminée");
+                    $.ajax({
+                        url: "ajax/install_oauth.php",
+                        method: "POST",
+                        data: {clientoauth: clientoauth, secretoauth: secretoauth, mailoauth: mailoauth}
+                    }).done(function (data) {
+                        console.log("result " + data);
+                        toastr.success("Installation de oauth terminée");
+                    }).fail(function () {
+                        console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+                    });
+                } else {
+                    toastr.warning('Merci de VERIFIER la saisie des champs');
+                    console.log('Au moins un des champs est VIDE !')
                 }
-             }).fail(function () {
-                console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
-           });
+            });
 }
 
 function test_etat() {
@@ -146,33 +149,8 @@ $(document).ready(function () {
             console.log('outils n est pas vide');
             $('#modalOutils').modal('hide');
             $('#modalOauth').modal('show');
+            oauth();
 
-            $(".oauth_install").click(function () {
-                if ($("#form_install_oauth").valid()) {
-                    var clientoauth = $("#clientoauth").val();
-                    console.log('clientoauth a la valeur ' + clientoauth);
-                    var secretoauth = $("#secretoauth").val();
-                    console.log('secretoauth a la valeur ' + secretoauth);
-                    var mailoauth = $("#mailoauth").val();
-                    console.log('mailoauth a la valeur ' + mailoauth);
-                    $('#modalOauth').modal('hide');
-                    toastr.success("Installation de " + outils + " en cours");
-                    toastr.warning("Déconnection du site imminente, nettoyer l'historique une fois l'installation terminée");
-                    $.ajax({
-                        url: "ajax/install_oauth.php",
-                        method: "POST",
-                        data: {clientoauth: clientoauth, secretoauth: secretoauth, mailoauth: mailoauth}
-                    }).done(function (data) {
-                        console.log("result " + data);
-                        toastr.success("Installation de " + outils + " terminée");
-                    }).fail(function () {
-                        console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
-                    });
-                } else {
-                    toastr.warning('Merci de VERIFIER la saisie des champs');
-                    console.log('Au moins un des champs est VIDE !')
-                }
-            });
         } else if (outils == "cloudflare") {
             console.log('outils n est pas vide');
             $('#modalOutils').modal('hide');
@@ -339,8 +317,21 @@ $(document).ready(function () {
         $("#validation_install_appli").attr('data-authentification', authentification);
 
         if (authentification == "oauth") {
-            test_oauth();
-            return;
+        let appli = "oauth";
+            $.ajax({
+                url: "ajax/etat_service.php?service=" + appli,
+                dataType: "json"
+            }).done(function (data) {
+                let installed = data.installed;
+                if (installed == false) {
+                        $('#modalPoll').modal('hide');
+                        $('#modalOauth').modal('show');
+                        oauth();
+                        toastr.success("Installation préalable de " + appli + " indispensable. Relancer ensuite l\'install de l\'appli");
+                }
+             }).fail(function () {
+                console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+           });
         }
 
         if (appli == "plex") {

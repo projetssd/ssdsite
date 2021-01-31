@@ -19,7 +19,6 @@ class service
      * @var string Sous domain de l'application
      */
     public $subdomain;
-
     /**
      * @var string Ligne de commande pour installer
      */
@@ -36,7 +35,6 @@ class service
      * @var string Ligne de commande pour arrêter une appli
      */
     public $command_stop = '';
-
     /**
      * @var string Ligne de commande pour démarrer
      */
@@ -544,7 +542,7 @@ class service
     {
         global $debugbar;
         $array_cache = array(
-            'collabora', 'oauth', 'cloudproxy', 'flaresolverr', 'office',);
+            'collabora', 'cloudproxy', 'flaresolverr', 'office',);
         $retour      = array();
         $listfiles   = scandir($this->status_file);
         foreach ($listfiles as $file)
