@@ -5,6 +5,32 @@ ne s'éxécute que quand la page est totalement chargée
 
 /*global toastr */
 
+function test_oauth() {
+        let appli = "oauth";
+            $.ajax({
+                url: "ajax/etat_service.php?service=" + appli,
+                dataType: "json"
+            }).done(function (data) {
+                // le "data" est le retour de la page etat_service
+                // c'est un json prêt à être exploité, de la forme
+                // {"running":true,"installed":true}
+
+                let running = data.running;
+                let installed = data.installed;
+                if (installed == 0) {
+                    if (running) {
+                        console.log('oauth est installé');
+                    }else{
+                        $('#modalPoll').modal('hide');
+                        $('#modalOauth').modal('show');
+                        toastr.success("Installation préalable de " + appli + " indispensable. Relancer ensuite l\'install de l\'appli");
+                    }
+                }
+             }).fail(function () {
+                console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+           });
+}
+
 function test_etat() {
     $(".divappli").each(function () {
         
@@ -206,6 +232,14 @@ $(document).ready(function () {
         }
     });
 
+    $(".auth_install").click(function () {
+        if ($('#appli-auth').is(':checked')) {
+            $("#choix-auth").show();
+        } else {
+            $("#choix-auth").hide();
+        }
+    });
+
     $("#affiche-install-appli").click(function () {
         console.log('affiche install');
         $('#modal_install_applis').modal('show');
@@ -302,13 +336,16 @@ $(document).ready(function () {
         console.log("Appli appelée " + appli)
         // on va considérer que le texte du bouton est ok
         // a voir si on refait un appel ajax pour vérifier 
-        if ($("#subdomain").val() !== "") {
-            console.log('Subdomain n est pas vide');
-            var subdomain = $("#subdomain").val();
-            console.log('Subdomain a la valeur ' + subdomain);
-            $("#validation_install_appli").attr('data-subdomain', subdomain);
-        } else {
-            console.log('Subdomain est VIDE !');
+        var subdomain = $("#subdomain").val();
+        console.log('Subdomain a la valeur ' + subdomain);
+        $("#validation_install_appli").attr('data-subdomain', subdomain);
+        var authentification = $("#authentification").val();
+        console.log('Authentification a la valeur ' + authentification);
+        $("#validation_install_appli").attr('data-authentification', authentification);
+
+        if (authentification == "oauth") {
+            test_oauth();
+            return;
         }
 
         if (appli == "plex") {
@@ -352,7 +389,7 @@ $(document).ready(function () {
         //$(".overlay").show();
 
         $.ajax({
-            url: "ajax/install_service.php?service=" + appli + "&subdomain=" + subdomain
+            url: "ajax/install_service.php?service=" + appli + "&subdomain=" + subdomain + "&authentification=" + authentification
         }).done(function (data) {
             // On est dans le done, tout est ok
             // la requête est passée
@@ -508,7 +545,19 @@ $(document).ready(function () {
 
     // on met à blanc les valeurs
     $("#subdomain").val('');
+    $("#authentification").val('basique');
+    $("#plexident").val('');
+    $("#plexpass").val('');
+    $("#token").val('');
+    $("#drive").val('');
+    $("#drivename").val('');
+    $("#emailcloud").val('');
+    $("#apicloud").val('');
+    $("#clientoauth").val('');
+    $("#secretoauth").val('');
+    $("#mailoauth").val('');
     $("#myCheck").prop("checked", false);
+    $("#appli-auth").prop("checked", false);
     // on va supprimer les vieux fichiers de logs
     $.ajax({
         url: "ajax/delete_old_logs.php",

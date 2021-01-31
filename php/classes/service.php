@@ -391,13 +391,13 @@ class service
      * @param $subdomain string Sous domaine de l'application
      * @return bool always true
      */
-    public function install($subdomain)
+    public function install($subdomain, $authentification)
     {
         /* la commande d'install se termine par un & et donc rend la main tout de suite
         impossible de catcher la sortie
         on ne stocke donc aucune info
         les infos seront lues dans le défilement des logs */
-        $this->command_install .= " " . $subdomain;
+        $this->command_install .= " " . $subdomain . " " . $authentification;
         $log                   = new log;
         $log->writelog("-----------------", 'DEBUG');
         $log->writelog("Installation " . $this->display_name, 'DEBUG');
