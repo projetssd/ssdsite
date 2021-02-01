@@ -34,12 +34,15 @@ $log->writelogappli("Suppression des caches","gui","update");
 $path_to_delete = array(
     __DIR__ . '/../cache',
     __DIR__ . '/../dist/js/min',
-    __DIR__ . '/../dist/css/min'
-    );
-foreach($path_to_delete as $path)
+    //__DIR__ . '/../dist/css/min'
+);
+foreach ($path_to_delete as $path)
 {
     $commande = 'rm -rf ' . $path . '/*';
-    $log->writelogappli(shell_exec('rm -rf ' . $path . '/*'),"gui","update");
+    $log->writelogappli(shell_exec('rm -rf ' . $path . '/*'), "gui", "update");
 }
+
+$commande = 'rm -f ' . __DIR__ . '/../dist/css/min/*css';
+$log->writelogappli(shell_exec($commande), "gui", "update");
 
 echo json_encode(array("status" => 1));
