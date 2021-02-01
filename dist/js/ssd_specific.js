@@ -321,18 +321,20 @@ $(document).ready(function () {
         console.log('Authentification a la valeur ' + authentification);
         $("#validation_install_appli").attr('data-authentification', authentification);
 
-        if (authentification == "oauth") {
+        if ($("#authentification ").val() == "oauth") {
         let appli = "oauth";
             $.ajax({
                 url: "ajax/etat_service.php?service=" + appli,
                 dataType: "json"
-            }).done(function (data) {
+             }).done(function (data) {
                 let installed = data.installed;
-                if (installed == false) {
+                if (installed == true) {
+                        toastr.success("oauth deja installé");
+                }else{
                         $('#modalPoll').modal('hide');
                         $('#modalOauth').modal('show');
                         oauth();
-                        toastr.success("Installation préalable de " + appli + " indispensable. Relancer ensuite l\'install de l\'appli");
+                        toastr.success("Installation préalable de " + appli + " indispensable. Relancer ensuite l\'install de l\'appli");                
                 }
              }).fail(function () {
                 console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
