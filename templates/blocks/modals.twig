@@ -12,22 +12,18 @@
                     </button>
             </div>
             <!--Body-->
-            <div id="description-appli"></div>
+            <div id="description-appli" style="margin:15px;"></div>
             <div class="modal-body post">
-                <!-- Checkbox -->
-                <div class="checkbox">
-                    <input type="checkbox" id="myCheck" class="check_install"> Sous Domaines Personalisés
+                <div id="plex-appli" style="display:none">
+                    {% include "blocks/modal_install_plex.twig" %}
                 </div>
-                <!-- Checkbox -->
                 <div>
-                    <p></p>
-                    <p id="text" style="display:none">Nom du sous domaine</p>
-                    <input type="text" id="subdomain" class="form-control" style="display:none" placeholder="Enter ..."></input>
+                    {% include "blocks/modal_authentification.twig" %}
                 </div>
             </div>
             <!--Footer-->
             <div class="modal-footer justify-content-center">
-                <button type="submit" id="validation_install_appli" class="btn btn-success bouton-install" data-appli="" data-subdomain="">Installer</button>
+                <button type="submit" id="validation_install_appli" class="btn btn-success bouton-install" data-appli="" data-subdomain="" data-authentification="">Installer</button>
             </div>
         </div>
     </div>
@@ -149,7 +145,7 @@
                         <span aria-hidden="true" class="white-text">×</span>
                 </button>
             </div>
-            <div id="description"></div>
+            <div id="description" style="margin:15px;"></div>
             <!--Body-->
             <!--Footer-->
             <div class="modal-footer justify-content-center">

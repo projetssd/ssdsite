@@ -14,27 +14,30 @@ $applis = $service->get_all($tab_installed);
 
 // javascripts  utilisés
 $js = array(
-    'https://code.jquery.com/jquery-3.5.1.min.js',
-    'bootstrap.bundle.min.js',
-    'adminlte.min.js',
+    'jquery.min.js',
+    'popper.min.js',
+    'bootstrap.min.js',
+    'app.min.js',
+    'app.init.horizontal-fullwidth.js',
+    'perfect-scrollbar.jquery.min.js',
+    'sparkline.js',
+    'waves.js',
+    'sidebarmenu.js',
+    'custom.min.js',
     'toastr.min.js',
-    'sweetalert2.min.js',
+    'toastr-init.js',
     'ssd_specific.js',
-    'https://cdn.jsdelivr.net/npm/jquery-validation@1.19.2/dist/jquery.validate.js',
-    'https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/localization/messages_fr.min.js',
-    'changetheme.js',
     'navigation_modal.js',
     'get_logs.js',
-    'test_git.js'
+    'test_git.js',
+    'https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.js'
 );
 
 // css utilisés
 $css = array(
-    "all.min.css",
-    "https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css",
-    "adminlte.min.css",
-    "toastr.min.css",
-    "ssd.css",);
+    "style.min.css",
+    "style.css",
+    "toastr.css",);
 
 
 $asset_css = '';

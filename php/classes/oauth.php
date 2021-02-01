@@ -23,14 +23,14 @@ class oauth
      * @param string $secretoauth
      * @param string $mailoauth
      */
-    function function_oauth($secretoauth, $mailoauth)
+    function goauth($secretoauth, $mailoauth)
     {
         $log = new log;
         $log->writelog("-----------------", 'DEBUG');
         $log->writelog("oauth" . $this->clientoauth, 'DEBUG');
 
         $commande =
-            'sudo ' . __DIR__ . '/../../scripts/manage_service.sh oauth "' . $this->clientoauth . '" "' . $secretoauth . '" "' . $mailoauth . '" ';
+            __DIR__ . '/../../scripts/manage_service.sh goauth "' . $this->clientoauth . '" "' . $secretoauth . '" "' . $mailoauth . '" ';
         $log->writelog("Lancé", "DEBUG");
         $log->writelog("Commande : " . $commande, "DEBUG");
         shell_exec($commande);

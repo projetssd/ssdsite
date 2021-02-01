@@ -5,8 +5,35 @@ ne s'éxécute que quand la page est totalement chargée
 
 /*global toastr */
 
+function test_oauth() {
+        let appli = "oauth";
+            $.ajax({
+                url: "ajax/etat_service.php?service=" + appli,
+                dataType: "json"
+            }).done(function (data) {
+                // le "data" est le retour de la page etat_service
+                // c'est un json prêt à être exploité, de la forme
+                // {"running":true,"installed":true}
+
+                let running = data.running;
+                let installed = data.installed;
+                if (installed == 0) {
+                    if (running) {
+                        console.log('oauth est installé');
+                    }else{
+                        $('#modalPoll').modal('hide');
+                        $('#modalOauth').modal('show');
+                        toastr.success("Installation préalable de " + appli + " indispensable. Relancer ensuite l\'install de l\'appli");
+                    }
+                }
+             }).fail(function () {
+                console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+           });
+}
+
 function test_etat() {
     $(".divappli").each(function () {
+        
         let appli = $(this).attr('data-appli');
         if ($("#status-" + appli).html() === "Installation...") {
             console.log('Appli en cours d install');
@@ -64,13 +91,17 @@ function test_etat() {
 }
 
 $(document).ready(function () {
+    // etat des vignettes d'appli
+    test_etat();
 
     $(".install_outils").click(function () {
+        
         var appli = $(this).attr('data-appli');
+        console.log('install outils ' + appli);
         var desc = $("#desc-" + appli).html();
         console.log('affiche' + desc);
         $('#modalOutils').modal('show');
-        $("#description").css({"margin-left": "15px", "font-family": "Verdana", "margin-right": "15px"});
+        //$("#description").css({"margin-left": "15px", "font-family": "Verdana", "margin-right": "15px"});
         $("#description").html(desc);
         $("#outils").html(appli);
         $("#outils_install").attr('data-outils', appli);
@@ -96,6 +127,17 @@ $(document).ready(function () {
                 required: true
             },
             apicloud: {
+                required: true
+            },
+        }
+    });
+
+    $("#form_modal_plex").validate({
+        rules: {
+            plexident: {
+                required: true
+            },
+            plexpass: {
                 required: true
             },
         }
@@ -190,6 +232,14 @@ $(document).ready(function () {
         }
     });
 
+    $(".auth_install").click(function () {
+        if ($('#appli-auth').is(':checked')) {
+            $("#choix-auth").show();
+        } else {
+            $("#choix-auth").hide();
+        }
+    });
+
     $("#affiche-install-appli").click(function () {
         console.log('affiche install');
         $('#modal_install_applis').modal('show');
@@ -241,11 +291,16 @@ $(document).ready(function () {
         let appli = $(this).attr("data-appli");
         var desc = $("#desc-" + appli).html();
         console.log('affiche' + desc);
-        $("#description-appli").css({"margin-left": "15px", "font-family": "Verdana", "margin-right": "15px"});
+        //$("#description-appli").css({"margin-left": "15px", "font-family": "Verdana", "margin-right": "15px"});
         $("#description-appli").html(desc);
         $("#nomappliencours").html(appli);
         $("#validation_install_appli").attr('data-appli', appli);
         $("#subdomain").val(appli);
+        if (appli == "plex") {
+            $("#plex-appli").show();
+        }else{
+            $("#plex-appli").hide();
+        }
         $('#modal_install_applis').modal('hide');
         $('#modalPoll').modal('show');
     });
@@ -281,14 +336,49 @@ $(document).ready(function () {
         console.log("Appli appelée " + appli)
         // on va considérer que le texte du bouton est ok
         // a voir si on refait un appel ajax pour vérifier 
-        if ($("#subdomain").val() !== "") {
-            console.log('Subdomain n est pas vide');
-            var subdomain = $("#subdomain").val();
-            console.log('Subdomain a la valeur ' + subdomain);
-            $("#validation_install_appli").attr('data-subdomain', subdomain);
-        } else {
-            console.log('Subdomain est VIDE !');
+        var subdomain = $("#subdomain").val();
+        console.log('Subdomain a la valeur ' + subdomain);
+        $("#validation_install_appli").attr('data-subdomain', subdomain);
+        var authentification = $("#authentification").val();
+        console.log('Authentification a la valeur ' + authentification);
+        $("#validation_install_appli").attr('data-authentification', authentification);
+
+        if (authentification == "oauth") {
+            test_oauth();
+            return;
         }
+
+        if (appli == "plex") {
+            if ($("#form_modal_plex").valid()) {
+                console.log('plexident n est pas vide');
+                var plexident = $("#plexident").val();
+                console.log('id plex a la valeur ' + plexident);
+                console.log('plexpass n est pas vide');
+                var plexpass = $("#plexpass").val();
+                console.log('pass plex a la valeur ' + plexpass);
+                    $.ajax({
+                        url: "ajax/install_plex.php",
+                        method: "POST",
+                        data: {plexident: plexident, plexpass: plexpass}
+
+                    }).done(function (data) {
+                        toastr.success("recuperation du token terminée");
+                        toastr.success("Poursuite de l installation Plex");
+                        console.log("result " + data);
+
+                    }).fail(function () {
+                        console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+                        toastr.warning("Erreur sur ajax");
+                        $("#status-" + appli).html("Erreur ajax");
+                    });
+
+            } else {
+                toastr.warning('Merci de VERIFIER la saisie des champs');
+                console.log('Au moins un des champs est VIDE !')
+                return;
+            }
+        }
+
         // on change le texte du bouton
         $("#status-" + appli).html("Installation...");
         // on lance un ajax qui va installer tout ça
@@ -297,8 +387,9 @@ $(document).ready(function () {
         toastr.success("Installation de " + appli + " commencée");
         console.log('Subdomain a ENCORE la valeur ' + subdomain);
         //$(".overlay").show();
+
         $.ajax({
-            url: "ajax/install_service.php?service=" + appli + "&subdomain=" + subdomain
+            url: "ajax/install_service.php?service=" + appli + "&subdomain=" + subdomain + "&authentification=" + authentification
         }).done(function (data) {
             // On est dans le done, tout est ok
             // la requête est passée
@@ -451,12 +542,22 @@ $(document).ready(function () {
     affiche_infos_ajax("ajax/disque.php", "free-disk");
 
 
-    // etat des vignettes d'appli
 
-    test_etat();
     // on met à blanc les valeurs
     $("#subdomain").val('');
+    $("#authentification").val('basique');
+    $("#plexident").val('');
+    $("#plexpass").val('');
+    $("#token").val('');
+    $("#drive").val('');
+    $("#drivename").val('');
+    $("#emailcloud").val('');
+    $("#apicloud").val('');
+    $("#clientoauth").val('');
+    $("#secretoauth").val('');
+    $("#mailoauth").val('');
     $("#myCheck").prop("checked", false);
+    $("#appli-auth").prop("checked", false);
     // on va supprimer les vieux fichiers de logs
     $.ajax({
         url: "ajax/delete_old_logs.php",
