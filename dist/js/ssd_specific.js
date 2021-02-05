@@ -27,11 +27,28 @@ function oauth() {
                     }).fail(function () {
                         console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
                     });
+
                 } else {
                     toastr.warning('Merci de VERIFIER la saisie des champs');
                     console.log('Au moins un des champs est VIDE !')
                 }
             });
+}
+
+function test_oauth() {
+        let appli = "oauth";
+            return $.ajax({
+                url: "ajax/etat_service.php?service=" + appli,
+                dataType: "json",
+            }).done(function (data) {
+                let installed = data.installed;
+                if (installed == false) {
+                    toastr.warning("Oauth non installé");
+                    $("#champsoauth").prop('disabled', true)
+                }
+             }).fail(function () {
+                console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+           });
 }
 
 function test_etat() {
@@ -279,6 +296,7 @@ $(document).ready(function () {
         }else{
             $("#plex-appli").hide();
         }
+        test_oauth();
         $('#modal_install_applis').modal('hide');
         $('#modalPoll').modal('show');
     });
@@ -320,26 +338,6 @@ $(document).ready(function () {
         var authentification = $("#authentification").val();
         console.log('Authentification a la valeur ' + authentification);
         $("#validation_install_appli").attr('data-authentification', authentification);
-
-        if ($("#authentification ").val() == "oauth") {
-        let appli = "oauth";
-            $.ajax({
-                url: "ajax/etat_service.php?service=" + appli,
-                dataType: "json"
-             }).done(function (data) {
-                let installed = data.installed;
-                if (installed == true) {
-                        toastr.success("oauth deja installé");
-                }else{
-                        $('#modalPoll').modal('hide');
-                        $('#modalOauth').modal('show');
-                        oauth();
-                        toastr.success("Installation préalable de " + appli + " indispensable. Relancer ensuite l\'install de l\'appli");                
-                }
-             }).fail(function () {
-                console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
-           });
-        }
 
         if (appli == "plex") {
             if ($("#form_modal_plex").valid()) {
