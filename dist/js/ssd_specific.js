@@ -51,6 +51,22 @@ function test_oauth() {
            });
 }
 
+function test_authelia() {
+        let appli = "authelia";
+            return $.ajax({
+                url: "ajax/etat_service.php?service=" + appli,
+                dataType: "json",
+            }).done(function (data) {
+                let installed = data.installed;
+                if (installed == false) {
+                    toastr.warning("Authelia non installé, uniquement par la cli");
+                    $("#champsauthelia").prop('disabled', true)
+                }
+             }).fail(function () {
+                console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+           });
+}
+
 function test_etat() {
     $(".divappli").each(function () {
         
@@ -297,6 +313,7 @@ $(document).ready(function () {
             $("#plex-appli").hide();
         }
         test_oauth();
+        test_authelia();
         $('#modal_install_applis').modal('hide');
         $('#modalPoll').modal('show');
     });
