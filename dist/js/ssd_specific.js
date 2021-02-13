@@ -67,6 +67,24 @@ function test_authelia() {
            });
 }
 
+function test_plex_autoscan() {
+        let appli = "plex_autoscan";
+            return $.ajax({
+                url: "ajax/etat_service.php?service=" + appli,
+                dataType: "json",
+            }).done(function (data) {
+                let installed = data.installed;
+                if (installed == true) {
+                   $("#fininstall").html(appli + " -> installé");
+                }else{
+                   $("#fininstall").html("plex_autoscan");
+                }
+             }).fail(function () {
+                console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+           });
+}
+
+
 function test_etat() {
     $(".divappli").each(function () {
         
@@ -132,6 +150,7 @@ function test_etat() {
 $(document).ready(function () {
     // etat des vignettes d'appli
     test_etat();
+    test_plex_autoscan();
 
     $(".install_outils").click(function () {
         
@@ -140,7 +159,6 @@ $(document).ready(function () {
         var desc = $("#desc-" + appli).html();
         console.log('affiche' + desc);
         $('#modalOutils').modal('show');
-        //$("#description").css({"margin-left": "15px", "font-family": "Verdana", "margin-right": "15px"});
         $("#description").html(desc);
         $("#outils").html(appli);
         $("#outils_install").attr('data-outils', appli);
@@ -187,7 +205,7 @@ $(document).ready(function () {
         console.log('outils a la valeur ' + outils);
 
         if (outils == "oauth") {
-            console.log('outils n est pas vide');
+            console.log('outils n\'est pas vide');
             $('#modalOutils').modal('hide');
             $('#modalOauth').modal('show');
             oauth();
@@ -224,6 +242,7 @@ $(document).ready(function () {
         } else {
             $('#modalOutils').modal('hide');
             toastr.success("Installation de " + outils + " en cours...")
+            //$("#fininstall").html(outils + " installé");
 
             $.ajax({
                 url: "ajax/install_options.php?outils=" + outils
@@ -537,6 +556,7 @@ $(document).ready(function () {
     /* fonction de refresh automatique  */
     window.setInterval(function () {
         test_etat();
+        test_plex_autoscan();
     }, 15000); // timer en ms
 
     function affiche_infos_ajax(ajaxpath, elementaafficher) {
