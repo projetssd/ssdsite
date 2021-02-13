@@ -91,6 +91,9 @@ function test_etat() {
                     $("#status-" + appli).html("Désinstaller").removeClass("btn-success").addClass("btn-warning");
                     $("#div-" + appli).removeClass('div-uninstalled').attr('data-installed', '1');
                     $(".start-stop-button-" + appli).show();
+                    var descriptif = $("#desc-" + appli).html();
+                    $("#descriptif-" + appli).html(descriptif);
+
                     // l'appli tourne, on va modifier les boutons si besoin
                     if (running) {
                         $("#texte-bouton-restart-" + appli).html("Redémarrer");
@@ -302,7 +305,6 @@ $(document).ready(function () {
         let appli = $(this).attr("data-appli");
         var desc = $("#desc-" + appli).html();
         console.log('affiche' + desc);
-        //$("#description-appli").css({"margin-left": "15px", "font-family": "Verdana", "margin-right": "15px"});
         $("#description-appli").html(desc);
         $("#nomappliencours").html(appli);
         $("#validation_install_appli").attr('data-appli', appli);
@@ -391,6 +393,7 @@ $(document).ready(function () {
         $("#status-" + appli).html("Installation...");
         // on lance un ajax qui va installer tout ça
         // là je ferme le modal, jusque là ca va et le modal "modalYT1" se lance
+
         $('#modalPoll').modal('hide');
         toastr.success("Installation de " + appli + " commencée");
         console.log('Subdomain a ENCORE la valeur ' + subdomain);
@@ -402,7 +405,7 @@ $(document).ready(function () {
             // On est dans le done, tout est ok
             // la requête est passée
             console.log("result " + data);
-            // on change le texte du bouton 
+            // on change le texte du bouton
             toastr.success("Installation de " + appli + " terminée");
             window.location.reload();
 
@@ -517,10 +520,12 @@ $(document).ready(function () {
         // on met la bonne image
         //$("#logo-" + appli).attr("src", "https://www.scriptseedboxdocker.com/wp-content/uploads/icones/" + appli + ".png");
         $("#logo-" + appli).attr("src", "ajax/affiche_image.php?appli=" + appli);
+
         $.ajax({
             url: "ajax/check_version.php?service=" + appli,
         }).done(function (data) {
             $("#version-" + appli).html(data);
+
         }).fail(function () {
             console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
             $("#version-".appli).html("erreur ajax");
