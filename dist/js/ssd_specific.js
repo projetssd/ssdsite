@@ -110,7 +110,29 @@ function test_etat() {
                     $("#div-" + appli).removeClass('div-uninstalled').attr('data-installed', '1');
                     $(".start-stop-button-" + appli).show();
                     var descriptif = $("#desc-" + appli).html();
-                    $("#descriptif-" + appli).html(descriptif);
+
+
+
+                    var maxLength = 300;
+
+                    $(".read-more").click(function(){
+                        $(this).siblings(".more-text").contents().unwrap();
+                        $(this).remove();
+                    });
+                    if($.trim(descriptif).length > maxLength){
+                        var newStr = descriptif.substring(0, maxLength);
+                        var removedStr = descriptif.substring(maxLength, $.trim(descriptif).length);
+                        $("#descriptif-" + appli).html(newStr);
+                        $(this).append(' <a href="javascript:void(0);" class="read-more">[...]</a>');
+                        $(this).append('<span class="more-text" style="display:none;">' + removedStr + '</span>');
+                    }
+                    else
+                    {
+                        $("#descriptif-" + appli).html(descriptif);
+                    }
+
+
+
 
                     // l'appli tourne, on va modifier les boutons si besoin
                     if (running) {
