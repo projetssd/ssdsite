@@ -67,21 +67,26 @@ function test_authelia() {
            });
 }
 
-function test_plex_autoscan() {
-        let appli = "plex_autoscan";
-            return $.ajax({
-                url: "ajax/etat_service.php?service=" + appli,
+function test_outils() {
+        var appli = ["plex_autoscan", "autoscan", "cloudplow", "crop"];
+        jQuery.each(appli, function(index, value) {
+        console.log(value);
+            $.ajax({
+                url: "ajax/etat_service.php?service=" + value,
                 dataType: "json",
             }).done(function (data) {
                 let installed = data.installed;
                 if (installed == true) {
-                   $("#fininstall").html(appli + " -> installé");
+                    $("#" + value).show();
+                    $("#" + value + "_trash").show();
                 }else{
-                   $("#fininstall").html("plex_autoscan");
+                    $("#" + value).hide();
+                    $("#" + value + "_trash").hide();
                 }
              }).fail(function () {
                 console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
            });
+        });
 }
 
 
@@ -150,7 +155,7 @@ function test_etat() {
 $(document).ready(function () {
     // etat des vignettes d'appli
     test_etat();
-    test_plex_autoscan();
+    test_outils();
 
     $(".install_outils").click(function () {
         
@@ -242,7 +247,6 @@ $(document).ready(function () {
         } else {
             $('#modalOutils').modal('hide');
             toastr.success("Installation de " + outils + " en cours...")
-            //$("#fininstall").html(outils + " installé");
 
             $.ajax({
                 url: "ajax/install_options.php?outils=" + outils
@@ -556,7 +560,7 @@ $(document).ready(function () {
     /* fonction de refresh automatique  */
     window.setInterval(function () {
         test_etat();
-        test_plex_autoscan();
+        test_outils();
     }, 15000); // timer en ms
 
     function affiche_infos_ajax(ajaxpath, elementaafficher) {
