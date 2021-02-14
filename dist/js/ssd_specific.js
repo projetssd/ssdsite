@@ -116,29 +116,32 @@ function test_etat() {
                     $("#status-" + appli).html("Désinstaller").removeClass("btn-success").addClass("btn-warning");
                     $("#div-" + appli).removeClass('div-uninstalled').attr('data-installed', '1');
                     $(".start-stop-button-" + appli).show();
-                    var descriptif = $("#desc-" + appli).html();
-
-                    var maxLength = 10;     
-
-
-                    if($.trim(descriptif).length > maxLength){
-                        var newStr = descriptif.substring(0, maxLength);
-                        var removedStr = descriptif.substring(maxLength, $.trim(descriptif).length);
-                        $("#descriptif-" + appli).html(newStr);
-                        $("#descriptif-" + appli).append('<a href="javascript:void(0);" class="read-more" data-appli="' + appli + '"> [+]</a>');
-                        $("#descriptif-" + appli).append('<span id="more-text-' + appli + '" style="display:none;">' + removedStr + '</span>');
-                    }
-                    else
+                    if($("#descriptif-" + appli).html() == '')
                     {
-                        $("#descriptif-" + appli).html(descriptif);
+                         var descriptif = $("#desc-" + appli).html();
+
+                        var maxLength = 10;     
+    
+    
+                        if($.trim(descriptif).length > maxLength){
+                            var newStr = descriptif.substring(0, maxLength);
+                            var removedStr = descriptif.substring(maxLength, $.trim(descriptif).length);
+                            $("#descriptif-" + appli).html(newStr);
+                            $("#descriptif-" + appli).append('<a href="javascript:void(0);" class="read-more" data-appli="' + appli + '"> [+]</a>');
+                            $("#descriptif-" + appli).append('<span id="more-text-' + appli + '" style="display:none;">' + removedStr + '</span>');
+                        }
+                        else
+                        {
+                            $("#descriptif-" + appli).html(descriptif);
+                        }
+                        // on redéclare la fonction read-more pour qu'elle soit prise en compte
+                        $(".read-more").click(function(){
+                            var appli = $(this).attr('data-appli');
+                            $("#more-text-" + appli).show();
+                            $(this).remove();
+                        });
                     }
-                    $(".read-more").click(function(){
-                        console.log("clic more text");
-                        var appli = $(this).attr('data-appli');
-                        console.log("appli = " + appli);
-                        $("#more-text-" + appli).show();
-                        $(this).remove();
-                    });
+                   
 
 
 
