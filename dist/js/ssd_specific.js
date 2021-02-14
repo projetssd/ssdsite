@@ -84,6 +84,13 @@ function test_plex_autoscan() {
            });
 }
 
+$(".read-more").click(function(){
+    console.log("clic more text");
+    var appli = $(this).attr('data-appli');
+    console.log("appli = " + appli);
+    $("#descriptif-" + appli).siblings(".more-text-" + appli).contents().unwrap();
+    $(this).remove();
+});
 
 function test_etat() {
     $(".divappli").each(function () {
@@ -111,25 +118,27 @@ function test_etat() {
                     $(".start-stop-button-" + appli).show();
                     var descriptif = $("#desc-" + appli).html();
 
+                    var maxLength = 10;     
 
 
-                    var maxLength = 300;
-
-                    $(".read-more").click(function(){
-                        $(this).siblings(".more-text").contents().unwrap();
-                        $(this).remove();
-                    });
                     if($.trim(descriptif).length > maxLength){
                         var newStr = descriptif.substring(0, maxLength);
                         var removedStr = descriptif.substring(maxLength, $.trim(descriptif).length);
                         $("#descriptif-" + appli).html(newStr);
-                        $(this).append(' <a href="javascript:void(0);" class="read-more">[...]</a>');
-                        $(this).append('<span class="more-text" style="display:none;">' + removedStr + '</span>');
+                        $("#descriptif-" + appli).append('<a href="javascript:void(0);" class="read-more" data-appli="' + appli + '"> [+]</a>');
+                        $("#descriptif-" + appli).append('<span id="more-text-' + appli + '" style="display:none;">' + removedStr + '</span>');
                     }
                     else
                     {
                         $("#descriptif-" + appli).html(descriptif);
                     }
+                    $(".read-more").click(function(){
+                        console.log("clic more text");
+                        var appli = $(this).attr('data-appli');
+                        console.log("appli = " + appli);
+                        $("#more-text-" + appli).show();
+                        $(this).remove();
+                    });
 
 
 
