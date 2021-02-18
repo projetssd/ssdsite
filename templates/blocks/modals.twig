@@ -50,6 +50,32 @@
     </div>
 </div>
 <!-- fin modal confirm uninstall -->
+
+
+<!-- modal confirm uninstall outils -->
+<div class="modal" tabindex="-1" role="dialog" id="outils-confirm-uninstall">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Désinstallation de <span class="outils-uninstall"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+            </div>
+            <div class="modal-body">
+                <p>Etes vous sur de vouloir désinstaller <b><span class="outils-uninstall"></span></b> ?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="confirm-outils-uninstall" data-appli="">Confirmer</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin modal confirm uninstall outils-->
+
+
+
 <!-- Modal: seedbox -->
 <div class="modal fade right" id="seedbox" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="false">
     <div class="modal-dialog modal-full-height modal-lg" role="document">
@@ -139,7 +165,7 @@
             <!--Header-->
 
             <div class="modal-header">
-                <p class="heading lead">Installation de l'application <span id="outils"></span>
+                <p class="heading lead"><span id="outils"></span>
                 </p>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true" class="white-text">×</span>

@@ -6,7 +6,7 @@
             <h4 class="card-title text-white m-b-0">{% if MYAPPLI.public_url != false%}<a href="https://{{ MYAPPLI.public_url }}" target="_blank">{% else %}<a>{%  endif %}<span class="username" id="nomAppli-{{ MYAPPLI.display_name }}">{{ MYAPPLI.display_name|capitalize }}</span></a>
             </h4>
             <span class="description" id="version-{{ MYAPPLI.display_name }}"></span>
-            <div id="descriptif-{{ MYAPPLI.display_name }}"></div>
+            <div id="descriptif-{{ MYAPPLI.display_name }}"></div><p>
             <div>
                 <div class="btn-group">
                     <button type="button" class="btn btn-light dropdown-toggle"

@@ -70,7 +70,6 @@ function test_authelia() {
 function test_outils() {
         var appli = ["plex_autoscan", "autoscan", "cloudplow", "crop"];
         jQuery.each(appli, function(index, value) {
-        console.log(value);
             $.ajax({
                 url: "ajax/etat_service.php?service=" + value,
                 dataType: "json",
@@ -125,14 +124,14 @@ function test_etat() {
                     {
                          var descriptif = $("#desc-" + appli).html();
 
-                        var maxLength = 10;     
+                        var maxLength = 60;     
     
     
                         if($.trim(descriptif).length > maxLength){
                             var newStr = descriptif.substring(0, maxLength);
                             var removedStr = descriptif.substring(maxLength, $.trim(descriptif).length);
                             $("#descriptif-" + appli).html(newStr);
-                            $("#descriptif-" + appli).append('<a href="javascript:void(0);" class="read-more" data-appli="' + appli + '"> [+]</a>');
+                            $("#descriptif-" + appli).append('<a href="javascript:void(0);" class="read-more" style="color:red;" data-appli="' + appli + '"> [+]</a>');
                             $("#descriptif-" + appli).append('<span id="more-text-' + appli + '" style="display:none;">' + removedStr + '</span>');
                         }
                         else
@@ -181,7 +180,6 @@ function test_etat() {
                 $("#status-" + appli).html("Erreur ajax");
             });
         }
-
     });
 
 }
@@ -194,13 +192,29 @@ $(document).ready(function () {
     $(".install_outils").click(function () {
         
         var appli = $(this).attr('data-appli');
-        console.log('install outils ' + appli);
-        var desc = $("#desc-" + appli).html();
-        console.log('affiche' + desc);
-        $('#modalOutils').modal('show');
-        $("#description").html(desc);
-        $("#outils").html(appli);
-        $("#outils_install").attr('data-outils', appli);
+
+            $.ajax({
+                url: "ajax/etat_service.php?service=" + appli,
+                dataType: "json",
+            }).done(function (data) {
+                let installed = data.installed;
+                if (installed == true) {
+                    console.log('desinstall outils ' + appli);
+                    $("#outils-confirm-uninstall").modal('show');
+                    $(".outils-uninstall").html(appli);
+                    $("#confirm-outils-uninstall").attr('data-appli', appli);
+                }else{
+                    console.log('install outils ' + appli);
+                    var desc = $("#desc-" + appli).html();
+                    console.log('affiche' + desc);
+                    $('#modalOutils').modal('show');
+                    $("#description").html(desc);
+                    $("#outils").html("Installation de " + appli);
+                    $("#outils_install").attr('data-outils', appli);
+                }
+             }).fail(function () {
+                console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+           });
     });
 
     $("#form_install_oauth").validate({
@@ -237,6 +251,20 @@ $(document).ready(function () {
                 required: true
             },
         }
+    });
+
+    $("#confirm-outils-uninstall").click(function () {
+        var appli = $(this).attr('data-appli');
+        $("#outils-confirm-uninstall").modal('hide');
+        toastr.success("Désinstallation de " + appli + " en cours...")
+            $.ajax({
+                url: "ajax/uninstall_options.php?outils=" + appli
+            }).done(function (data) {
+                console.log("result " + data);
+                toastr.success("Désinstallation de " + appli + " terminée");
+            }).fail(function () {
+                console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+            });
     });
 
     $(".option_install").click(function () {
@@ -281,7 +309,6 @@ $(document).ready(function () {
         } else {
             $('#modalOutils').modal('hide');
             toastr.success("Installation de " + outils + " en cours...")
-
             $.ajax({
                 url: "ajax/install_options.php?outils=" + outils
             }).done(function (data) {

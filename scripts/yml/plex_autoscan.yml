@@ -1,0 +1,48 @@
+---
+
+- hosts: localhost
+  gather_facts: false
+  tasks:
+
+    - name: Check if plex_autoscan.service exists
+      stat:
+        path: "/etc/systemd/system/plex_autoscan.service"
+      register: plex_autoscan_service
+
+    - name: Service Tasks
+      block:
+
+      - name: Populate Service Facts
+        service_facts:
+
+      - name: Get plex_autoscan service state
+        set_fact:
+          plex_autoscan_service_running: "{{ (services['plex_autoscan.service'] is defined) and (services['plex_autoscan.service']['state'] == 'running') }}"
+
+      - name: Stop plex_autoscan service
+        become: yes
+        systemd:
+          name: plex_autoscan
+          state: stopped
+        when: plex_autoscan_service_running
+
+      - name: delete plex_autoscan.service
+        become: yes
+        file:
+          path: /etc/systemd/system/plex_autoscan.service
+          state: absent
+
+      - name: delete plex_autoscan folder
+        become: yes
+        file:
+          path: "/home/{{ lookup('env','USER') }}/scripts/plex_autoscan"
+          state: absent
+
+      - name: "create plex_autoscan state"
+        become: yes
+        shell: |
+          echo "0" > {{ lookup('env','CONFDIR') }}/status/plex_autoscan
+
+      when: plex_autoscan_service.stat.exists
+
+

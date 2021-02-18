@@ -80,6 +80,17 @@ function tools()
   writelog_appli "Installation ${1} terminée"
 }
 
+function uninstall_tools() {
+  log_applicatif ${1}
+  writelog_appli "Désinstallation ${1}"
+  LOGFILE=${LOGFILE_APPLI}
+
+  ansible-playbook /var/www/seedboxdocker.website/scripts/yml/${1}.yml | tee -a ${LOGFILE}
+
+  writelog_appli "Désinstallation ${1} terminée"
+}
+
+
 function clflare()  {
   log_applicatif Cloudflare
   writelog_appli "Installation oauth"
@@ -470,6 +481,9 @@ case $ACTION in
   ;;
   create_plex)
     create_plex ${2} ${3}
+  ;;
+  uninstall_tools)
+    uninstall_tools ${2}
   ;;
   *)
   writelog "ACTION INDEFINIE" 'DEBUG' 

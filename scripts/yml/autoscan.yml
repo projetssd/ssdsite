@@ -1,0 +1,36 @@
+---
+
+- hosts: localhost
+  gather_facts: false
+  tasks:
+
+    - name: Check if autoscan.service exists
+      stat:
+        path: "/home/{{ lookup('env','USER') }}/scripts/autoscan/config.yml"
+      register: autoscan_service
+
+    - name: Service Tasks
+      block:
+
+      - name: Stop autoscan
+        docker_container:
+          name: autoscan
+          state: stopped
+
+      - name: remove container Autoscan
+        docker_container:
+          name: autoscan
+          state: absent
+
+      - name: delete autoscan folder
+        become: yes
+        file:
+          path: "/home/{{ lookup('env','USER') }}/scripts/autoscan"
+          state: absent
+
+      - name: "create autoscan state"
+        become: yes
+        shell: |
+          echo "0" > {{ lookup('env','CONFDIR') }}/status/autoscan
+
+      when: autoscan_service.stat.exists
