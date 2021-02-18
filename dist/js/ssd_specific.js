@@ -5,6 +5,37 @@ ne s'éxécute que quand la page est totalement chargée
 
 /*global toastr */
 
+function authelia() {
+            $(".authelia_install").click(function () {
+                if ($("#form_install_authelia").valid()) {
+                    var mailauthelia = $("#mailauthelia").val();
+                    console.log('mailauthelia a la valeur ' + mailauthelia);
+                    var smtpauthelia= $("#smtpauthelia").val();
+                    console.log('smtpauthelia a la valeur ' + smtpauthelia);
+                    var portauthelia = $("#portauthelia").val();
+                    console.log('portauthelia a la valeur ' + portauthelia);
+                    var passeauthelia = $("#passeauthelia").val();
+                    console.log('passeauthelia a la valeur ' + passeauthelia);
+                    $('#modalAuthelia').modal('hide');
+                    toastr.success("Installation de Authelia en cours");
+                    $.ajax({
+                        url: "ajax/install_authelia.php",
+                        method: "POST",
+                        data: {mailauthelia: mailauthelia, smtpauthelia: smtpauthelia, portauthelia: portauthelia, passeauthelia: passeauthelia}
+                    }).done(function (data) {
+                        console.log("result " + data);
+                        toastr.success("Installation de Authelia terminée");
+                    }).fail(function () {
+                        console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+                    });
+
+                } else {
+                    toastr.warning('Merci de VERIFIER la saisie des champs');
+                    console.log('Au moins un des champs est VIDE !')
+                }
+            });
+}
+
 function oauth() {
             $(".oauth_install").click(function () {
                 if ($("#form_install_oauth").valid()) {
@@ -59,7 +90,7 @@ function test_authelia() {
             }).done(function (data) {
                 let installed = data.installed;
                 if (installed == false) {
-                    toastr.warning("Authelia non installé, uniquement par la cli");
+                    toastr.warning("Authelia non installé");
                     $("#champsauthelia").prop('disabled', true)
                 }
              }).fail(function () {
@@ -68,7 +99,7 @@ function test_authelia() {
 }
 
 function test_outils() {
-        var appli = ["plex_autoscan", "autoscan", "cloudplow", "crop"];
+        var appli = ["plex_autoscan", "autoscan", "cloudplow", "crop", "authelia", "oauth"];
         jQuery.each(appli, function(index, value) {
             $.ajax({
                 url: "ajax/etat_service.php?service=" + value,
@@ -145,10 +176,6 @@ function test_etat() {
                             $(this).remove();
                         });
                     }
-                   
-
-
-
 
                     // l'appli tourne, on va modifier les boutons si besoin
                     if (running) {
@@ -231,6 +258,23 @@ $(document).ready(function () {
         }
     });
 
+    $("#form_install_authelia").validate({
+        rules: {
+            mailauthelia: {
+                required: true
+            },
+            smtpauthelia: {
+                required: true
+            },
+            portauthelia: {
+                required: true
+            },
+            passeauthelia: {
+                required: true
+            },
+        }
+    });
+
     $("#form_install_cloud").validate({
         rules: {
             emailcloud: {
@@ -276,6 +320,12 @@ $(document).ready(function () {
             $('#modalOutils').modal('hide');
             $('#modalOauth').modal('show');
             oauth();
+
+        } else if (outils == "authelia") {
+            console.log('outils n est pas vide');
+            $('#modalOutils').modal('hide');
+            $('#modalAuthelia').modal('show');
+            authelia();
 
         } else if (outils == "cloudflare") {
             console.log('outils n est pas vide');
@@ -642,6 +692,10 @@ $(document).ready(function () {
 
 
     // on met à blanc les valeurs
+    $("#mailauthelia").val('');
+    $("#smtpauthelia").val('');
+    $("#portauthelia").val('');
+    $("#passeauthelia").val('');
     $("#subdomain").val('');
     $("#authentification").val('basique');
     $("#plexident").val('');
