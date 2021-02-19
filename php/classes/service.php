@@ -542,7 +542,7 @@ class service
     {
         global $debugbar;
         $array_cache = array(
-            'collabora', 'cloudproxy', 'flaresolverr', 'office', 'plex_autoscan');
+            'collabora', 'cloudproxy', 'flaresolverr', 'office', 'plex_autoscan', 'crop', 'cloudplow', 'autoscan');
         $retour      = array();
         $listfiles   = scandir($this->status_file);
         foreach ($listfiles as $file)

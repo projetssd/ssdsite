@@ -80,6 +80,36 @@ function tools()
   writelog_appli "Installation ${1} terminée"
 }
 
+function uninstall_tools() {
+  log_applicatif ${1}
+  writelog_appli "Désinstallation ${1}"
+  LOGFILE=${LOGFILE_APPLI}
+  if [ "${1}" == "authelia" ]; then
+
+    # Mise à jour du status actif de l'appli
+    echo 0 > "${CONFDIR}/status/${1}"
+
+    sed -i "/${1}/d" "${CONFDIR}/resume" > /dev/null 2>&1
+    sed -i "/${1}/d" "/home/${USER}/resume" > /dev/null 2>&1
+
+    # supression des volumes
+    docker rm -f "${1}" > /dev/null 2>&1
+    rm "${CONFDIR}/conf/${1}.yml" > /dev/null 2>&1
+    rm "${CONFDIR}/vars/${1}.yml" > /dev/null 2>&1
+    rm -rf ${CONFDIR}/docker/${USER}/${1}
+
+    # supressions mariadb et images associées
+    docker rm -f db-${1} > /dev/null 2>&1
+    docker system prune -af > /dev/null 2>&1
+
+  else
+    ansible-playbook /var/www/seedboxdocker.website/scripts/yml/${1}.yml | tee -a ${LOGFILE}
+  fi
+
+  writelog_appli "Désinstallation ${1} terminée"
+}
+
+
 function clflare()  {
   log_applicatif Cloudflare
   writelog_appli "Installation oauth"
@@ -326,8 +356,6 @@ function install() {
   writelog_appli "Installation de l'appli ${1}"    
   
   LOGFILE=${LOGFILE_APPLI}
-
-  echo $3 > /tmp/$3
     
   ansible-vault decrypt "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
   
@@ -390,6 +418,21 @@ function install() {
     🚀 $1                             📓 https://wiki.scriptseedboxdocker.com
 EOF
 
+}
+
+function add_authelia() {
+  log_applicatif oauth
+  writelog_appli "Installation oauth"
+  
+  LOGFILE=${LOGFILE_APPLI}
+
+  echo "authelia:" > /tmp/authelia.yml
+  sed -i "/authelia/a \ \ \ mail: ${1}" /tmp/authelia.yml
+  sed -i "/mail/a \ \ \ smtp: ${2}" /tmp/authelia.yml
+  sed -i "/smtp/a \ \ \ smtp_port: ${3}" /tmp/authelia.yml
+  sed -i "/smtp_port/a \ \ \ pass_appli: ${4}" /tmp/authelia.yml
+  ansible-playbook /var/www/seedboxdocker.website/scripts/yml/authelia.yml --extra-vars "@${BASEDIR}/includes/dockerapps/vars/authelia.yml" | tee -a ${LOGFILE}
+  rm /tmp/authelia.yml
 }
 
 function goauth() 
@@ -470,6 +513,12 @@ case $ACTION in
   ;;
   create_plex)
     create_plex ${2} ${3}
+  ;;
+  uninstall_tools)
+    uninstall_tools ${2}
+  ;;
+  add_authelia)
+    add_authelia ${2} ${3} ${4} ${5}
   ;;
   *)
   writelog "ACTION INDEFINIE" 'DEBUG' 

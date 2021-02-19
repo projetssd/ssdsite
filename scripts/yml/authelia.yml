@@ -1,0 +1,119 @@
+#
+# A lancer avec un fichier vars
+# Ex :
+# ansible-playbook ${BASEDIR}/includes/dockerapps/generique.yml --extra-vars "@${BASEDIR}/includes/dockerapps/vars/calibre.yml"
+#
+
+---
+- hosts: localhost
+  gather_facts: true
+  vars_files:
+    - "{{ lookup('env','CONFDIR') }}/variables/account.yml"
+    - "{{ lookup('env','BASEDIR') }}/includes/dockerapps/templates/generique/generique.yml"
+    - '/tmp/authelia.yml'
+
+  tasks:
+        
+    # FACTS #######################################################################
+
+    - name: "create {{ pgrole}} state"
+      shell: |
+        echo "1" > {{ lookup('env','CONFDIR') }}/status/{{ pgrole }}
+
+    - name: Checking for existing app data
+      stat:
+        path: "{{ lookup('env','CONFDIR') }}/docker/{{ lookup('env','USER') }}/authelia/configuration.yml"
+      register: check
+
+    - name: "Set DNS Record on CloudFlare"
+      include_tasks: "{{ lookup('env','BASEDIR') }}/includes/config/roles/cloudflare/tasks/main.yml"
+      vars:
+        subdomain: "{{sub[pgrole][pgrole] if sub_enabled else pgrole}}"
+      when: cloudflare_enabled
+
+    - name: Creating paths
+      file: "path={{item}} state=directory mode=0775 owner={{ lookup('env','MYUID') }} group={{ lookup('env','MYGID') }}"
+      with_items:
+        - "{{ lookup('env','CONFDIR') }}/docker/{{ lookup('env','USER') }}/{{pgrole}}"    
+    
+    # PRE TASKS ###################################################################
+
+    - name: Create new hashed
+      shell: |
+        docker run --rm authelia/authelia:latest authelia hash-password {{user.pass}} | cut -d: -f2 | sed 's/ //g'
+      register: password
+
+    - name: Import configuration.yml
+      template:
+        src: "/var/www/{{ user.domain }}/scripts/yml/templates/{{ pgrole }}/configuration.yml.j2"
+        dest: "{{ lookup('env','CONFDIR') }}/docker/{{ lookup('env','USER') }}/{{ pgrole }}/configuration.yml"
+
+    - name: Import users_database.yml
+      template:
+        src: "/var/www/{{ user.domain }}/scripts/yml/templates/{{ pgrole }}/users_database.yml.j2"
+        dest: "{{ lookup('env','CONFDIR') }}/docker/{{ lookup('env','USER') }}/{{ pgrole }}/users_database.yml"
+
+    # LABELS ######################################################################
+    - name: Create temp file
+      tempfile:
+        state: file
+      register: tempfile_1
+      
+    - name: fill temp file with labels
+      template:
+        src: "{{ lookup('env','BASEDIR') }}/includes/dockerapps/templates/generique/traefik_labels.yml.j2"
+        dest: "{{ tempfile_1.path }}"
+        force: yes
+    
+    - name: Import traefik labels
+      include_vars: 
+        file: "{{ tempfile_1.path }}"
+        name: pg_labels
+        
+    - name: Delete temp file
+      file:
+        path: "{{ tempfile_1.path }}"
+        state: absent
+    
+    # DEPLOY ######################################################################
+
+    - name: 'Deploying {{pgrole}}'
+      docker_container:
+        name: '{{pgrole}}'
+        image: '{{image}}'
+        volumes: "{{ pg_volumes }}"
+        env: "{{pg_env}}"
+        restart_policy: unless-stopped
+        networks:
+          - name: traefik_proxy
+        state: started
+        labels: '{{pg_labels}}'
+    
+    # POST TASKS ###################################################################
+    - name: Check that posttasks file exists
+      stat:
+        path: "{{ lookup('env','BASEDIR') }}/includes/dockerapps/posttasks/{{ pgrole }}.yml"
+      register: stat_result_post
+      
+    - name: Launch Posttask
+      include_tasks: "{{ lookup('env','BASEDIR') }}/includes/dockerapps/posttasks/{{ pgrole }}.yml"
+      when: stat_result_post.stat.exists
+
+    
+    # Administratif pour ssd
+    - name: "create {{ pgrole }} state"
+      shell: |
+        echo "2" > {{ lookup('env','CONFDIR') }}/status/{{ pgrole }}
+
+    - name: "create {{ pgrole }} state"
+      shell: |
+        echo "authelia = authelia.{{ user.domain }}" >> {{ lookup('env','CONFDIR') }}/resume
+        
+    - name: "Insert {{ pgrole}} into database"
+      shell : 
+        cmd: |
+          sqlite3 {{  lookup('env','BASEDIR') }}/ssddb << EOF
+              replace into applications (name,status,subdomain,port)
+              values
+              ('{{ pgrole }}',2,'{{sub[pgrole][pgrole] if sub_enabled else pgrole}}',{{ intport }});
+          EOF

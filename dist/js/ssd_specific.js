@@ -5,6 +5,37 @@ ne s'éxécute que quand la page est totalement chargée
 
 /*global toastr */
 
+function authelia() {
+            $(".authelia_install").click(function () {
+                if ($("#form_install_authelia").valid()) {
+                    var mailauthelia = $("#mailauthelia").val();
+                    console.log('mailauthelia a la valeur ' + mailauthelia);
+                    var smtpauthelia= $("#smtpauthelia").val();
+                    console.log('smtpauthelia a la valeur ' + smtpauthelia);
+                    var portauthelia = $("#portauthelia").val();
+                    console.log('portauthelia a la valeur ' + portauthelia);
+                    var passeauthelia = $("#passeauthelia").val();
+                    console.log('passeauthelia a la valeur ' + passeauthelia);
+                    $('#modalAuthelia').modal('hide');
+                    toastr.success("Installation de Authelia en cours");
+                    $.ajax({
+                        url: "ajax/install_authelia.php",
+                        method: "POST",
+                        data: {mailauthelia: mailauthelia, smtpauthelia: smtpauthelia, portauthelia: portauthelia, passeauthelia: passeauthelia}
+                    }).done(function (data) {
+                        console.log("result " + data);
+                        toastr.success("Installation de Authelia terminée");
+                    }).fail(function () {
+                        console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+                    });
+
+                } else {
+                    toastr.warning('Merci de VERIFIER la saisie des champs');
+                    console.log('Au moins un des champs est VIDE !')
+                }
+            });
+}
+
 function oauth() {
             $(".oauth_install").click(function () {
                 if ($("#form_install_oauth").valid()) {
@@ -59,7 +90,7 @@ function test_authelia() {
             }).done(function (data) {
                 let installed = data.installed;
                 if (installed == false) {
-                    toastr.warning("Authelia non installé, uniquement par la cli");
+                    toastr.warning("Authelia non installé");
                     $("#champsauthelia").prop('disabled', true)
                 }
              }).fail(function () {
@@ -67,21 +98,25 @@ function test_authelia() {
            });
 }
 
-function test_plex_autoscan() {
-        let appli = "plex_autoscan";
-            return $.ajax({
-                url: "ajax/etat_service.php?service=" + appli,
+function test_outils() {
+        var appli = ["plex_autoscan", "autoscan", "cloudplow", "crop", "authelia", "oauth"];
+        jQuery.each(appli, function(index, value) {
+            $.ajax({
+                url: "ajax/etat_service.php?service=" + value,
                 dataType: "json",
             }).done(function (data) {
                 let installed = data.installed;
                 if (installed == true) {
-                   $("#fininstall").html(appli + " -> installé");
+                    $("#" + value).show();
+                    $("#" + value + "_trash").show();
                 }else{
-                   $("#fininstall").html("plex_autoscan");
+                    $("#" + value).hide();
+                    $("#" + value + "_trash").hide();
                 }
              }).fail(function () {
                 console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
            });
+        });
 }
 
 $(".read-more").click(function(){
@@ -120,14 +155,14 @@ function test_etat() {
                     {
                          var descriptif = $("#desc-" + appli).html();
 
-                        var maxLength = 10;     
+                        var maxLength = 60;     
     
     
                         if($.trim(descriptif).length > maxLength){
                             var newStr = descriptif.substring(0, maxLength);
                             var removedStr = descriptif.substring(maxLength, $.trim(descriptif).length);
                             $("#descriptif-" + appli).html(newStr);
-                            $("#descriptif-" + appli).append('<a href="javascript:void(0);" class="read-more" data-appli="' + appli + '"> [+]</a>');
+                            $("#descriptif-" + appli).append('<a href="javascript:void(0);" class="read-more" style="color:red;" data-appli="' + appli + '"> [+]</a>');
                             $("#descriptif-" + appli).append('<span id="more-text-' + appli + '" style="display:none;">' + removedStr + '</span>');
                         }
                         else
@@ -141,10 +176,6 @@ function test_etat() {
                             $(this).remove();
                         });
                     }
-                   
-
-
-
 
                     // l'appli tourne, on va modifier les boutons si besoin
                     if (running) {
@@ -176,7 +207,6 @@ function test_etat() {
                 $("#status-" + appli).html("Erreur ajax");
             });
         }
-
     });
 
 }
@@ -184,18 +214,34 @@ function test_etat() {
 $(document).ready(function () {
     // etat des vignettes d'appli
     test_etat();
-    test_plex_autoscan();
+    test_outils();
 
     $(".install_outils").click(function () {
         
         var appli = $(this).attr('data-appli');
-        console.log('install outils ' + appli);
-        var desc = $("#desc-" + appli).html();
-        console.log('affiche' + desc);
-        $('#modalOutils').modal('show');
-        $("#description").html(desc);
-        $("#outils").html(appli);
-        $("#outils_install").attr('data-outils', appli);
+
+            $.ajax({
+                url: "ajax/etat_service.php?service=" + appli,
+                dataType: "json",
+            }).done(function (data) {
+                let installed = data.installed;
+                if (installed == true) {
+                    console.log('desinstall outils ' + appli);
+                    $("#outils-confirm-uninstall").modal('show');
+                    $(".outils-uninstall").html(appli);
+                    $("#confirm-outils-uninstall").attr('data-appli', appli);
+                }else{
+                    console.log('install outils ' + appli);
+                    var desc = $("#desc-" + appli).html();
+                    console.log('affiche' + desc);
+                    $('#modalOutils').modal('show');
+                    $("#description").html(desc);
+                    $("#outils").html("Installation de " + appli);
+                    $("#outils_install").attr('data-outils', appli);
+                }
+             }).fail(function () {
+                console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+           });
     });
 
     $("#form_install_oauth").validate({
@@ -207,6 +253,23 @@ $(document).ready(function () {
                 required: true
             },
             mailoauth: {
+                required: true
+            },
+        }
+    });
+
+    $("#form_install_authelia").validate({
+        rules: {
+            mailauthelia: {
+                required: true
+            },
+            smtpauthelia: {
+                required: true
+            },
+            portauthelia: {
+                required: true
+            },
+            passeauthelia: {
                 required: true
             },
         }
@@ -234,6 +297,20 @@ $(document).ready(function () {
         }
     });
 
+    $("#confirm-outils-uninstall").click(function () {
+        var appli = $(this).attr('data-appli');
+        $("#outils-confirm-uninstall").modal('hide');
+        toastr.success("Désinstallation de " + appli + " en cours...")
+            $.ajax({
+                url: "ajax/uninstall_options.php?outils=" + appli
+            }).done(function (data) {
+                console.log("result " + data);
+                toastr.success("Désinstallation de " + appli + " terminée");
+            }).fail(function () {
+                console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
+            });
+    });
+
     $(".option_install").click(function () {
         var outils = $(this).attr('data-outils');
         console.log('outils a la valeur ' + outils);
@@ -243,6 +320,12 @@ $(document).ready(function () {
             $('#modalOutils').modal('hide');
             $('#modalOauth').modal('show');
             oauth();
+
+        } else if (outils == "authelia") {
+            console.log('outils n est pas vide');
+            $('#modalOutils').modal('hide');
+            $('#modalAuthelia').modal('show');
+            authelia();
 
         } else if (outils == "cloudflare") {
             console.log('outils n est pas vide');
@@ -276,8 +359,6 @@ $(document).ready(function () {
         } else {
             $('#modalOutils').modal('hide');
             toastr.success("Installation de " + outils + " en cours...")
-            //$("#fininstall").html(outils + " installé");
-
             $.ajax({
                 url: "ajax/install_options.php?outils=" + outils
             }).done(function (data) {
@@ -590,7 +671,7 @@ $(document).ready(function () {
     /* fonction de refresh automatique  */
     window.setInterval(function () {
         test_etat();
-        test_plex_autoscan();
+        test_outils();
     }, 15000); // timer en ms
 
     function affiche_infos_ajax(ajaxpath, elementaafficher) {
@@ -611,6 +692,10 @@ $(document).ready(function () {
 
 
     // on met à blanc les valeurs
+    $("#mailauthelia").val('');
+    $("#smtpauthelia").val('');
+    $("#portauthelia").val('');
+    $("#passeauthelia").val('');
     $("#subdomain").val('');
     $("#authentification").val('basique');
     $("#plexident").val('');
