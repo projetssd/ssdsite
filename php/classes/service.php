@@ -19,6 +19,7 @@ class service
      * @var string Sous domain de l'application
      */
     public $subdomain;
+    public $cron;
     /**
      * @var string Ligne de commande pour installer
      */
@@ -93,6 +94,7 @@ class service
         $this->command_restart   = $start_command . 'restart ' . $this->display_name . ' ';
         $this->command_stop      = $start_command . 'stop ' . $this->display_name . ' ';
         $this->command_start     = $start_command . 'start ' . $this->display_name . ' ';
+        $this->command_crontab   = $start_command . 'crontab ' . $this->display_name . ' ';
 
         //
         // on va chercher l'ip du docker
@@ -389,18 +391,19 @@ class service
      * @param $subdomain string Sous domaine de l'application
      * @return bool always true
      */
-    public function install($subdomain, $authentification)
+
+    public function crontab($cron)
     {
         /* la commande d'install se termine par un & et donc rend la main tout de suite
         impossible de catcher la sortie
         on ne stocke donc aucune info
         les infos seront lues dans le défilement des logs */
-        $this->command_install .= " " . $subdomain . " " . $authentification;
-        $log                   = new log;
+        $this->command_crontab .= " " . $cron;
+        $log                    = new log;
         $log->writelog("-----------------", 'DEBUG');
-        $log->writelog("Installation " . $this->display_name, 'DEBUG');
-        $log->writelog("Commande " . $this->command_install, 'DEBUG');
-        shell_exec($this->command_install);
+        $log->writelog("Installation crontab " . $this->display_name, 'DEBUG');
+        $log->writelog("Commande " . $this->command_crontab, 'DEBUG');
+        shell_exec($this->command_crontab);
 
         return true;
     }

@@ -30,6 +30,7 @@ $js = array(
     'navigation_modal.js',
     'get_logs.js',
     'test_git.js',
+    'jquery-cron-quartz.js',
     'https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.js'
 );
 
@@ -83,3 +84,5 @@ echo $template->render(['IP'             => $_SERVER['REMOTE_ADDR'],
                         'DEBUGBARRENDER' => $debugbarrender,
                         'UNINSTALLED'    => $tab_uninstalled
                        ]);
+
+

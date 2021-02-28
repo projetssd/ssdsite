@@ -80,6 +80,17 @@ function tools()
   writelog_appli "Installation ${1} terminée"
 }
 
+function crontab() 
+{
+  log_applicatif ${1}
+  writelog_appli "Installation ${1}"
+  
+  LOGFILE=${LOGFILE_APPLI}
+
+  echo ${1} > /opt/seedbox/${1}
+  echo ${2} > /opt/seedbox/${2}
+}
+
 function uninstall_tools() {
   log_applicatif ${1}
   writelog_appli "Désinstallation ${1}"
@@ -519,6 +530,9 @@ case $ACTION in
   ;;
   add_authelia)
     add_authelia ${2} ${3} ${4} ${5}
+  ;;
+  crontab)
+    crontab ${2} ${3}
   ;;
   *)
   writelog "ACTION INDEFINIE" 'DEBUG' 

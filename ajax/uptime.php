@@ -13,3 +13,5 @@ $dateformat =  $date->format('d/m/Y');
 $heureformat = $date->format("H:i:s");
 
 echo $dateformat. ' ' . $heureformat;
+
+
