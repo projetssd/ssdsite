@@ -72,7 +72,7 @@ function create_plex()
 function tools() 
 {
   log_applicatif ${1}
-  writelog_appli "Installation ${1}"
+  writelog_appli "Tools ${1}"
   
   LOGFILE=${LOGFILE_APPLI}
 
@@ -83,7 +83,7 @@ function tools()
 function crontab() 
 {
   log_applicatif ${1}
-  writelog_appli "Installation ${1}"
+  writelog_appli "Crontab ${1}"
   
   LOGFILE=${LOGFILE_APPLI}
 
