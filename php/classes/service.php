@@ -398,7 +398,7 @@ class service
         impossible de catcher la sortie
         on ne stocke donc aucune info
         les infos seront lues dans le défilement des logs */
-        $this->command_crontab .= " " . $cron;
+        $this->command_crontab .= " " . '"$cron"';
         $log                    = new log;
         $log->writelog("-----------------", 'DEBUG');
         $log->writelog("Installation crontab " . $this->display_name, 'DEBUG');
