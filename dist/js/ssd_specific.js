@@ -211,13 +211,18 @@ function test_etat() {
 
 }
 
-$(function() {
-   $('#appli-cron').cronBuilder({
-       selectorLabel: "Selectionner la periode:  ",
-       onChange: function(expression) {
-           $('#cron').text(expression);
-       }
-   });               
+
+$(function(){
+    $('.cron-selector').jqCron({
+        default_value: '30 2 1 * *',
+        numeric_zero_pad: true,
+        bind_to: $('#cron'),
+        bind_method: {
+            set: function($element, value) {
+                $element.html(value);
+            }
+        }
+    });
 });
 
 $(document).ready(function () {
@@ -238,7 +243,8 @@ $(document).ready(function () {
 
             }).done(function (data) {
                 console.log("result " + data);
-                toastr.success("Installation de " + appli + " terminée");
+                $('#modalBackup').modal('hide');
+                toastr.success("Configuration du cron pour " + appli + " effectuée");
             }).fail(function () {
                 console.log('Erreur sur le chargement de l\'ajax, impossible de continuer');
             });
@@ -251,7 +257,7 @@ $(document).ready(function () {
         console.log("configure de " + appli);
         $("#crontab").attr('data-backup', appli);
         $('#modalBackup').modal('show');
-        $("#backup_appli").html("Installation sauvegarde de " + appli);
+        $("#backup_appli").html("Sauvegarde de " + appli);
     });
 
     $(".install_outils").click(function () {

@@ -30,7 +30,8 @@ $js = array(
     'navigation_modal.js',
     'get_logs.js',
     'test_git.js',
-    'jquery-cron-quartz.js',
+    'jqCron.js',
+    'jqCron.fr.js',
     'https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.js'
 );
 
@@ -38,6 +39,7 @@ $js = array(
 $css = array(
     "style.min.css",
     "style.css",
+    "jqCron.css",
     "toastr.css",);
 
 

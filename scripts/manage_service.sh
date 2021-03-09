@@ -87,8 +87,6 @@ function crontab()
   
   LOGFILE=${LOGFILE_APPLI}
 
-  echo ${1} > /opt/seedbox/${1}
-  echo ${2} > /opt/seedbox/${2}
 }
 
 function uninstall_tools() {
@@ -532,7 +530,7 @@ case $ACTION in
     add_authelia ${2} ${3} ${4} ${5}
   ;;
   crontab)
-    crontab ${2} ${3}
+    crontab "${2}" "${3}"
   ;;
   *)
   writelog "ACTION INDEFINIE" 'DEBUG' 
