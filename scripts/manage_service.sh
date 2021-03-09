@@ -121,7 +121,7 @@ function uninstall_tools() {
 
 function clflare()  {
   log_applicatif Cloudflare
-  writelog_appli "Installation oauth"
+  writelog_appli "Cloudflare"
   
   LOGFILE=${LOGFILE_APPLI}
 
@@ -296,7 +296,7 @@ fi
 
 function uninstall() {
   log_applicatif ${1}
-  writelog_appli "Désinstallation"
+  writelog_appli "Uninstall"
 
   ansible-vault decrypt "${CONFDIR}/variables/account.yml" > /dev/null 2>&1
   DOMAIN=$(grep domain "${CONFDIR}/variables/account.yml" | cut -d : -f2 | tr -d ' ')
@@ -431,7 +431,7 @@ EOF
 
 function add_authelia() {
   log_applicatif oauth
-  writelog_appli "Installation oauth"
+  writelog_appli "Authelia"
   
   LOGFILE=${LOGFILE_APPLI}
 
@@ -447,7 +447,7 @@ function add_authelia() {
 function goauth() 
 {
   log_applicatif oauth
-  writelog_appli "Installation oauth"
+  writelog_appli "Oauth"
   
   LOGFILE=${LOGFILE_APPLI}
 
