@@ -14,7 +14,7 @@ class images
     /**
      * @var string Chemin par défaut des images distantes
      */
-    private $chemin_distant = "https://www.scriptseedboxdocker.com/wp-content/uploads/icones/";
+    private $chemin_distant = "https://iconesssd.sdewitte.net/";
     /**
      * @var string Header par défaut (png)
      */
