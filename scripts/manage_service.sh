@@ -353,34 +353,14 @@ function install() {
 
 
   ## Installation
-  # On est dans le cas générique
-  # on regarde s'il y a un playbook existant
-  if [[ -f "${CONFDIR}/conf/${1}.yml" ]]; then
-    # il y a déjà un playbook "perso", on le lance
-    ansible-playbook "${CONFDIR}/conf/${1}.yml" | tee -a ${LOGFILE}
-  elif [[ -f "${CONFDIR}/vars/${1}.yml" ]]; then
-    # il y a des variables persos, on les lance
-    ansible-playbook "${BASEDIR}/includes/dockerapps/generique.yml" --extra-vars "@${CONFDIR}/vars/${1}.yml" | tee -a ${LOGFILE}
-  elif [[ -f "${BASEDIR}/includes/dockerapps/${1}.yml" ]]; then
-    # pas de playbook perso ni de vars perso
-    # Il y a un playbook spécifique pour cette appli, on le copie
-    cp "${BASEDIR}/includes/dockerapps/${1}.yml" "${CONFDIR}/conf/${1}.yml"
-    # puis on le lance
-    ansible-playbook "${CONFDIR}/conf/${1}.yml" | tee -a ${LOGFILE}
-  else
-    # on copie les variables pour le user
-    cp "${BASEDIR}/includes/dockerapps/vars/${1}.yml" "${CONFDIR}/vars/${1}.yml"
-    # puis on lance le générique avec ce qu'on vient de copier
-    ansible-playbook "${BASEDIR}/includes/dockerapps/generique.yml" --extra-vars "@${CONFDIR}/vars/${1}.yml" | tee -a ${LOGFILE}
-  fi
+  # A ce niveau, on vient de renseigner les variables nécessaires ci dessus
+  # donc la fonction ne devrait pas les demander
+  launch_appli ${1}
 
   # mise à jour du fichier "/opt/seedbox/resume" && "/home/user/resume"
   FQDNTMP="${2}.${DOMAIN}"
   echo "${1} = ${FQDNTMP}" | tee -a "${CONFDIR}/resume" >/dev/null
   echo "${1}.${DOMAIN}" >>"/home/${USER}/resume"
-
-  # crypt fichier account.yml
-
 
   tee -a ${LOGFILE} <<-EOF
     
