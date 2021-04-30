@@ -70,6 +70,8 @@ $tableau_appli = array(
     'varken' =>  ["port" => 8080], 
     'wetty' =>  ["port" => 8080], 
     'wordpress' =>  ["port" => 8080], 
-    'gitlab' =>  ["port" => 8080], 
+    'gitlab' =>  ["port" => 8080],
+    'petio' => ["port" => 7777],
+    "overseerr" => ["port" => 5055]
 
 );

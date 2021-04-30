@@ -9,13 +9,13 @@
             <div id="descriptif-{{ MYAPPLI.display_name }}"></div><p>
             <div>
                 <div class="btn-group">
-                    <button type="button" class="btn btn-light dropdown-toggle"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button type="button" class="btn btn-light dropdown-toggle bouton-start"
+                        data-toggle="dropdown" data-appli="{{ MYAPPLI.display_name }}" aria-haspopup="true" aria-expanded="false">
                         <i class="ti-settings"></i>
                     </button>
                     <div class="dropdown-menu animated flipInX">
                         <a class="dropdown-item" id="texte-bouton-restart-{{ MYAPPLI.display_name }}" href="javascript:void(0)">Redémarrer</a>
-                        <a class="dropdown-item start-stop-button-{{ MYAPPLI.display_name }}" href="javascript:void(0)" data-appli="{{ MYAPPLI.display_name }}" id="stop-{{ MYAPPLI.display_name }}">Arrêter</a>
+                        <a class="dropdown-item bouton-stop start-stop-button-{{ MYAPPLI.display_name }}" href="javascript:void(0)" data-appli="{{ MYAPPLI.display_name }}" id="stop-{{ MYAPPLI.display_name }}">Arrêter</a>
 
                         <a class="dropdown-item" href="javascript:void(0)">Sauvegarder</a>
                         <div class="dropdown-divider"></div>
