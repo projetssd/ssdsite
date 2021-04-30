@@ -427,6 +427,14 @@ function goauth() {
   writelog_appli "Installation Oauth terminée"
 }
 
+function stop()
+{
+  log_applicatif "${1}"
+  writelog_appli "Arrêt de ${1} en cours"
+  docker rm -f "${1}"
+  writelog_appli "Arrêt de ${1} terminé"
+}
+
 # Variables d'environnement
 DIRNAME=$(dirname $0)
 export PATH="$HOME/.local/bin:$PATH"
@@ -470,6 +478,9 @@ uninstall_tools)
   ;;
 add_authelia)
   add_authelia ${2} ${3} ${4} ${5}
+  ;;
+stop)
+  stop ${2}
   ;;
 *)
   writelog "ACTION INDEFINIE" 'DEBUG'
