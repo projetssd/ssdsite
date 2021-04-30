@@ -99,7 +99,7 @@ class service
         //
         $this->url = 'http://127.0.0.1';
         $retour    =
-            exec("docker inspect -f '{{.NetworkSettings.Networks.bridge.IPAddress}}' " . $this->display_name, $tab_retour, $code_retour);
+            exec("docker inspect -f '{{.NetworkSettings.Networks.traefik_proxy.IPAddress}}' " . $this->display_name, $tab_retour, $code_retour);
 
         if ($code_retour == 0)
         {
