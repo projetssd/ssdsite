@@ -53,8 +53,7 @@ $tableau_appli = array(
     'netdata' =>  ["port" => 19999],
     'organizr' =>  ["port" => 80],
     'jellyfin' =>  ["port" => 8096],
-    'authelia' =>  ["port" => 8080], 
-    'sensorr' =>  ["port" => 8080], 
+    'authelia' =>  ["port" => 8080],
     'minecraft' =>  ["port" => 8080], 
     'mkvtoolnix' =>  ["port" => 8080], 
     'ntopng' =>  ["port" => 8080], 
@@ -72,6 +71,9 @@ $tableau_appli = array(
     'wordpress' =>  ["port" => 8080], 
     'gitlab' =>  ["port" => 8080],
     'petio' => ["port" => 7777],
-    "overseerr" => ["port" => 5055]
+    "overseerr" => ["port" => 5055],
+    "kresus" => ["port" => 9876],
+    "qbittorrent" => ["port" => 8080],
+    "qbitorrent" => ["port" => 8080]
 
 );

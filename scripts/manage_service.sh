@@ -275,7 +275,7 @@ function createtoken() {
 
 function uninstall() {
   log_applicatif ${1}
-  writelog_appli "Désinstallation"
+  writelog_appli "Désinstallation de ${1} en cours"
 
   DOMAIN=$(get_from_account_yml user.domain)
 
@@ -287,6 +287,7 @@ function uninstall() {
   sed -i "/${1}/d" "/home/${USER}/resume" >/dev/null 2>&1
 
   # supression des volumes
+  writelog_appli "Suppression des volumes..."
   docker rm -f "${1}" >/dev/null 2>&1
   rm "${CONFDIR}/conf/${1}.yml" >/dev/null 2>&1
   rm "${CONFDIR}/vars/${1}.yml" >/dev/null 2>&1
@@ -294,6 +295,7 @@ function uninstall() {
 
   # supressions des mariadb associées
   if docker ps | grep -q db-${1}; then
+    writelog_appli "Suppression de la base de données..."
     docker rm -f db-${1} >/dev/null 2>&1
   fi
 
@@ -329,9 +331,10 @@ function uninstall() {
     # writelog "ACTION INDEFINIE" 'DEBUG'
     ;;
   esac
-
+  writelog_appli "Suppression des images et volumes non utilisés"
   # supression des images non utilisées && network eventuels && crypt account.yml
   docker system prune -af >/dev/null 2>&1
+  writelog_appli "Suppresion de l'application ${1} terminée"
 }
 
 function install() {
@@ -347,22 +350,22 @@ function install() {
   DOMAIN=$(get_from_account_yml user.domain)
 
   # Mise à jour des données subdomain dans account.yml
-  manage_account_yml sub.${1}.${1} ${2}
-  manage_account_yml sub.${1}.auth ${3}
+  manage_account_yml "sub.${1}.${1}" "${2}"
+  manage_account_yml "sub.${1}.auth" "${3}"
 
 
 
   ## Installation
   # A ce niveau, on vient de renseigner les variables nécessaires ci dessus
   # donc la fonction ne devrait pas les demander
-  launch_appli ${1}
+  launch_appli "${1}" >> "${LOGFILE}"
 
   # mise à jour du fichier "/opt/seedbox/resume" && "/home/user/resume"
   FQDNTMP="${2}.${DOMAIN}"
   echo "${1} = ${FQDNTMP}" | tee -a "${CONFDIR}/resume" >/dev/null
   echo "${1}.${DOMAIN}" >>"/home/${USER}/resume"
 
-  tee -a ${LOGFILE} <<-EOF
+  tee -a "${LOGFILE}" <<-EOF
     
        $1                             📓 https://wiki.scriptseedboxdocker.com
     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -431,7 +434,7 @@ function stop()
 {
   log_applicatif "${1}"
   writelog_appli "Arrêt de ${1} en cours"
-  docker rm -f "${1}"
+  docker stop "${1}"
   writelog_appli "Arrêt de ${1} terminé"
 }
 
