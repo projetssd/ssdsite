@@ -127,27 +127,29 @@ class service
             $this->public_url = false;
             if ($this->is_installed())
             {
+		    $temp = shell_exec("get_from_account_yml sub." . $my_service . "." . $my_service);
+	            $this->public_url = $temp; 
                 // on récupère les url publiques
                 // on lit le fichier
-                $file    = fopen($this->resume_file, 'r');
-                $matches = array();
-                if ($file)
-                {
-                    while (!feof($file))
-                    {
-                        $buffer = fgets($file);
-                        if (strpos($buffer, $this->display_name) !== false)
-                        {
-                            $matches[] = $buffer;
-                        }
-                    }
-                    fclose($file);
-                }
-                if (!empty($matches))
-                {
-                    $tab_temp         = explode('=', $matches[0]);
-                    $this->public_url = trim($tab_temp[1]);
-                }
+                // $file    = fopen($this->resume_file, 'r');
+                // $matches = array();
+                // if ($file)
+                // {
+                //     while (!feof($file))
+                //     {
+                //         $buffer = fgets($file);
+                //         if (strpos($buffer, $this->display_name) !== false)
+                //         {
+                //             $matches[] = $buffer;
+                //         }
+                //     }
+                //     fclose($file);
+                // }
+                // if (!empty($matches))
+                // {
+                //     $tab_temp         = explode('=', $matches[0]);
+                //     $this->public_url = trim($tab_temp[1]);
+                // }
             }
 
         }
@@ -468,31 +470,34 @@ class service
      */
     public function get_public_url()
     {
-        $handle  = @fopen($this->resume_file, "r");
-        $matches = array();
-        if ($handle)
-        {
-            while (!feof($handle))
-            {
-                $buffer = fgets($handle);
-                if (strpos($buffer, $this->display_name) !== false)
-                {
-                    $matches[] = $buffer;
-                }
-            }
-            fclose($handle);
-        }
-        $matches = array_unique($matches);
-        if (!empty($matches))
-        {
+	     $temp = shell_exec("get_from_account_yml sub." . $this->display_name . "." . $this->display_name);
+	                         $this->public_url = $temp;
 
-            $tab_temp         = explode('=', $matches[0]);
-            $this->public_url = trim($tab_temp[1]);
-
-        } else
-        {
-            $this->public_url = false;
-        }
+        //$handle  = @fopen($this->resume_file, "r");
+        //$matches = array();
+        //if ($handle)
+        //{
+        //    while (!feof($handle))
+        //    {
+        //        $buffer = fgets($handle);
+        //        if (strpos($buffer, $this->display_name) !== false)
+        //        {
+        //            $matches[] = $buffer;
+        //        }
+        //    }
+        //    fclose($handle);
+        //}
+        //$matches = array_unique($matches);
+        //if (!empty($matches))
+       // {
+//
+//            $tab_temp         = explode('=', $matches[0]);
+//            $this->public_url = trim($tab_temp[1]);
+//
+//        } else
+//        {
+//            $this->public_url = false;
+//        }
         return $this->public_url;
     }
 
