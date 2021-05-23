@@ -72,6 +72,7 @@ $tableau_appli = array(
     'gitlab' =>  ["port" => 8080],
     'petio' => ["port" => 7777],
     "overseerr" => ["port" => 5055],
+    "overseer" => ["port" => 5055],
     "kresus" => ["port" => 9876],
     "qbittorrent" => ["port" => 8080],
     "qbitorrent" => ["port" => 8080]

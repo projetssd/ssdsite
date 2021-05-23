@@ -208,7 +208,15 @@ class service
     {
         if ($this->is_installed())
         {
-            $connection = fsockopen($this->host, $this->port, $errno, $errstr);
+
+            $result  = shell_exec("docker inspect -f '{{ .State.Running }}' " . $this->display_name);
+            if($result == 'true')
+            {
+                return true;
+            }
+            return false;
+
+            /*$connection = fsockopen($this->host, $this->port, $errno, $errstr);
             if (!$connection)
             {
                 return false;
@@ -219,7 +227,7 @@ class service
                     fclose($connection);
                     return true;
                 }
-            }
+            }*/
         }
 
 
