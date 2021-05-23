@@ -7,7 +7,7 @@ require_once __DIR__ . '/../includes/header.php';
 $service = new service($_GET['service']);
 
 
-if ($service->running) {
+if ($service->check()) {
     echo "ok";
 } else {
     echo "bad";

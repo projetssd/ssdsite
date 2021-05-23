@@ -207,31 +207,20 @@ class service
     public function check()
     {
         if ($this->is_installed())
-        {
-
+        { 
             $result  = shell_exec("docker inspect -f '{{ .State.Running }}' " . $this->display_name);
-            if($result == 'true')
-            {
-                $this->running = true;
-                return true;
-            }
-            $this->running = false;
-            return false;
+	    if(!empty(trim($result))){
+		    $this->running = $result;
+		               return $result;
 
-            /*$connection = fsockopen($this->host, $this->port, $errno, $errstr);
-            if (!$connection)
-            {
-                return false;
-            } else
-            {
-                if (is_resource($connection))
-                {
-                    fclose($connection);
-                    return true;
-                }
-            }*/
+	    }
+	    else
+	    {
+ $this->running = false;
+         return false;
+
+	    }
         }
-
         $this->running = false;
         return false;
     }
