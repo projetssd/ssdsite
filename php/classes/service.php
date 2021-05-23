@@ -212,8 +212,10 @@ class service
             $result  = shell_exec("docker inspect -f '{{ .State.Running }}' " . $this->display_name);
             if($result == 'true')
             {
+                $this->running = true;
                 return true;
             }
+            $this->running = false;
             return false;
 
             /*$connection = fsockopen($this->host, $this->port, $errno, $errstr);
@@ -230,7 +232,7 @@ class service
             }*/
         }
 
-
+        $this->running = false;
         return false;
     }
 
